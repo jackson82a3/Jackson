@@ -181,7 +181,7 @@ npm run util:test # 73 self-checks - run this first
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
-| `util:test` | 68 self-checks | — |
+| `util:test` | 73 self-checks | — |
 | `typecheck` | `tsc --noEmit` | — |
 
 Every command takes `--data <path>` to point at a different extract. `util:train`
