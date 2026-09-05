@@ -36,11 +36,13 @@ the whole thing runs end to end with no access to real data.
 **The honest summary of its accuracy**: on the panel every published number is
 measured on, it is about 1% better than assuming next period equals last period.
 **Re-generate the world from a different random seed and that edge disappears.**
-Across 20 seeds the model beats the naive baseline on 7, and averages 0.55%
-*worse*. The published panel turns out to be the most favourable of the 20.
+Across 200 seeds the model beats the naive baseline on 101 — an exact coin flip.
+Worse, the two things the write-ups called its "stronger claims" are where it is
+most clearly beaten: it has the better bias on 51 of 200 seeds and the better
+cost-centre rollup on 66.
 
 The one thing that does survive re-drawing is **blending in PM hour
-allocations**: that beats the naive baseline on 14 of 20 seeds. The value is in
+allocations**: that beats the naive baseline on 124 of 200 seeds. The value is in
 the extra data, not in the estimator.
 
 So the short version: if you have PM allocations, use the blend. If you do not,
@@ -61,7 +63,7 @@ forecasting from history alone if it does not.
 | Predicts | Util % for period t+1, per person |
 | Trained on | 12 monthly periods, 60 people, 720 rows (synthetic) |
 | Out-of-sample MAE | 4.58pp vs 4.63pp for "same as last period" — **on one seed; see §2.1** |
-| Across 20 seeds | model beats the baseline on **7/20**; blend with plans on **14/20** |
+| Across 200 seeds | model beats the baseline on **101/200**; blend with plans on **124/200** |
 | Usable horizon | **t+1 only** — it loses to naive baselines at t+2, see §8 |
 | Interval | 80% nominal, **74.6% realised** — see §2 |
 | Cost-centre rollup | 3.26pp MAE, hours-weighted |
@@ -76,23 +78,27 @@ This is the section that stops the model being misused.
 
 ### 2.1 The edge over the naive baseline is not reliable
 
-Run `npm run util:seedstudy`. It regenerates the whole world from 20 seeds and
-scores the model identically each time. This is the most important table in the
-project:
+Run `npm run util:seedstudy`. It regenerates the whole world from 200 seeds and
+scores the model identically each time, against the strongest naive baseline on
+each panel. This is the most important table in the project:
 
 | claim | model | baseline | model better on |
 | --- | --- | --- | --- |
-| MAE (pp) | 4.033 | 4.011 | 7/20 seeds |
-| absolute bias (pp) | 0.669 | 0.664 | 5/20 seeds |
-| within 5pp | 0.709 | 0.709 | 10/20 seeds |
-| cost-centre rollup MAE (pp) | 2.355 | 2.324 | 8/20 seeds |
-| **blend with PM plans (pp)** | **3.939** | 4.011 | **14/20 seeds** |
+| MAE (pp) | 4.112 | 4.093 | 101/200 seeds |
+| absolute bias (pp) | 0.828 | 0.785 | **51/200 seeds** |
+| within 5pp | 0.702 | 0.703 | 83/200 seeds |
+| cost-centre rollup MAE (pp) | 2.388 | 2.344 | **66/200 seeds** |
+| **blend with PM plans (pp)** | **4.034** | 4.093 | **124/200 seeds** |
 
-**None of the history-only model's claims survive re-drawing the world.** Not
-level accuracy, not the bias correction, not the 5pp hit rate, not the
-cost-centre rollup — every one of them is a coin flip or worse across seeds. The
-shipped panel gives +1.0%; the other 19 average −0.63%, and +1.0% is the best of
-all 20 draws.
+**None of the history-only model's claims survive re-drawing the world.** Level
+accuracy is an exact coin flip — 101 of 200. And the two the write-ups singled
+out as the *stronger* claims are the ones where the model is most clearly beaten:
+its bias is better on a quarter of panels and its cost-centre rollup on a third.
+The published panel gives +1.0%; the other 199 average −0.44%.
+
+Do not read that 20-seed studies would have done: an earlier version of this
+table used 20 seeds and reported 7/20 for MAE, which the full study shows was
+itself noise. Small studies of small effects are not evidence.
 
 The one claim that does survive is the blend with PM allocations, at 14/20 seeds
 and a mean 4.011 → 3.939pp. It is a modest, real effect, and it comes from having
@@ -120,8 +126,9 @@ That is exactly how it gets used, so the number is not a fit statistic.
 **Read that first column honestly: 4.58 against 4.63 is a 1% improvement** — on
 this panel, and per §2.1 not on most others. The bias (−0.08 vs −0.33), the 5pp
 hit rate (65.0% vs 62.0%) and the 3.26pp cost-centre rollup look like stronger
-claims here, and were presented as such before the seed study existed; they do
-not hold up across seeds either.
+claims here, and were presented as such before the seed study existed. They are
+in fact the model's *weakest* claims: across 200 panels its bias beats the
+baseline's on 51 and its rollup on 66.
 
 The penalty is chosen *inside each fold's own past*, not on the folds being
 reported. If it is chosen the usual sloppy way — scan the grid, report the best
@@ -207,9 +214,9 @@ The raw plan is *worse* than the model, but it carries information the model
 structurally cannot have, so combining them beats either.
 
 **This is the only claim in the project that survives the seed study**, and even
-it is more modest than this table suggests: across 20 seeds the blend averages
-3.939pp against the baseline's 4.011pp and wins on 14 of 20, an edge of about
-1.8% rather than the 6.5% this panel shows. Full protocol, sensitivity analysis,
+it is more modest than this table suggests: across 200 seeds the blend averages
+4.034pp against the baseline's 4.093pp and wins on 124 of 200, an edge of about
+1.4% rather than the 6.5% this panel shows. Full protocol, sensitivity analysis,
 and the caveats in
 [`utilization-plan-headtohead.md`](utilization-plan-headtohead.md).
 
@@ -230,7 +237,7 @@ npm run util:test # 101 self-checks - run this first
 | `util:monitor` | Checks a deployed model for drift; **exits non-zero on breach** | `utilization-monitor.json` |
 | `util:experiment` | Scores model variants through the shipped protocol | `utilization-experiments.json` |
 | `util:horizon` | Measures accuracy at t+1..t+4 against baselines | `utilization-horizons.json` |
-| `util:seedstudy` | **Re-runs everything on 20 seeds. Read this before trusting any number.** | `utilization-seedstudy.json` |
+| `util:seedstudy` | **Re-runs everything on 200 seeds (~90s). Read this before trusting any number.** | `utilization-seedstudy.json` |
 | `util:secondyear` | Tests whether a second year unlocks seasonality (it does not) | `utilization-secondyear.json` |
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
@@ -477,8 +484,9 @@ older readers cannot handle, and note what changed in the comment above it.
 
 Read this before any decision that affects a person.
 
-- **The model has no reliable edge over "same as last period".** Across 20
-  simulated panels it wins on 7 (§2.1). Do not deploy it on the strength of the
+- **The model has no reliable edge over "same as last period".** Across 200
+  simulated panels it wins on 101, and is clearly worse on bias and on the
+  cost-centre rollup (§2.1). Do not deploy it on the strength of the
   headline figure. If you have PM allocations, the blend is the defensible
   choice; if you do not, the naive baseline is as good and far simpler to
   explain.

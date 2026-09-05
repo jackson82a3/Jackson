@@ -42,7 +42,10 @@ function arg(name: string, fallback: string): string {
   return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
 }
 
-const seedCount = Number(arg('seeds', '20'));
+// 200 because 20 was not enough: the win rate moved from 7/20 to 101/200 as the
+// study grew, so a small study of a small effect was itself too noisy to quote.
+// 80 and 200 agree closely, so this has converged. It takes about 90 seconds.
+const seedCount = Number(arg('seeds', '200'));
 const shippedSeed = Number(arg('shipped-seed', '20260901'));
 const outPath = path.resolve(process.cwd(), arg('out', 'data/utilization-seedstudy.json'));
 // The PM-plan comparison costs a head-to-head run per seed, so it can be skipped.

@@ -32,12 +32,12 @@ history-only model was always scored on. Util % in percentage points.
 
 Four qualifications belong with that table, and none of them are small:
 
-0. **The size of this effect is specific to this panel.** Across 20 seeds of the
-   *actuals* the blend averages 3.939pp against the naive baseline's 4.011pp and
-   wins on 14 of 20 - an edge nearer 1.8% than the 6.5% here. It is still the
+0. **The size of this effect is specific to this panel.** Across 200 seeds of the
+   *actuals* the blend averages 4.034pp against the naive baseline's 4.093pp and
+   wins on 124 of 200 - an edge nearer 1.4% than the 6.5% here. It is still the
    only claim in the project that survives re-drawing the world (the history-only
-   model wins on 7 of 20), but it is a modest effect, not a large one. Run
-   `npm run util:seedstudy`.
+   model wins on 101 of 200, an exact coin flip), but it is a modest effect, not
+   a large one. Run `npm run util:seedstudy`.
 
 
 1. **The blend is the robust choice, and this only became clear under honest

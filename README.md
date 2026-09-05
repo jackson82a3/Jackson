@@ -30,7 +30,7 @@ npm run util:predict    # forecast from a saved model, without retraining
 npm run util:monitor    # accuracy + feature drift; exits non-zero on breach
 npm run util:experiment # score model variants through the shipped protocol
 npm run util:horizon    # how far ahead is it still worth using? (answer: t+1 only)
-npm run util:seedstudy  # does any of this survive a different seed? (read this one)
+npm run util:seedstudy  # does any of this survive a different seed? (read this one, ~90s)
 npm run util:secondyear # does a second year unlock seasonality? (no)
 ```
 
@@ -79,21 +79,22 @@ cost-center periods.
 **Read this before quoting the table above.** Those numbers are correct for the
 panel they describe, and that panel is one draw from a simulator. Regenerate the
 world from a different seed and the edge disappears: `npm run util:seedstudy`
-runs 20 seeds and finds the model beats the naive baseline on 7 of them, averaging
-0.55% *worse*. The published seed is the most favourable of the 20.
+runs 200 seeds and finds the model beats the naive baseline on 101 of them - an
+exact coin flip.
 
 | claim | model | baseline | model better on |
 | --- | --- | --- | --- |
-| MAE (pp) | 4.033 | 4.011 | 7/20 seeds |
-| absolute bias (pp) | 0.669 | 0.664 | 5/20 seeds |
-| within 5pp | 0.709 | 0.709 | 10/20 seeds |
-| cost-center rollup MAE (pp) | 2.355 | 2.324 | 8/20 seeds |
-| **blend with PM plans (pp)** | **3.939** | 4.011 | **14/20 seeds** |
+| MAE (pp) | 4.112 | 4.093 | 101/200 seeds |
+| absolute bias (pp) | 0.828 | 0.785 | **51/200 seeds** |
+| within 5pp | 0.702 | 0.703 | 83/200 seeds |
+| cost-center rollup MAE (pp) | 2.388 | 2.344 | **66/200 seeds** |
+| **blend with PM plans (pp)** | **4.034** | 4.093 | **124/200 seeds** |
 
-**None of the history-only model's claims survive re-drawing the world** - not
-level accuracy, not the bias correction, not the hit rate, not the rollup. The
-one that does is blending in PM allocations, and the value there is the extra
-data rather than the estimator.
+**None of the history-only model's claims survive re-drawing the world** - and
+the two this project singled out as its *stronger* claims, the bias correction
+and the cost-center rollup, are exactly where it is most clearly beaten. The one
+claim that does survive is blending in PM allocations, where the value is the
+extra data rather than the estimator.
 
 So: if you have PM allocations, use the blend. If you do not, "same as last
 period" is as good as this model and far simpler to explain.
@@ -134,8 +135,8 @@ either: adding plans is worth -6.5% MAE on this panel. Over 12 draws of the
 allocations the blend averages 4.28pp (sd 0.05) and is best in 10 of 12, against
 4.33pp (sd 0.12) for the plan-augmented model.
 
-Across 20 *actuals* seeds the effect is real but smaller: the blend averages
-3.939pp against the baseline's 4.011pp and wins on 14 of 20. That makes it the
+Across 200 *actuals* seeds the effect is real but smaller: the blend averages
+4.034pp against the baseline's 4.093pp and wins on 124 of 200. That makes it the
 only claim in this project that survives re-drawing the world.
 
 "The plan loses" is a statement about *assumed planner quality*, so `util:sweep`
