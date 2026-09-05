@@ -111,7 +111,7 @@ interface Person {
 }
 
 /** Deterministic 32-bit PRNG (mulberry32) so a seed reproduces the dataset. */
-function makeRng(seed: number): () => number {
+export function makeRng(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
@@ -121,7 +121,7 @@ function makeRng(seed: number): () => number {
   };
 }
 
-function makeNormal(rng: () => number): (mean: number, sd: number) => number {
+export function makeNormal(rng: () => number): (mean: number, sd: number) => number {
   return (mean, sd) => {
     // Box-Muller; the second variate is discarded to keep the draw order simple.
     const u1 = Math.max(rng(), 1e-12);
