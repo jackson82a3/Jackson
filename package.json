@@ -10,6 +10,7 @@
   "scripts": {
     "util:generate": "node scripts/generate-utilization-data.ts",
     "util:train": "node scripts/train-utilization-forecast.ts",
+    "util:experiment": "node scripts/experiment-utilization.ts",
     "util:plans": "node scripts/generate-utilization-plans.ts",
     "util:compare": "node scripts/compare-utilization-forecasts.ts",
     "util:sweep": "node scripts/sweep-utilization-plans.ts",

@@ -13,7 +13,15 @@ import { parseCsv, toCsv } from '../src/lib/utilization/csv.ts';
 import { verifyRecord, COLUMNS } from '../src/lib/utilization/types.ts';
 import { buildTrainingSamples, FEATURE_NAMES } from '../src/lib/utilization/features.ts';
 import { fitRidge, predictOne } from '../src/lib/utilization/ridge.ts';
-import { forecastNextPeriod, rollupByCostCenter, trainForecaster } from '../src/lib/utilization/forecast.ts';
+import {
+  calibrateIntervals,
+  crossValidateNested,
+  forecastAll,
+  forecastNextPeriod,
+  rollupByCostCenter,
+  selectLambdaBefore,
+  trainForecaster,
+} from '../src/lib/utilization/forecast.ts';
 import { generatePlans, parsePlanCsv, plansToCsv, verifyPlan } from '../src/lib/utilization/plan.ts';
 import { buildPlanSamples, PLAN_FEATURE_NAMES, runHeadToHead } from '../src/lib/utilization/headtohead.ts';
 
@@ -113,6 +121,104 @@ check(
   forecasts.every(f => f.forecastUtil >= 0 && f.forecastUtil <= 100 && f.low80 <= f.forecastUtil && f.forecastUtil <= f.high80),
 );
 check('rollup covers every cost center', rollupByCostCenter(forecasts).length === new Set(parsed.map(r => r.costCenter)).size);
+
+// --- Penalty selection and intervals ---------------------------------------
+// The penalty for a fold must be a function of that fold's past and nothing
+// else, so restricting the input to that past cannot change the answer.
+let penaltyLeaks = 0;
+for (const period of [8, 10, 12]) {
+  const fromAll = selectLambdaBefore(samples, period);
+  const fromPastOnly = selectLambdaBefore(
+    samples.filter(s => s.targetPeriod < period),
+    period,
+  );
+  if (fromAll !== fromPastOnly) penaltyLeaks++;
+}
+check(
+  'penalty selection never sees the fold it is scored on',
+  penaltyLeaks === 0,
+  `${penaltyLeaks} folds differ`,
+);
+check(
+  'every fold records the penalty it chose',
+  trained.lambdaByFold.length === trained.byFold.length &&
+    trained.lambdaByFold.every(l => Number.isFinite(l.lambda)),
+);
+
+const nested = crossValidateNested(samples);
+const calibration = calibrateIntervals(nested.predictions);
+check(
+  'interval coverage is measured walk-forward, not on its own calibration set',
+  calibration.nWalkForward > 0 && calibration.nWalkForward < nested.predictions.length,
+  `${calibration.nWalkForward} of ${nested.predictions.length} rows`,
+);
+check(
+  'the shipped interval is one of the measured methods',
+  calibration.methods.some(m => m.name === calibration.shipped),
+);
+check(
+  'every interval method brackets its prediction',
+  calibration.methods.every(m => m.low < 0 && m.high > 0),
+);
+
+// --- Roster coverage -------------------------------------------------------
+const full = forecastAll(trained, parsed);
+const headcountLastPeriod = new Set(
+  parsed.filter(r => r.periodIndex === 12).map(r => `${r.costCenter}|${r.personName}`),
+).size;
+check(
+  'every person in the last period gets a forecast',
+  full.forecasts.length === headcountLastPeriod,
+  `${full.forecasts.length} vs ${headcountLastPeriod}`,
+);
+check(
+  'coverage counts add up to the roster',
+  full.coverage.reduce((a, c) => a + c.people, 0) ===
+    full.forecasts.length + full.excluded.length,
+);
+check(
+  'a complete panel needs no fallbacks',
+  full.forecasts.every(f => f.method === 'model') && full.excluded.length === 0,
+);
+
+// Two periods of history is below what the model needs. Those people must still
+// come back, flagged - not silently vanish from the forecast.
+const shortPanel = parsed.filter(r => r.periodIndex >= 11);
+const shortResult = forecastAll(trained, shortPanel);
+check(
+  'people with too little history are still forecast, and flagged',
+  shortResult.forecasts.length === headcountLastPeriod &&
+    shortResult.forecasts.every(f => f.method === 'short_history' && f.periodsOfHistory === 2),
+  `${shortResult.forecasts.length} rows`,
+);
+// Fallback rows are given the naive baseline's own error spread rather than the
+// model's. On this data the two are the same to four decimal places, because
+// the model only beats "same as last period" by about 1% - so this asserts the
+// width is derived from the right quantity, not that it comes out larger.
+const unclamped = shortResult.forecasts.find(f => f.low80 > 0 && f.high80 < 100);
+check(
+  'fallback rows use the naive baseline width, not the model width',
+  unclamped !== undefined &&
+    Math.abs(unclamped.high80 - unclamped.low80 - 2 * 1.2816 * trained.fallbackSigma) < 1e-6,
+);
+check(
+  'the fallback width is measured, not assumed',
+  trained.fallbackSigma > 0 && Number.isFinite(trained.fallbackSigma),
+);
+
+// Someone who left mid-year has no period to forecast from.
+const leaver = `${parsed[0].costCenter}|${parsed[0].personName}`;
+const withLeaver = parsed.filter(
+  r => !(r.periodIndex === 12 && `${r.costCenter}|${r.personName}` === leaver),
+);
+const leaverResult = forecastAll(trained, withLeaver);
+check(
+  'people absent from the last period are excluded, not silently dropped',
+  leaverResult.excluded.length === 1 &&
+    leaverResult.excluded[0].reason === 'absent_from_last_period' &&
+    leaverResult.forecasts.length === headcountLastPeriod - 1,
+  `${leaverResult.excluded.length} excluded`,
+);
 
 // --- PM allocations --------------------------------------------------------
 const plans = generatePlans(parsed);

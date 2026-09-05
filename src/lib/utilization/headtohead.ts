@@ -1,6 +1,11 @@
 import { buildTrainingSamples, FEATURE_NAMES, periodAggregates } from './features.ts';
 import type { Sample } from './features.ts';
-import { evaluate, FIRST_VALIDATION_PERIOD, LAMBDA_GRID } from './forecast.ts';
+import {
+  evaluate,
+  FIRST_VALIDATION_PERIOD,
+  LAMBDA_GRID,
+  selectLambdaBefore,
+} from './forecast.ts';
 import type { Metrics } from './forecast.ts';
 import { indexPlans, planKey } from './plan.ts';
 import type { SnapshottedPlan } from './plan.ts';
@@ -37,10 +42,12 @@ import type { PeriodedRecord } from './types.ts';
  * first fold - which has no earlier fold to learn from - uses a flat 0.5. The
  * weights actually used are reported so the choice can be inspected.
  *
- * Both ridge families pick their penalty the same way the existing model does,
- * by pooled MAE over the rolling-origin grid. That is a mild optimism shared
- * equally by both, so it does not tilt the comparison between them; it does mean
- * neither ridge number is a pure held-out result.
+ * Both ridge families pick their penalty by nested selection - fold k's penalty
+ * comes from an inner rolling origin over the periods that closed before k - so
+ * nothing about a fold, the fit or the penalty, touches the period it is scored
+ * on. `history_ridge` therefore reproduces the shipped model exactly, which a
+ * self-check asserts; if the two ever drift apart, the comparison has stopped
+ * being like for like.
  */
 
 export const PLAN_FEATURE_NAMES = [
@@ -190,8 +197,11 @@ export interface FoldSummary {
 
 export interface HeadToHead {
   trainedAt: string;
+  /** Penalties for the deployed fit; folds each chose their own, see `lambdaByFold`. */
   lambdaHistory: number;
   lambdaPlan: number;
+  /** What each fold selected from its own past. */
+  lambdaByFold: { targetPeriod: number; history: number; plan: number }[];
   rows: number;
   validationRows: number;
   metrics: Record<ForecasterName, Metrics>;
@@ -243,15 +253,13 @@ function fitBlendWeight(
 interface RollingPass {
   predictions: HeadToHeadPrediction[];
   byFold: FoldSummary[];
+  lambdaByFold: { targetPeriod: number; history: number; plan: number }[];
 }
 
-function rollingOrigin(
-  samples: PlanSample[],
-  lambdaHistory: number,
-  lambdaPlan: number,
-): RollingPass {
+function rollingOrigin(samples: PlanSample[]): RollingPass {
   const predictions: HeadToHeadPrediction[] = [];
   const byFold: FoldSummary[] = [];
+  const lambdaByFold: { targetPeriod: number; history: number; plan: number }[] = [];
   // Out-of-sample rows from folds already scored, which is all the blend weight
   // is ever allowed to see.
   const seen: { actual: number; plan: number; model: number }[] = [];
@@ -260,6 +268,10 @@ function rollingOrigin(
     const train = samples.filter(s => s.base.targetPeriod < period);
     const validate = samples.filter(s => s.base.targetPeriod === period);
     if (train.length === 0 || validate.length === 0) continue;
+
+    const lambdaHistory = selectLambdaBefore(samples.map(s => s.base), period);
+    const lambdaPlan = selectPlanLambdaBefore(samples, period);
+    lambdaByFold.push({ targetPeriod: period, history: lambdaHistory, plan: lambdaPlan });
 
     const historyModel = fitRidge(
       train.map(s => s.base.x),
@@ -309,29 +321,46 @@ function rollingOrigin(
     }
   }
 
-  return { predictions, byFold };
+  return { predictions, byFold, lambdaByFold };
 }
 
-/** Pooled MAE for one ridge family across the penalty grid. */
-function selectLambda(
-  samples: PlanSample[],
-  fit: (train: PlanSample[], lambda: number) => RidgeModel,
-  predict: (model: RidgeModel, sample: PlanSample) => number,
-): number {
+/**
+ * Penalty for the plan-augmented family, chosen from periods before
+ * `beforePeriod` only - the same nested rule the history model uses, so neither
+ * family gets to see the fold it will be scored on.
+ */
+function selectPlanLambdaBefore(samples: PlanSample[], beforePeriod: number): number {
+  const inner = samples.filter(s => s.base.targetPeriod < beforePeriod);
+  const middle = LAMBDA_GRID[Math.floor(LAMBDA_GRID.length / 2)];
+  if (inner.length === 0) return middle;
+
+  const minTarget = Math.min(...inner.map(s => s.base.targetPeriod));
+  const innerPeriods = [...new Set(inner.map(s => s.base.targetPeriod))]
+    .filter(p => p >= minTarget + 2)
+    .sort((a, b) => a - b);
+  if (innerPeriods.length === 0) return middle;
+
   let best = { lambda: LAMBDA_GRID[0], mae: Number.POSITIVE_INFINITY };
   for (const lambda of LAMBDA_GRID) {
     const actual: number[] = [];
     const predicted: number[] = [];
-    for (const period of validationPeriods(samples)) {
-      const train = samples.filter(s => s.base.targetPeriod < period);
-      const validate = samples.filter(s => s.base.targetPeriod === period);
+    for (const period of innerPeriods) {
+      const train = inner.filter(s => s.base.targetPeriod < period);
+      const validate = inner.filter(s => s.base.targetPeriod === period);
       if (train.length === 0 || validate.length === 0) continue;
-      const model = fit(train, lambda);
+      const model = fitRidge(
+        train.map(augmentedX),
+        train.map(s => s.base.y - s.plan.plannedUtilPct),
+        lambda,
+        augmentedNames,
+        true,
+      );
       for (const sample of validate) {
         actual.push(sample.base.y);
-        predicted.push(predict(model, sample));
+        predicted.push(clampUtil(sample.plan.plannedUtilPct + predictOne(model, augmentedX(sample))));
       }
     }
+    if (actual.length === 0) continue;
     const mae = evaluate(actual, predicted).mae;
     if (mae < best.mae) best = { lambda, mae };
   }
@@ -345,33 +374,13 @@ export function runHeadToHead(
   const samples = buildPlanSamples(records, plans);
   if (samples.length === 0) throw new Error('No plan-joined samples could be built');
 
-  const lambdaHistory = selectLambda(
-    samples,
-    (train, lambda) =>
-      fitRidge(
-        train.map(s => s.base.x),
-        train.map(s => s.base.y - s.base.anchor),
-        lambda,
-        FEATURE_NAMES,
-        true,
-      ),
-    (model, sample) => clampUtil(sample.base.anchor + predictOne(model, sample.base.x)),
-  );
-  const lambdaPlan = selectLambda(
-    samples,
-    (train, lambda) =>
-      fitRidge(
-        train.map(augmentedX),
-        train.map(s => s.base.y - s.plan.plannedUtilPct),
-        lambda,
-        augmentedNames,
-        true,
-      ),
-    (model, sample) =>
-      clampUtil(sample.plan.plannedUtilPct + predictOne(model, augmentedX(sample))),
-  );
+  const pass = rollingOrigin(samples);
+  // Penalties for the deployed fit, chosen from everything that has closed -
+  // the same rule a fold applies, with the whole panel as its past.
+  const lastPeriod = Math.max(...samples.map(s => s.base.targetPeriod));
+  const lambdaHistory = selectLambdaBefore(samples.map(s => s.base), lastPeriod + 1);
+  const lambdaPlan = selectPlanLambdaBefore(samples, lastPeriod + 1);
 
-  const pass = rollingOrigin(samples, lambdaHistory, lambdaPlan);
   const actual = pass.predictions.map(p => p.actual);
 
   const metrics = {} as Record<ForecasterName, Metrics>;
@@ -427,6 +436,7 @@ export function runHeadToHead(
     validationRows: pass.predictions.length,
     metrics,
     byFold: pass.byFold,
+    lambdaByFold: pass.lambdaByFold,
     planModel,
     planByAge,
     versusPlan,
