@@ -48,6 +48,7 @@ are the calibration and the coverage, not the MAE.
 | Predicts | Util % for period t+1, per person |
 | Trained on | 12 monthly periods, 60 people, 720 rows (synthetic) |
 | Out-of-sample MAE | **4.58pp** vs 4.63pp for "same as last period" |
+| Usable horizon | **t+1 only** — it loses to naive baselines at t+2, see §8 |
 | Interval | 80% nominal, **74.6% realised** — see §2 |
 | Cost-centre rollup | 3.26pp MAE, hours-weighted |
 | Dependencies | none (Node's standard library only) |
@@ -166,7 +167,7 @@ sensitivity analysis, and the caveats in
 
 ```bash
 npm install       # no runtime dependencies; TypeScript for typechecking only
-npm run util:test # 68 self-checks - run this first
+npm run util:test # 73 self-checks - run this first
 ```
 
 | Command | What it does | Writes |
@@ -176,6 +177,7 @@ npm run util:test # 68 self-checks - run this first
 | `util:predict` | Forecasts from a **saved** model, no retraining | `utilization-forecast.csv` |
 | `util:monitor` | Checks a deployed model for drift; **exits non-zero on breach** | `utilization-monitor.json` |
 | `util:experiment` | Scores model variants through the shipped protocol | `utilization-experiments.json` |
+| `util:horizon` | Measures accuracy at t+1..t+4 against baselines | `utilization-horizons.json` |
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
@@ -348,7 +350,7 @@ extrapolation. Only *relative* terms survive.
 The claims in §2 are only true because of specific protocol decisions. These are
 the ones that are easy to break without noticing.
 
-**Run `npm run util:test` before and after any change.** 68 checks, and the ones
+**Run `npm run util:test` before and after any change.** 73 checks, and the ones
 that matter most are the leakage invariants.
 
 ### Rules that are not style preferences
@@ -401,9 +403,22 @@ Read this before any decision that affects a person.
   synthetic — calibrated to be plausible and internally consistent, not to match
   any real firm. On real data the model-vs-naive gap could go either way. Nothing
   here has been validated against a real workforce.
-- **One period ahead only.** Beyond 2–3 periods it decays toward the person-mean
-  baseline, which is 6.19pp — materially worse than doing nothing clever. Do not
-  use it for annual planning.
+- **One period ahead only — and this is now measured, not assumed.** Run
+  `npm run util:horizon`. The model beats the best naive baseline at t+1 by 1.0%
+  and **loses at t+2 and t+3**:
+
+  | horizon | model MAE | best baseline | margin |
+  | --- | --- | --- | --- |
+  | t+1 | 4.58 | last period, 4.63 | **+1.0%** |
+  | t+2 | 5.95 | 3-period MA, 5.80 | −2.7% |
+  | t+3 | 6.30 | last period, 6.16 | −2.3% |
+  | t+4 | 6.35 | last period, 6.81 | +6.7% |
+
+  **Use it for t+1 only.** At t+2 and beyond a naive baseline is at least as
+  good, so the model adds complexity and no accuracy. The t+4 figure comes after
+  the model has already lost at a shorter horizon — with 300 rows per horizon
+  these margins move a couple of points either way, so read it as noise rather
+  than as range. Do not use this for quarterly or annual planning.
 - **One fiscal year.** Seasonal effects cannot be learned or validated. The July
   vacation trough is the clearest case, and it is exactly where the model and its
   intervals are worst.

@@ -47,7 +47,8 @@ jobs:
           npm run util:predict
           npm run util:monitor
 
-      - name: Head-to-head and experiments
+      - name: Head-to-head, experiments and horizons
         run: |
           npm run util:compare
           npm run util:experiment
+          npm run util:horizon

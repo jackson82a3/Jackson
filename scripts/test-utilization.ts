@@ -336,6 +336,50 @@ check(
   validateDataset([...parsed, parsed[0]]).ok === false,
 );
 
+// --- Horizons --------------------------------------------------------------
+const h2 = buildTrainingSamples(parsed, 2);
+check(
+  'horizon-2 samples target exactly two periods after their origin',
+  h2.length > 0 && h2.every(s => s.targetPeriod === s.originPeriod + 2),
+);
+check(
+  'a longer horizon yields fewer samples',
+  h2.length < samples.length && buildTrainingSamples(parsed, 3).length < h2.length,
+  `${samples.length} / ${h2.length}`,
+);
+check(
+  'horizon samples still carry the last-period anchor',
+  h2.every(s => Number.isFinite(s.anchor) && s.anchor === s.baselines.last),
+);
+check(
+  'a non-positive horizon is rejected',
+  (() => {
+    for (const bad of [0, -1, 1.5]) {
+      try {
+        buildTrainingSamples(parsed, bad);
+        return false;
+      } catch {
+        /* expected */
+      }
+    }
+    return true;
+  })(),
+);
+// Features are computed at the origin, so a horizon-2 sample and a horizon-1
+// sample from the same origin must have identical feature rows - only the
+// question changes, not the information.
+const byOrigin = new Map(samples.map(s => [`${s.costCenter}|${s.personName}|${s.originPeriod}`, s]));
+let horizonFeatureDrift = 0;
+for (const s of h2) {
+  const one = byOrigin.get(`${s.costCenter}|${s.personName}|${s.originPeriod}`);
+  if (one && one.x.some((v, i) => Math.abs(v - s.x[i]) > 1e-12)) horizonFeatureDrift++;
+}
+check(
+  'the same origin gives the same features at any horizon',
+  horizonFeatureDrift === 0,
+  `${horizonFeatureDrift} rows differ`,
+);
+
 // --- Monitoring ------------------------------------------------------------
 // Train on the first nine periods, then check the model against the three it
 // never saw. This is also the honest demonstration of how much a backtest can

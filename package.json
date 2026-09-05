@@ -13,6 +13,7 @@
     "util:predict": "node scripts/predict-utilization.ts",
     "util:monitor": "node scripts/monitor-utilization.ts",
     "util:experiment": "node scripts/experiment-utilization.ts",
+    "util:horizon": "node scripts/horizon-utilization.ts",
     "util:plans": "node scripts/generate-utilization-plans.ts",
     "util:compare": "node scripts/compare-utilization-forecasts.ts",
     "util:sweep": "node scripts/sweep-utilization-plans.ts",

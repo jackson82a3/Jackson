@@ -515,8 +515,11 @@ function costCenterRollupMetrics(predictions: FoldPrediction[]): Metrics {
   return evaluate(actual, predicted);
 }
 
-export function trainForecaster(records: PeriodedRecord[]): TrainedForecaster {
-  const samples = buildTrainingSamples(records);
+export function trainForecaster(
+  records: PeriodedRecord[],
+  horizon = 1,
+): TrainedForecaster {
+  const samples = buildTrainingSamples(records, horizon);
   if (samples.length === 0) throw new Error('No training samples could be built');
 
   // Headline numbers come from the nested run, where each fold's penalty is

@@ -8,7 +8,7 @@ baselines.
 npm install
 npm run util:generate   # writes data/utilization.csv (720 rows, deterministic)
 npm run util:train      # writes data/utilization-model.json + utilization-forecast.csv
-npm run util:test       # 68 self-checks
+npm run util:test       # 73 self-checks
 npm run typecheck
 ```
 
@@ -27,6 +27,7 @@ Operating a deployed model:
 npm run util:predict    # forecast from a saved model, without retraining
 npm run util:monitor    # accuracy + feature drift; exits non-zero on breach
 npm run util:experiment # score model variants through the shipped protocol
+npm run util:horizon    # how far ahead is it still worth using? (answer: t+1 only)
 ```
 
 ## Layout
@@ -76,6 +77,11 @@ bias reduction, the 5pp hit rate, and the cost-center rollup are the stronger
 claims. Selecting the penalty on the folds being reported - the usual shortcut -
 would say 4.56pp instead; that 0.02pp is the size of the optimism, and both
 numbers are printed on every run.
+
+**Use it for t+1 only.** `util:horizon` measures what the model was previously
+only assumed to do beyond one period: it beats the best naive baseline by 1.0% at
+t+1, and loses at t+2 (5.95 vs 5.80) and t+3 (6.30 vs 6.16). Past one period it
+adds complexity and no accuracy.
 
 The 80% interval is ±7.8pp and, measured walk-forward, **covers 74.6%, not 80%**.
 Nearly all of the shortfall is P10 (July, the vacation trough) at 56.7%, which is
