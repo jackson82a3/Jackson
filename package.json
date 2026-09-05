@@ -1,0 +1,20 @@
+{
+  "name": "utilization-forecast",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Seeded twelve-period workforce utilization dataset and a next-period Util % forecaster.",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "util:generate": "node scripts/generate-utilization-data.ts",
+    "util:train": "node scripts/train-utilization-forecast.ts",
+    "util:test": "node scripts/test-utilization.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20"
+  }
+}
