@@ -96,13 +96,15 @@ out as the *stronger* claims are the ones where the model is most clearly beaten
 its bias is better on a quarter of panels and its cost-centre rollup on a third.
 The published panel gives +1.0%; the other 199 average −0.44%.
 
-Do not read that 20-seed studies would have done: an earlier version of this
-table used 20 seeds and reported 7/20 for MAE, which the full study shows was
-itself noise. Small studies of small effects are not evidence.
+A note on the study itself: an earlier version of this table used 20 seeds and
+reported 7 of 20 for MAE, which read as "clearly worse". Growing it to 200 gives
+101 of 200, an exact coin flip. That first figure was itself noise — the same
+mistake the study exists to catch. A small study of a small effect is not
+evidence either, which is why the default is now 200.
 
-The one claim that does survive is the blend with PM allocations, at 14/20 seeds
-and a mean 4.011 → 3.939pp. It is a modest, real effect, and it comes from having
-more information rather than from the model being clever.
+The one claim that does survive is the blend with PM allocations, at 124 of 200
+seeds and a mean 4.093 → 4.034pp. It is a modest, real effect, and it comes from
+having more information rather than from the model being clever.
 
 That is not a reason to distrust the numbers below — they are correctly measured
 on the panel they describe. It is a reason not to generalise them. Everything in
