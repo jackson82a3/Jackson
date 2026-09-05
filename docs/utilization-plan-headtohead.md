@@ -17,14 +17,14 @@ npm run util:sweep     # data/utilization-sweep.json   - sensitivity to planner 
 
 **With plans as good as the ones simulated here, the raw PM plan loses to the
 model, but the plan carries information the model does not have, and using both
-beats either.** The gain from adding plans (4.56 → 4.26pp MAE, −6.5%) is more
-than four times the gain the model itself had over "same as last period" (−1.5%).
+beats either.** The gain from adding plans (4.58 → 4.28pp MAE, −6.5%) is more
+than six times the gain the model itself had over "same as last period" (−1.0%).
 
 | forecaster | MAE | RMSE | bias | R² | within 5pp |
 | --- | --- | --- | --- | --- | --- |
-| **blend (plan + model)** | **4.26** | **5.76** | +0.55 | 0.909 | 65.3% |
-| model on plan + history | 4.47 | 5.83 | +0.86 | 0.907 | 64.0% |
-| model (history only) | 4.56 | 6.07 | −0.13 | 0.899 | 65.3% |
+| **blend (plan + model)** | **4.28** | **5.79** | +0.59 | 0.908 | 65.0% |
+| model on plan + history | 4.49 | 5.86 | +0.68 | 0.906 | 64.0% |
+| model (history only) | 4.58 | 6.09 | −0.08 | 0.898 | 65.0% |
 | PM plan (as-is) | 5.17 | 7.30 | +1.90 | 0.854 | 64.7% |
 
 Rolling-origin CV, folds = target periods 8–12, the same 300 person-periods the
@@ -32,11 +32,14 @@ history-only model was always scored on. Util % in percentage points.
 
 Three qualifications belong with that table, and none of them are small:
 
-1. **The ranking of the top two is a coin flip.** Over 12 independent draws of
-   the allocations, the blend averages 4.25pp (sd 0.05) and the plan-augmented
-   model 4.27pp (sd 0.12); each is the best of the four in exactly 6 of 12 draws.
-   Do not read "blend beats plan_ridge" out of the table above — that gap is
-   smaller than the noise between draws.
+1. **The blend is the robust choice, and this only became clear under honest
+   penalty selection.** Over 12 independent draws of the allocations, the blend
+   averages 4.28pp (sd 0.05) and is best in 10 of 12; the plan-augmented model
+   averages 4.33pp (sd 0.12) and is best in 2. Under the earlier protocol, where
+   each family's penalty was tuned on the folds being reported, the two looked
+   like a coin flip at 6-6 — the plan-augmented model was picking a near-zero
+   penalty with knowledge of the answer, which flattered it. Fixing the
+   selection changed the conclusion, which is the argument for fixing it.
 2. **"The plan loses" is a statement about assumed planner quality**, not a
    finding about PM plans. §4 sweeps it, and the plan wins in a third of the grid.
 3. **The dataset is still synthetic.** Everything here is a number about this
@@ -113,18 +116,23 @@ The weight for fold k is fitted by least squares on out-of-sample rows from fold
 0.5. The weights actually used were 0.50, 0.27, 0.23, 0.26, 0.28 — after the
 first fold the process settles on trusting the plan about a quarter.
 
-One thing is **not** clean, and is worth stating plainly: both ridge families
-pick their penalty by pooled MAE over the same rolling-origin folds they are then
-reported on, exactly as the original model did. That is a mild optimism shared
-equally by both, so it does not tilt the comparison between them, but neither
-ridge number is a pure held-out result. The history model lands on λ=3 as before;
-the plan-augmented one on λ=0.3.
+Both ridge families pick their penalty by **nested selection**: fold k's penalty
+comes from an inner rolling origin over the periods that closed before k, so
+nothing about a fold — fit or penalty — touches the period it is scored on.
+`history_ridge` therefore reproduces the shipped model exactly, which a
+self-check asserts; if the two ever drift apart the comparison has stopped being
+like for like. The deployed fits land on λ=3 and λ=0.3.
+
+This was not always so, and fixing it mattered: under the earlier pooled
+selection the plan-augmented model chose λ=0.01 — the very edge of the grid —
+with knowledge of the folds it was reported on, and looked equal to the blend.
+It is not.
 
 The four forecasters:
 
 - `plan` — the allocation, used as-is.
-- `history_ridge` — the existing model, features and anchor unchanged. It
-  reproduces its old 4.5576pp exactly, which a self-check asserts.
+- `history_ridge` — the shipped model, features and anchor unchanged. It
+  reproduces its 4.5780pp exactly, which a self-check asserts.
 - `plan_ridge` — the same history features plus a plan block, fitted on the
   *plan's* error so shrinkage falls back to the raw plan. Same anchoring logic
   that makes the history model fall back to "same as last period".
@@ -143,7 +151,7 @@ optimistic this particular person's plans have been.
 The single-point answer above is a statement about assumed planner quality, so
 the assumptions get swept: foresight 0.20–0.80 against optimism 0.00–0.50,
 regenerating the allocations at each of the 30 cells and re-running the identical
-protocol. The history-only model never sees a plan, and its MAE is 4.56pp in
+protocol. The history-only model never sees a plan, and its MAE is 4.58pp in
 every cell with 0.0000pp drift — a useful check that the sweep only moves what it
 means to move.
 
@@ -156,18 +164,18 @@ means to move.
 | 0.50 | plan | plan | | | |
 | 0.55 | plan | plan | | | |
 | 0.65 | plan | plan | plan | | |
-| 0.80 | plan | plan | plan | | |
+| 0.80 | plan | plan | plan | plan | |
 
-The raw plan wins in 10 of 30 cells. It needs foresight ≥ 0.50 to win at all, and
-once optimism reaches 0.35 it never wins at any foresight on this grid — **an
-unbiased mediocre plan beats a sharp optimistic one.** That is the practically
-useful finding: de-biasing allocations is worth more than improving them.
+The raw plan wins in 11 of 30 cells. It needs foresight ≥ 0.50 to win at all, and
+at optimism 0.35 it wins only from the top of the foresight range — **an unbiased
+mediocre plan beats a sharp optimistic one.** That is the practically useful
+finding: de-biasing allocations is worth more than improving them.
 
 The sweep also exposes a failure mode the single run hid:
 
 | | best in | worse than ignoring plans |
 | --- | --- | --- |
-| blend | 29 of 30 cells | 1 cell, by 0.022pp |
+| blend | 29 of 30 cells | 1 cell, by 0.033pp |
 | plan+history model | 0 of 30 cells | 11 cells, all at foresight ≤ 0.55 |
 | history-only model | 1 of 30 cells | — |
 | PM plan | 0 of 30 cells | — |
