@@ -192,6 +192,17 @@ function clampUtil(value: number): number {
   return Math.min(100, Math.max(0, value));
 }
 
+/** Distinct people a peer group needs before its median means anything. */
+const MIN_COHORT_PEOPLE = 3;
+
+/** Median, or undefined for an empty list - so callers must say what they want instead. */
+function median(values: number[]): number | undefined {
+  if (values.length === 0) return undefined;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = sorted.length >> 1;
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
 /**
  * Picks a penalty using only samples whose target period is before `beforePeriod`.
  *
@@ -612,7 +623,10 @@ export type ForecastMethod =
   | 'model'
   /** 1-2 periods of history: carried forward from the last observation. */
   | 'short_history'
-  /** No usable history at all: the cost-centre and job-level median. */
+  /**
+   * No usable history at all: the cost-centre and job-level median. Only occurs
+   * when a roster is supplied - the timesheet alone cannot know about a joiner.
+   */
   | 'cold_start';
 
 export interface PersonForecast {
@@ -634,6 +648,26 @@ export interface PersonForecast {
   method: ForecastMethod;
   /** Closed periods of history behind this row. */
   periodsOfHistory: number;
+  /** For a fallback row, what it was derived from. Absent on model rows. */
+  basis?: string;
+}
+
+/**
+ * A person the firm expects to have, supplied separately from the timesheet.
+ *
+ * The extract only contains people who have already charged time, so a joiner
+ * starting next period is invisible to it - and they are exactly the person a
+ * resourcing conversation is about. Passing a roster is what makes a
+ * `cold_start` forecast possible; without one, that method never occurs.
+ */
+export interface RosterEntry {
+  personName: string;
+  costCenter: string;
+  costCenterName?: string;
+  jobLevel?: string;
+  targetType?: string;
+  utilPctTarget?: number;
+  expectedAvailHours?: number;
 }
 
 /** People on the roster who are deliberately not forecast, and why. */
@@ -667,6 +701,7 @@ function monthLabel(periodIndex: number, firstMonth: string): string {
 export function forecastAll(
   trained: TrainedForecaster,
   records: PeriodedRecord[],
+  roster?: RosterEntry[],
 ): ForecastResult {
   const firstPeriod = Math.min(...records.map(r => r.periodIndex));
   const lastPeriod = Math.max(...records.map(r => r.periodIndex));
@@ -686,21 +721,27 @@ export function forecastAll(
     buildForecastSamples(records).map(s => [`${s.costCenter}|${s.personName}`, s]),
   );
 
-  // Cost-centre x job-level medians, for people with nothing else to go on.
-  const cohorts = new Map<string, number[]>();
-  for (const record of records) {
-    if (record.periodIndex < lastPeriod - 2) continue;
-    const key = `${record.costCenter}|${record.jobLevel}`;
-    const list = cohorts.get(key) ?? [];
-    list.push(record.utilPct);
-    cohorts.set(key, list);
-  }
-  const cohortMedian = (costCenter: string, jobLevel: string, fallback: number): number => {
-    const values = cohorts.get(`${costCenter}|${jobLevel}`);
-    if (!values || values.length === 0) return fallback;
-    const sorted = [...values].sort((a, b) => a - b);
-    const mid = sorted.length >> 1;
-    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  // Peer group for someone with no history of their own. The narrowest grouping
+  // is not automatically the best one: a cost centre may hold a single person at
+  // a given job level, and a "cohort median" over one person is that person's
+  // recent luck, not a peer group. So the grouping widens until it describes
+  // enough distinct people to mean anything.
+  const recent = records.filter(r => r.periodIndex >= lastPeriod - 2);
+  const peerGroup = (
+    costCenter: string,
+    jobLevel: string,
+  ): { rows: PeriodedRecord[]; basis: string } => {
+    const candidates: { rows: PeriodedRecord[]; basis: string }[] = [
+      { rows: recent.filter(r => r.costCenter === costCenter && r.jobLevel === jobLevel), basis: `${costCenter} x ${jobLevel}` },
+      { rows: recent.filter(r => r.jobLevel === jobLevel), basis: `${jobLevel} firm-wide` },
+      { rows: recent.filter(r => r.costCenter === costCenter), basis: costCenter },
+      { rows: recent, basis: 'firm-wide' },
+    ];
+    for (const candidate of candidates) {
+      const people = new Set(candidate.rows.map(r => r.personName));
+      if (people.size >= MIN_COHORT_PEOPLE) return candidate;
+    }
+    return { rows: recent, basis: 'firm-wide' };
   };
 
   const forecasts: PersonForecast[] = [];
@@ -763,33 +804,48 @@ export function forecastAll(
     });
   }
 
-  // Anyone in the last period the panel never grouped (no history at all) would
-  // land here; with a complete extract this is empty, but real feeds are not
-  // always complete.
-  const seen = new Set(forecasts.map(f => `${f.costCenter}|${f.personName}`));
-  for (const record of records.filter(r => r.periodIndex === lastPeriod)) {
-    const key = `${record.costCenter}|${record.personName}`;
-    if (seen.has(key)) continue;
-    const forecastUtil = clampUtil(cohortMedian(record.costCenter, record.jobLevel, record.utilPctTarget));
+  // Joiners: on the roster, but with no timesheet history to build on. Their
+  // forecast is the cost-centre x job-level median, which is barely a forecast -
+  // hence the label, so nobody reads it as one.
+  const known = new Set(panel.keys());
+  const meanAvail =
+    records.filter(r => r.periodIndex === lastPeriod).reduce((a, r) => a + r.availTotal, 0) /
+    Math.max(1, records.filter(r => r.periodIndex === lastPeriod).length);
+
+  for (const entry of roster ?? []) {
+    const key = `${entry.costCenter}|${entry.personName}`;
+    if (known.has(key)) continue;
+    const jobLevel = entry.jobLevel ?? '';
+    const peers = peerGroup(entry.costCenter, jobLevel);
+    // The target comes from the peer group's *targets*, never from their
+    // utilization - those are different quantities and conflating them would
+    // quietly report a peer group's shortfall as this person's goal.
+    const utilTarget =
+      entry.utilPctTarget ?? median(peers.rows.map(r => r.utilPctTarget)) ?? 0;
+    const forecastUtil = clampUtil(median(peers.rows.map(r => r.utilPct)) ?? utilTarget);
     forecasts.push({
-      personName: record.personName,
-      costCenter: record.costCenter,
-      costCenterName: record.costCenterName,
-      jobLevel: record.jobLevel,
-      targetType: record.targetType,
+      personName: entry.personName,
+      costCenter: entry.costCenter,
+      costCenterName:
+        entry.costCenterName ??
+        records.find(r => r.costCenter === entry.costCenter)?.costCenterName ??
+        entry.costCenter,
+      jobLevel,
+      targetType: entry.targetType ?? '',
       targetPeriod,
       targetMonth,
-      lastUtil: record.utilPct,
-      utilTarget: record.utilPctTarget,
+      lastUtil: Number.NaN,
+      utilTarget,
       forecastUtil,
       low80: clampUtil(forecastUtil - fallbackHalfWidth),
       high80: clampUtil(forecastUtil + fallbackHalfWidth),
-      forecastVariance: forecastUtil - record.utilPctTarget,
-      expectedAvailHours: record.availTotal,
+      forecastVariance: forecastUtil - utilTarget,
+      expectedAvailHours: entry.expectedAvailHours ?? meanAvail,
       method: 'cold_start',
       periodsOfHistory: 0,
+      basis: `median of ${new Set(peers.rows.map(r => r.personName)).size} peers (${peers.basis})`,
     });
-    seen.add(key);
+    known.add(key);
   }
 
   forecasts.sort(
@@ -809,8 +865,9 @@ export function forecastAll(
 export function forecastNextPeriod(
   trained: TrainedForecaster,
   records: PeriodedRecord[],
+  roster?: RosterEntry[],
 ): PersonForecast[] {
-  return forecastAll(trained, records).forecasts;
+  return forecastAll(trained, records, roster).forecasts;
 }
 
 export interface CostCenterForecast {

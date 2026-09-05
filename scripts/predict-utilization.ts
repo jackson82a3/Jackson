@@ -13,7 +13,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseCsv } from '../src/lib/utilization/csv.ts';
+import { parseCsv, parseRosterCsv } from '../src/lib/utilization/csv.ts';
 import { forecastAll, rollupByCostCenter } from '../src/lib/utilization/forecast.ts';
 import {
   forecasterFromArtifact,
@@ -74,8 +74,27 @@ try {
   throw error;
 }
 
+// A roster is optional and names who the firm expects to have next period. The
+// timesheet only contains people who have already charged time, so without one a
+// joiner is invisible - and they are exactly who a resourcing question is about.
+const rosterPath = arg('roster', '');
+let roster;
+if (rosterPath) {
+  const resolved = path.resolve(process.cwd(), rosterPath);
+  if (!fs.existsSync(resolved)) {
+    console.error(`No roster at ${path.relative(process.cwd(), resolved)}.`);
+    process.exit(1);
+  }
+  try {
+    roster = parseRosterCsv(fs.readFileSync(resolved, 'utf8'));
+  } catch (error) {
+    console.error(`Cannot read the roster: ${(error as Error).message}`);
+    process.exit(1);
+  }
+}
+
 const trained = forecasterFromArtifact(loaded.artifact, loaded.model);
-const result = forecastAll(trained, records);
+const result = forecastAll(trained, records, roster);
 const rollup = rollupByCostCenter(result.forecasts);
 
 const shipped = trained.interval.methods.find(m => m.name === trained.interval.shipped);
@@ -88,6 +107,7 @@ console.log(
   `          lambda=${loaded.artifact.lambda}, out-of-sample MAE ${loaded.artifact.metrics.mae.toFixed(2)}pp`,
 );
 console.log(`Data      ${records.length} rows | ${path.relative(process.cwd(), dataPath)}`);
+if (roster) console.log(`Roster    ${roster.length} people | ${rosterPath}`);
 console.log(
   `Interval  ${trained.interval.shipped}, ` +
     `${shipped ? `${shipped.low.toFixed(1)}/+${shipped.high.toFixed(1)}pp` : 'n/a'}, ` +
@@ -131,15 +151,18 @@ const header = [
   'Cost Center', 'Cost Center Name', 'Person Name', 'Target Type', 'Job Level',
   'Forecast Period', 'Forecast Month', 'Last Util %', 'Forecast Util %',
   'Forecast Low 80', 'Forecast High 80', 'Util % Target', 'Forecast Variance',
-  'Expected Avail Hours', 'Method', 'Periods Of History',
+  'Expected Avail Hours', 'Method', 'Periods Of History', 'Basis',
 ];
+// A cold-start row has no last observation. Emitting the empty string rather
+// than "NaN" keeps the file re-readable by anything that parses numbers.
+const num = (x: number, digits = 2) => (Number.isFinite(x) ? x.toFixed(digits) : '');
 const lines = result.forecasts.map(f =>
   [
     f.costCenter, f.costCenterName, f.personName, f.targetType, f.jobLevel,
-    f.targetPeriod, f.targetMonth, f.lastUtil.toFixed(2), f.forecastUtil.toFixed(2),
-    f.low80.toFixed(2), f.high80.toFixed(2), f.utilTarget.toFixed(2),
-    f.forecastVariance.toFixed(2), f.expectedAvailHours.toFixed(1), f.method,
-    f.periodsOfHistory,
+    f.targetPeriod, f.targetMonth, num(f.lastUtil), num(f.forecastUtil),
+    num(f.low80), num(f.high80), num(f.utilTarget),
+    num(f.forecastVariance), num(f.expectedAvailHours, 1), f.method,
+    f.periodsOfHistory, f.basis ?? '',
   ]
     .map(cell => (/[",\n]/.test(String(cell)) ? `"${String(cell).replace(/"/g, '""')}"` : cell))
     .join(','),

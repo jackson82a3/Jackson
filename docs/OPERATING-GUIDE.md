@@ -167,7 +167,7 @@ sensitivity analysis, and the caveats in
 
 ```bash
 npm install       # no runtime dependencies; TypeScript for typechecking only
-npm run util:test # 73 self-checks - run this first
+npm run util:test # 80 self-checks - run this first
 ```
 
 | Command | What it does | Writes |
@@ -181,7 +181,7 @@ npm run util:test # 73 self-checks - run this first
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
-| `util:test` | 73 self-checks | — |
+| `util:test` | 80 self-checks | — |
 | `typecheck` | `tsc --noEmit` | — |
 
 Every command takes `--data <path>` to point at a different extract. `util:train`
@@ -263,12 +263,31 @@ One row per person on the roster. The columns that need explanation:
 | `Forecast Variance` | Forecast minus target. Negative = expected to miss |
 | `Method` | `model`, `short_history`, or `cold_start` — **read this** |
 | `Periods Of History` | Closed periods behind the row |
+| `Basis` | For a fallback row, what it was derived from |
+
+`Last Util %` is empty on a `cold_start` row, because there is no last
+observation. It is not zero, and it is not `NaN`.
 
 **`Method` is the column people skip and shouldn't.** `model` is a real
 forecast. `short_history` means the person has one or two periods and the row is
 just their last observation carried forward. `cold_start` means there was no
-usable history and the row is a cost-centre × job-level median — barely a
-forecast at all.
+usable history at all and the row is a peer-group median — barely a forecast, and
+the `Basis` column says which peer group and how many people it covered.
+
+`cold_start` only appears when you supply a **roster** (`--roster`), because the
+timesheet contains only people who have already charged time — a joiner starting
+next period is invisible to it, and they are exactly who a resourcing question is
+about:
+
+```bash
+npm run util:predict -- --data extract.csv --roster roster.csv
+```
+
+The roster needs `Cost Center` and `Person Name`; `Job Level`, `Target Type`,
+`Util % Target` and `Expected Avail Hours` sharpen the row if present. The peer
+group widens until it describes at least three distinct people, so a cost centre
+holding one person at a given level does not have that person's recent luck
+reported as a cohort.
 
 Anyone missing from the final period is **excluded and listed by name**, not
 silently dropped. That is deliberate: a forecast that quietly covers 54 of 60
@@ -350,7 +369,7 @@ extrapolation. Only *relative* terms survive.
 The claims in §2 are only true because of specific protocol decisions. These are
 the ones that are easy to break without noticing.
 
-**Run `npm run util:test` before and after any change.** 73 checks, and the ones
+**Run `npm run util:test` before and after any change.** 80 checks, and the ones
 that matter most are the leakage invariants.
 
 ### Rules that are not style preferences
@@ -434,7 +453,9 @@ Read this before any decision that affects a person.
   history. A person with two periods behind them is genuinely less predictable
   than that, so those intervals are likely optimistic.
 - **The roster is static in this data.** No joiners, leavers or transfers, so the
-  fallback paths are exercised by tests rather than by evidence.
+  fallback paths are exercised by tests rather than by evidence. A `cold_start`
+  row in particular is a peer-group median wearing a forecast's clothes; treat it
+  as a placeholder until that person has three periods of their own.
 
 ---
 

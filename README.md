@@ -8,7 +8,7 @@ baselines.
 npm install
 npm run util:generate   # writes data/utilization.csv (720 rows, deterministic)
 npm run util:train      # writes data/utilization-model.json + utilization-forecast.csv
-npm run util:test       # 73 self-checks
+npm run util:test       # 80 self-checks
 npm run typecheck
 ```
 

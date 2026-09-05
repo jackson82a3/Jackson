@@ -220,6 +220,66 @@ check(
   trained.fallbackSigma > 0 && Number.isFinite(trained.fallbackSigma),
 );
 
+// A joiner is on the roster but has no timesheet history. Without a roster the
+// timesheet cannot know they exist, so `cold_start` must not occur; with one it
+// must, and must be labelled rather than passed off as a forecast.
+check(
+  'cold_start never occurs without a roster',
+  forecastAll(trained, parsed).forecasts.every(f => f.method !== 'cold_start'),
+);
+const joinerResult = forecastAll(trained, parsed, [
+  { personName: 'New Joiner', costCenter: 'CC-1010', jobLevel: 'L2 Engineer', utilPctTarget: 85 },
+  // Someone already in the panel must not be duplicated by the roster.
+  { personName: parsed[0].personName, costCenter: parsed[0].costCenter },
+]);
+const joiner = joinerResult.forecasts.find(f => f.personName === 'New Joiner');
+check(
+  'a joiner on the roster is forecast, flagged cold_start',
+  joiner !== undefined &&
+    joiner.method === 'cold_start' &&
+    joiner.periodsOfHistory === 0 &&
+    joiner.forecastUtil > 0 &&
+    joiner.forecastUtil <= 100,
+  joiner ? `${joiner.forecastUtil.toFixed(1)}%` : 'missing',
+);
+check(
+  'a roster entry who is already in the panel is not duplicated',
+  joinerResult.forecasts.length === headcountLastPeriod + 1 &&
+    joinerResult.forecasts.filter(f => f.personName === parsed[0].personName).length === 1,
+  `${joinerResult.forecasts.length} rows`,
+);
+check(
+  'a joiner gets the fallback interval, not the model interval',
+  joiner !== undefined &&
+    Math.abs(joiner.high80 - joiner.low80 - 2 * 1.2816 * trained.fallbackSigma) < 1e-6,
+);
+// CC-1010 holds exactly one L2 Engineer, so the narrowest peer group is one
+// person's recent luck. It must widen rather than report that as a cohort.
+check(
+  'a thin peer group is widened until it describes enough people',
+  joiner !== undefined &&
+    /median of (\d+) peers/.test(joiner.basis ?? '') &&
+    Number(/median of (\d+) peers/.exec(joiner.basis ?? '')?.[1]) >= 3,
+  joiner?.basis,
+);
+// Peer utilization and peer targets are different quantities; deriving the
+// target from the former would report a peer group's shortfall as this person's
+// goal.
+const untargeted = forecastAll(trained, parsed, [
+  { personName: 'No Target', costCenter: 'CC-1010', jobLevel: 'L2 Engineer' },
+]).forecasts.find(f => f.personName === 'No Target');
+check(
+  'a joiner target comes from peer targets, not peer utilization',
+  untargeted !== undefined &&
+    untargeted.utilTarget !== untargeted.forecastUtil &&
+    untargeted.utilTarget > untargeted.forecastUtil,
+  untargeted ? `target ${untargeted.utilTarget} vs forecast ${untargeted.forecastUtil.toFixed(1)}` : 'missing',
+);
+check(
+  'a cold-start row has no last observation, and says so with NaN rather than a number',
+  joiner !== undefined && Number.isNaN(joiner.lastUtil),
+);
+
 // Someone who left mid-year has no period to forecast from.
 const leaver = `${parsed[0].costCenter}|${parsed[0].personName}`;
 const withLeaver = parsed.filter(
