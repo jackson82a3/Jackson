@@ -9,6 +9,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseCsv } from '../src/lib/utilization/csv.ts';
 import { serializeModel } from '../src/lib/utilization/model-io.ts';
+import { parsePlanCsv } from '../src/lib/utilization/plan.ts';
+import { runHeadToHead } from '../src/lib/utilization/headtohead.ts';
 import { formatValidationReport, validateDataset } from '../src/lib/utilization/validate.ts';
 import {
   featureImportance,
@@ -44,6 +46,30 @@ if (!validation.ok) {
 }
 
 const trained = trainForecaster(records);
+
+// Given allocations, also fit the deployment blend weight. The seed study is
+// unambiguous that the blend is the only forecaster here that beats the naive
+// baseline across simulated panels, so an artifact trained where allocations
+// exist should be able to use them.
+const plansPath = arg('plans', '');
+if (plansPath) {
+  const resolved = path.resolve(process.cwd(), plansPath);
+  if (!fs.existsSync(resolved)) {
+    console.error(`No plan file at ${path.relative(process.cwd(), resolved)}.`);
+    process.exit(1);
+  }
+  const head = runHeadToHead(records, parsePlanCsv(fs.readFileSync(resolved, 'utf8')));
+  trained.blendWeight = head.deployedBlendWeight;
+  console.log(
+    `Blend     weight ${head.deployedBlendWeight.toFixed(3)} on the PM plan, fitted on ` +
+      `${head.validationRows} out-of-sample rows`,
+  );
+  console.log(
+    `          blend ${head.metrics.blend.mae.toFixed(2)}pp vs model ` +
+      `${head.metrics.history_ridge.mae.toFixed(2)}pp on this panel`,
+  );
+  console.log('');
+}
 const result = forecastAll(trained, records);
 const forecasts = result.forecasts;
 const rollup = rollupByCostCenter(forecasts);

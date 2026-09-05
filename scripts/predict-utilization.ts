@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseCsv, parseRosterCsv } from '../src/lib/utilization/csv.ts';
+import { parsePlanCsv } from '../src/lib/utilization/plan.ts';
 import { forecastAll, rollupByCostCenter } from '../src/lib/utilization/forecast.ts';
 import {
   forecasterFromArtifact,
@@ -93,8 +94,49 @@ if (rosterPath) {
   }
 }
 
+// Allocations for the period being forecast. The seed study says the blend is
+// the only forecaster that beats the naive baseline across panels, so this is
+// the path to use where a firm has plans - but it needs both halves: a weight
+// fitted at training time and a plan for the coming period.
+const plansPath = arg('plans', '');
+let blend;
+if (plansPath) {
+  const resolved = path.resolve(process.cwd(), plansPath);
+  if (!fs.existsSync(resolved)) {
+    console.error(`No plan file at ${path.relative(process.cwd(), resolved)}.`);
+    process.exit(1);
+  }
+  if (loaded.artifact.blendWeight === undefined) {
+    console.error(
+      'This model was trained without allocations, so it carries no blend weight and cannot',
+    );
+    console.error('use the plans supplied. Retrain with: npm run util:train -- --plans <file>');
+    process.exit(1);
+  }
+  const parsed = parsePlanCsv(fs.readFileSync(resolved, 'utf8'));
+  const targetPeriod = Math.max(...records.map(r => r.periodIndex)) + 1;
+  const forPeriod = parsed.filter(p => p.planPeriod === targetPeriod);
+  if (forPeriod.length === 0) {
+    console.error(
+      `The plan file has no allocations for P${targetPeriod}, the period being forecast ` +
+        `(it covers P${Math.min(...parsed.map(p => p.planPeriod))}-P${Math.max(...parsed.map(p => p.planPeriod))}).`,
+    );
+    console.error('A blend needs the plan for the coming period, not for periods already closed.');
+    process.exit(1);
+  }
+  blend = {
+    weight: loaded.artifact.blendWeight,
+    plans: forPeriod.map(p => ({
+      costCenter: p.costCenter,
+      personName: p.personName,
+      planPeriod: p.planPeriod,
+      plannedUtilPct: p.plannedUtilPct,
+    })),
+  };
+}
+
 const trained = forecasterFromArtifact(loaded.artifact, loaded.model);
-const result = forecastAll(trained, records, roster);
+const result = forecastAll(trained, records, roster, blend);
 const rollup = rollupByCostCenter(result.forecasts);
 
 const shipped = trained.interval.methods.find(m => m.name === trained.interval.shipped);
@@ -108,6 +150,13 @@ console.log(
 );
 console.log(`Data      ${records.length} rows | ${path.relative(process.cwd(), dataPath)}`);
 if (roster) console.log(`Roster    ${roster.length} people | ${rosterPath}`);
+console.log(
+  blend
+    ? `Blend     ${(blend.weight * 100).toFixed(0)}% weight on the PM plan, ${blend.plans.length} allocations`
+    : `Blend     none - forecasting from history alone${
+        loaded.artifact.blendWeight === undefined ? ' (model carries no blend weight)' : ''
+      }`,
+);
 console.log(
   `Interval  ${trained.interval.shipped}, ` +
     `${shipped ? `${shipped.low.toFixed(1)}/+${shipped.high.toFixed(1)}pp` : 'n/a'}, ` +

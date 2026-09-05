@@ -498,6 +498,12 @@ export interface TrainedForecaster {
    * measured properly.
    */
   fallbackSigma: number;
+  /**
+   * Weight on the PM plan for deployment, when the model was trained with
+   * allocations available. Absent means no blend was fitted, and forecasting
+   * falls back to the model alone.
+   */
+  blendWeight?: number;
   /** Walk-forward coverage of the shipped interval. Not the in-sample figure. */
   coverage80: number;
   /** Interval calibration, including honestly measured coverage. */
@@ -639,7 +645,13 @@ export type ForecastMethod =
    * No usable history at all: the cost-centre and job-level median. Only occurs
    * when a roster is supplied - the timesheet alone cannot know about a joiner.
    */
-  | 'cold_start';
+  | 'cold_start'
+  /**
+   * The model combined with this person's PM allocation for the coming period.
+   * This is the only forecaster that beats the naive baseline across simulated
+   * panels, so it is the one to deploy where allocations exist.
+   */
+  | 'blend';
 
 export interface PersonForecast {
   personName: string;
@@ -710,10 +722,26 @@ function monthLabel(periodIndex: number, firstMonth: string): string {
  * `forecastAll` returns the fallbacks and exclusions alongside the model rows;
  * `forecastNextPeriod` keeps the original signature and returns just the rows.
  */
+/** A PM allocation for the period being forecast, keyed by cost centre and person. */
+export interface PlannedUtil {
+  costCenter: string;
+  personName: string;
+  /** The period the plan is about; must be the period being forecast. */
+  planPeriod: number;
+  plannedUtilPct: number;
+}
+
+export interface BlendConfig {
+  /** Weight on the plan in `w * plan + (1 - w) * model`. */
+  weight: number;
+  plans: PlannedUtil[];
+}
+
 export function forecastAll(
   trained: TrainedForecaster,
   records: PeriodedRecord[],
   roster?: RosterEntry[],
+  blend?: BlendConfig,
 ): ForecastResult {
   // The period being forecast is defined as the one after the last closed
   // period, so with no records there is no such period - and a roster alone
@@ -793,7 +821,21 @@ export function forecastAll(
     };
 
     if (sample) {
-      const forecastUtil = clampUtil(sample.anchor + predictOne(trained.model, sample.x));
+      const modelUtil = clampUtil(sample.anchor + predictOne(trained.model, sample.x));
+      // Blend in this person's allocation where there is one for the period being
+      // forecast. People without a plan keep the plain model forecast rather than
+      // being dropped, and the coverage report says how many of each there were.
+      const planned = blend
+        ? blend.plans.find(
+            p =>
+              p.costCenter === last.costCenter &&
+              p.personName === last.personName &&
+              p.planPeriod === targetPeriod,
+          )
+        : undefined;
+      const forecastUtil = planned
+        ? clampUtil(blend!.weight * planned.plannedUtilPct + (1 - blend!.weight) * modelUtil)
+        : modelUtil;
       forecasts.push({
         ...base,
         lastUtil: sample.baselines.last,
@@ -802,7 +844,10 @@ export function forecastAll(
         high80: clampUtil(forecastUtil + shippedInterval.high),
         forecastVariance: forecastUtil - sample.utilTarget,
         expectedAvailHours: sample.weight,
-        method: 'model',
+        method: planned ? 'blend' : 'model',
+        ...(planned
+          ? { basis: `${(blend!.weight * 100).toFixed(0)}% plan (${planned.plannedUtilPct.toFixed(1)}%), rest model (${modelUtil.toFixed(1)}%)` }
+          : {}),
       });
       continue;
     }
@@ -870,7 +915,7 @@ export function forecastAll(
     (a, b) => a.costCenter.localeCompare(b.costCenter) || a.personName.localeCompare(b.personName),
   );
 
-  const methods: (ForecastMethod | 'excluded')[] = ['model', 'short_history', 'cold_start'];
+  const methods: (ForecastMethod | 'excluded')[] = ['blend', 'model', 'short_history', 'cold_start'];
   const coverage = methods.map(method => ({
     method,
     people: forecasts.filter(f => f.method === method).length,
@@ -884,8 +929,9 @@ export function forecastNextPeriod(
   trained: TrainedForecaster,
   records: PeriodedRecord[],
   roster?: RosterEntry[],
+  blend?: BlendConfig,
 ): PersonForecast[] {
-  return forecastAll(trained, records, roster).forecasts;
+  return forecastAll(trained, records, roster, blend).forecasts;
 }
 
 export interface CostCenterForecast {

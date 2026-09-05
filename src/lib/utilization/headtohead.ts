@@ -208,6 +208,12 @@ export interface HeadToHead {
   byFold: FoldSummary[];
   /** Final plan-augmented model, refit on every sample. */
   planModel: RidgeModel;
+  /**
+   * The weight on the plan a forecast made *now* would use: fitted on every
+   * out-of-sample row available, which is the same rule each fold applied to its
+   * own past. This is what gets deployed.
+   */
+  deployedBlendWeight: number;
   /** Plan accuracy split by how stale the allocation was. */
   planByAge: { age: string; n: number; mae: number; bias: number }[];
   /** Paired comparisons against the plan, on the identical rows. */
@@ -428,10 +434,20 @@ export function runHeadToHead(
     true,
   );
 
+  const deployedBlendWeight =
+    fitBlendWeight(
+      pass.predictions.map(p => ({
+        actual: p.actual,
+        plan: p.byForecaster.plan,
+        model: p.byForecaster.history_ridge,
+      })),
+    ) ?? 0.5;
+
   return {
     trainedAt: new Date().toISOString(),
     lambdaHistory,
     lambdaPlan,
+    deployedBlendWeight,
     rows: samples.length,
     validationRows: pass.predictions.length,
     metrics,

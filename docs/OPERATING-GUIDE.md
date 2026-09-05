@@ -47,6 +47,15 @@ So the short version: if you have PM allocations, use the blend. If you do not,
 "same as last period" is as good as this model and far simpler. §2.1 has the
 numbers.
 
+```bash
+npm run util:train   -- --plans allocations.csv   # fits and stores the blend weight
+npm run util:predict -- --plans allocations.csv   # forecasts using it
+```
+
+The plan file must contain allocations for the **period being forecast**, not
+only for periods already closed; `util:predict` refuses rather than quietly
+forecasting from history alone if it does not.
+
 | | |
 | --- | --- |
 | Predicts | Util % for period t+1, per person |
@@ -210,7 +219,7 @@ and the caveats in
 
 ```bash
 npm install       # no runtime dependencies; TypeScript for typechecking only
-npm run util:test # 93 self-checks - run this first
+npm run util:test # 101 self-checks - run this first
 ```
 
 | Command | What it does | Writes |
@@ -226,7 +235,7 @@ npm run util:test # 93 self-checks - run this first
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
-| `util:test` | 93 self-checks | — |
+| `util:test` | 101 self-checks | — |
 | `typecheck` | `tsc --noEmit` | — |
 
 Every command takes `--data <path>` to point at a different extract. `util:train`
@@ -255,11 +264,13 @@ Once a period closes:
 # 1. Has the deployed model held up? Exits non-zero if not.
 npm run util:monitor -- --data new-extract.csv
 
-# 2. Forecast the coming period from the reviewed model.
-npm run util:predict -- --data new-extract.csv
+# 2. Forecast the coming period from the reviewed model. Add --plans if you have
+#    allocations for the coming period - that is the version with evidence
+#    behind it - and --roster to cover joiners.
+npm run util:predict -- --data new-extract.csv --plans allocations.csv
 
 # 3. Only if monitoring flagged drift, or on a fixed schedule (see below):
-npm run util:train -- --data new-extract.csv
+npm run util:train -- --data new-extract.csv --plans allocations.csv
 ```
 
 **Why predict and train are separate.** The model is a reviewed artifact. If
@@ -306,15 +317,18 @@ One row per person on the roster. The columns that need explanation:
 | `Forecast Util %` | The point forecast for the coming period |
 | `Forecast Low 80` / `High 80` | The interval — realistically ~75%, see §2.2 |
 | `Forecast Variance` | Forecast minus target. Negative = expected to miss |
-| `Method` | `model`, `short_history`, or `cold_start` — **read this** |
+| `Method` | `blend`, `model`, `short_history`, or `cold_start` — **read this** |
 | `Periods Of History` | Closed periods behind the row |
 | `Basis` | For a fallback row, what it was derived from |
 
 `Last Util %` is empty on a `cold_start` row, because there is no last
 observation. It is not zero, and it is not `NaN`.
 
-**`Method` is the column people skip and shouldn't.** `model` is a real
-forecast. `short_history` means the person has one or two periods and the row is
+**`Method` is the column people skip and shouldn't.** `blend` is the model
+combined with that person's PM allocation, and is the only method with evidence
+behind it across panels (§2.1); the `Basis` column gives the mix. `model` is the
+history-only forecast, used where no allocation was supplied for that person.
+`short_history` means the person has one or two periods and the row is
 just their last observation carried forward. `cold_start` means there was no
 usable history at all and the row is a peer-group median — barely a forecast, and
 the `Basis` column says which peer group and how many people it covered.
@@ -414,7 +428,7 @@ extrapolation. Only *relative* terms survive.
 The claims in §2 are only true because of specific protocol decisions. These are
 the ones that are easy to break without noticing.
 
-**Run `npm run util:test` before and after any change.** 93 checks, and the ones
+**Run `npm run util:test` before and after any change.** 101 checks, and the ones
 that matter most are the leakage invariants.
 
 ### Rules that are not style preferences

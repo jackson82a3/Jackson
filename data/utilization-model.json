@@ -1,7 +1,7 @@
 {
   "kind": "utilization-next-period-ridge",
   "formatVersion": 2,
-  "trainedAt": "2026-09-05T16:50:15.982Z",
+  "trainedAt": "2026-09-05T16:55:43.251Z",
   "dataset": {
     "file": "data/utilization.csv",
     "rows": 720,

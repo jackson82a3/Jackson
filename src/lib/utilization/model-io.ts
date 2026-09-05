@@ -43,6 +43,12 @@ export interface ModelArtifact {
   sigma: number;
   fallbackSigma: number;
   coverage80: number;
+  /**
+   * Deployment weight on the PM plan, present only when the model was trained
+   * with allocations. Optional because an artifact trained without them is still
+   * perfectly valid - it just cannot blend.
+   */
+  blendWeight?: number;
   interval: IntervalCalibration;
   model: {
     featureNames: string[];
@@ -73,6 +79,7 @@ export function serializeModel(
     sigma: trained.sigma,
     fallbackSigma: trained.fallbackSigma,
     coverage80: trained.coverage80,
+    ...(trained.blendWeight !== undefined ? { blendWeight: trained.blendWeight } : {}),
     interval: trained.interval,
     model: {
       featureNames: trained.model.featureNames,
@@ -186,6 +193,13 @@ export function loadModel(raw: unknown): {
   if (typeof artifact.fallbackSigma !== 'number' || !Number.isFinite(artifact.fallbackSigma)) {
     throw new ModelLoadError('The artifact has no `fallbackSigma` for fallback rows.');
   }
+  if (artifact.blendWeight !== undefined) {
+    const w = artifact.blendWeight;
+    // A weight outside [0,1] is not a blend; it extrapolates beyond both inputs.
+    if (typeof w !== 'number' || !Number.isFinite(w) || w < 0 || w > 1) {
+      throw new ModelLoadError(`blendWeight must be a number in [0, 1], got ${String(w)}.`);
+    }
+  }
 
   return {
     artifact: artifact as ModelArtifact,
@@ -217,6 +231,7 @@ export function forecasterFromArtifact(
     sigma: artifact.sigma,
     fallbackSigma: artifact.fallbackSigma,
     coverage80: artifact.coverage80,
+    blendWeight: artifact.blendWeight,
     interval: artifact.interval,
     costCenterMetrics: artifact.costCenterMetrics,
     training: artifact.dataset,

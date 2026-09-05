@@ -8,7 +8,7 @@ baselines.
 npm install
 npm run util:generate   # writes data/utilization.csv (720 rows, deterministic)
 npm run util:train      # writes data/utilization-model.json + utilization-forecast.csv
-npm run util:test       # 93 self-checks
+npm run util:test       # 101 self-checks
 npm run typecheck
 ```
 
@@ -24,6 +24,8 @@ npm run util:sweep      # how good would PM plans have to be? (30-cell sensitivi
 Operating a deployed model:
 
 ```bash
+npm run util:train -- --plans data/utilization-plan.csv    # also fits the blend weight
+npm run util:predict -- --plans data/utilization-plan.csv  # forecast using the blend
 npm run util:predict    # forecast from a saved model, without retraining
 npm run util:monitor    # accuracy + feature drift; exits non-zero on breach
 npm run util:experiment # score model variants through the shipped protocol

@@ -406,6 +406,82 @@ refuses('a model with no interval calibration is refused', a => {
   delete a.interval;
 });
 
+// --- Blend deployment ------------------------------------------------------
+// The seed study says the blend is the only forecaster that beats the naive
+// baseline across panels, so the production path has to be able to deploy it.
+const blendPlans = generatePlans(parsed);
+const deployed = runHeadToHead(parsed, blendPlans).deployedBlendWeight;
+check(
+  'the deployed blend weight is a genuine convex weight',
+  deployed >= 0 && deployed <= 1 && Number.isFinite(deployed),
+  deployed.toFixed(3),
+);
+
+// Forecast P12 from P1-P11, which is the only period the simulated plans can
+// exercise: there is deliberately no plan past the last extract.
+const throughP11 = parsed.filter(r => r.periodIndex <= 11);
+const p12Plans = blendPlans
+  .filter(p => p.planPeriod === 12)
+  .map(p => ({
+    costCenter: p.costCenter,
+    personName: p.personName,
+    planPeriod: p.planPeriod,
+    plannedUtilPct: p.plannedUtilPct,
+  }));
+const blended = forecastAll(trained, throughP11, undefined, { weight: deployed, plans: p12Plans });
+const unblended = forecastAll(trained, throughP11);
+check(
+  'a plan for the forecast period produces blend rows',
+  blended.forecasts.length > 0 && blended.forecasts.every(f => f.method === 'blend'),
+  `${blended.forecasts.filter(f => f.method === 'blend').length} of ${blended.forecasts.length}`,
+);
+check(
+  'a blended forecast is the stated mix of plan and model',
+  blended.forecasts.every((f, i) => {
+    const plan = p12Plans.find(p => p.costCenter === f.costCenter && p.personName === f.personName);
+    if (!plan) return false;
+    const expected = deployed * plan.plannedUtilPct + (1 - deployed) * unblended.forecasts[i].forecastUtil;
+    return Math.abs(f.forecastUtil - Math.min(100, Math.max(0, expected))) < 1e-9;
+  }),
+);
+check(
+  'people with no plan keep the model forecast rather than being dropped',
+  (() => {
+    const partial = forecastAll(trained, throughP11, undefined, {
+      weight: deployed,
+      plans: p12Plans.slice(0, 10),
+    });
+    return (
+      partial.forecasts.length === blended.forecasts.length &&
+      partial.forecasts.filter(f => f.method === 'blend').length === 10 &&
+      partial.forecasts.filter(f => f.method === 'model').length ===
+        blended.forecasts.length - 10
+    );
+  })(),
+);
+check(
+  'a plan for the wrong period is ignored, not silently applied',
+  forecastAll(trained, throughP11, undefined, {
+    weight: deployed,
+    plans: p12Plans.map(p => ({ ...p, planPeriod: 5 })),
+  }).forecasts.every(f => f.method === 'model'),
+);
+check(
+  'the blend weight round-trips through the artifact',
+  (() => {
+    const withBlend = { ...trained, blendWeight: deployed };
+    const back = loadModel(JSON.parse(JSON.stringify(serializeModel(withBlend, 'x'))));
+    return back.artifact.blendWeight === deployed;
+  })(),
+);
+check(
+  'an artifact without a blend weight still loads',
+  loadModel(JSON.parse(JSON.stringify(artifact))).artifact.blendWeight === undefined,
+);
+refuses('a blend weight outside [0,1] is refused', a => {
+  a.blendWeight = 1.4;
+});
+
 // --- Dataset validation ----------------------------------------------------
 const cleanReport = validateDataset(parsed);
 check(

@@ -1,7 +1,8 @@
 {
-  "trainedAt": "2026-09-05T16:50:17.164Z",
+  "trainedAt": "2026-09-05T16:55:44.817Z",
   "lambdaHistory": 3,
   "lambdaPlan": 0.3,
+  "deployedBlendWeight": 0.31334361684858303,
   "rows": 540,
   "validationRows": 300,
   "metrics": {
