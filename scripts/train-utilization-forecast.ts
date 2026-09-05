@@ -8,7 +8,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseCsv } from '../src/lib/utilization/csv.ts';
-import { verifyRecord } from '../src/lib/utilization/types.ts';
+import { serializeModel } from '../src/lib/utilization/model-io.ts';
+import { formatValidationReport, validateDataset } from '../src/lib/utilization/validate.ts';
 import {
   featureImportance,
   forecastAll,
@@ -31,10 +32,14 @@ if (!fs.existsSync(dataPath)) {
 }
 
 const records = parseCsv(fs.readFileSync(dataPath, 'utf8'));
-const badRows = records.filter(r => verifyRecord(r).length > 0);
-if (badRows.length > 0) {
-  console.error(`${badRows.length} rows fail the accounting identities; refusing to train.`);
-  console.error(`  e.g. ${badRows[0].personName} in ${badRows[0].sourceName}: ${verifyRecord(badRows[0])[0]}`);
+
+const validation = validateDataset(records);
+if (!validation.ok || validation.warnings.length > 0) {
+  console.log(formatValidationReport(validation));
+  console.log('');
+}
+if (!validation.ok) {
+  console.error('Refusing to train on data with errors. Fix the extract, not the tolerance.');
   process.exit(1);
 }
 
@@ -209,30 +214,7 @@ fs.mkdirSync(outDir, { recursive: true });
 const modelPath = path.join(outDir, 'utilization-model.json');
 fs.writeFileSync(
   modelPath,
-  JSON.stringify(
-    {
-      kind: 'utilization-next-period-ridge',
-      trainedAt: trained.trainedAt,
-      dataset: { file: path.relative(process.cwd(), dataPath), ...trained.training },
-      lambda: trained.model.lambda,
-      lambdaGrid: trained.byLambda,
-      metrics: trained.metrics,
-      byFold: trained.byFold,
-      baselines: trained.baselines,
-      costCenterMetrics: trained.costCenterMetrics,
-      sigma: trained.sigma,
-      coverage80: trained.coverage80,
-      model: {
-        featureNames: trained.model.featureNames,
-        coefficients: trained.model.coefficients,
-        means: trained.model.means,
-        sds: trained.model.sds,
-        intercept: trained.model.intercept,
-      },
-    },
-    null,
-    2,
-  ) + '\n',
+  JSON.stringify(serializeModel(trained, path.relative(process.cwd(), dataPath)), null, 2) + '\n',
 );
 
 const forecastPath = path.join(outDir, 'utilization-forecast.csv');

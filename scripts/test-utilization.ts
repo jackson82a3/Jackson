@@ -23,6 +23,20 @@ import {
   trainForecaster,
 } from '../src/lib/utilization/forecast.ts';
 import { generatePlans, parsePlanCsv, plansToCsv, verifyPlan } from '../src/lib/utilization/plan.ts';
+import {
+  forecasterFromArtifact,
+  loadModel,
+  ModelLoadError,
+  MODEL_FORMAT_VERSION,
+  serializeModel,
+} from '../src/lib/utilization/model-io.ts';
+import { validateDataset } from '../src/lib/utilization/validate.ts';
+import {
+  accuracyDrift,
+  DEFAULT_THRESHOLDS,
+  featureDrift,
+  verdict,
+} from '../src/lib/utilization/monitor.ts';
 import { buildPlanSamples, PLAN_FEATURE_NAMES, runHeadToHead } from '../src/lib/utilization/headtohead.ts';
 
 let failures = 0;
@@ -218,6 +232,156 @@ check(
     leaverResult.excluded[0].reason === 'absent_from_last_period' &&
     leaverResult.forecasts.length === headcountLastPeriod - 1,
   `${leaverResult.excluded.length} excluded`,
+);
+
+// --- Model artifact --------------------------------------------------------
+// A model artifact outlives the code that wrote it, and a ridge model will
+// cheerfully multiply the wrong coefficient by the wrong column and return a
+// plausible number. These check that it refuses instead.
+const artifact = serializeModel(trained, 'data/utilization.csv');
+const reloaded = loadModel(JSON.parse(JSON.stringify(artifact)));
+check(
+  'a saved model round-trips',
+  reloaded.model.featureNames.length === FEATURE_NAMES.length &&
+    reloaded.model.coefficients.every((c, i) => c === trained.model.coefficients[i]) &&
+    reloaded.model.intercept === trained.model.intercept,
+);
+
+const scoredFromDisk = forecastAll(
+  forecasterFromArtifact(reloaded.artifact, reloaded.model),
+  parsed,
+).forecasts;
+check(
+  'forecasting from a saved model matches forecasting from the trained one',
+  scoredFromDisk.length === full.forecasts.length &&
+    scoredFromDisk.every((f, i) => Math.abs(f.forecastUtil - full.forecasts[i].forecastUtil) < 1e-9),
+);
+
+const refuses = (label: string, mutate: (a: Record<string, unknown>) => void) => {
+  const copy = JSON.parse(JSON.stringify(artifact)) as Record<string, unknown>;
+  mutate(copy);
+  let threw = false;
+  try {
+    loadModel(copy);
+  } catch (error) {
+    threw = error instanceof ModelLoadError;
+  }
+  check(label, threw);
+};
+
+refuses('a model of the wrong kind is refused', a => {
+  a.kind = 'something-else';
+});
+refuses('a model with no format version is refused', a => {
+  delete a.formatVersion;
+});
+refuses('a model from a future format is refused', a => {
+  a.formatVersion = MODEL_FORMAT_VERSION + 1;
+});
+refuses('a model trained on different features is refused', a => {
+  (a.model as { featureNames: string[] }).featureNames = FEATURE_NAMES.map((n, i) =>
+    i === 0 ? 'some_other_feature' : n,
+  );
+});
+refuses('a model with the wrong number of coefficients is refused', a => {
+  (a.model as { coefficients: number[] }).coefficients = [1, 2, 3];
+});
+refuses('a model with a zero scale is refused', a => {
+  (a.model as { sds: number[] }).sds[0] = 0;
+});
+refuses('a model with no interval calibration is refused', a => {
+  delete a.interval;
+});
+
+// --- Dataset validation ----------------------------------------------------
+const cleanReport = validateDataset(parsed);
+check(
+  'clean data validates with no issues',
+  cleanReport.ok && cleanReport.issues.length === 0,
+  cleanReport.issues.map(i => i.code).join(', '),
+);
+
+const codesFor = (rows: typeof parsed) => validateDataset(rows).issues.map(i => i.code);
+check(
+  'a duplicated person-period is an error',
+  codesFor([...parsed, parsed[0]]).includes('duplicate_person_period'),
+);
+check(
+  'a broken accounting identity is an error',
+  codesFor([{ ...parsed[0], directTotal: parsed[0].directTotal + 25 }, ...parsed.slice(1)]).includes(
+    'identity_violation',
+  ),
+);
+check(
+  'a missing period is an error',
+  codesFor(parsed.filter(r => r.periodIndex !== 6)).includes('missing_periods'),
+);
+check(
+  'too few periods to train is an error',
+  codesFor(parsed.filter(r => r.periodIndex <= 4)).includes('insufficient_periods'),
+);
+check(
+  'a leaver is a warning, not an error',
+  (() => {
+    const report = validateDataset(withLeaver);
+    return (
+      report.ok &&
+      report.warnings.some(w => w.code === 'absent_from_last_period') &&
+      report.errors.length === 0
+    );
+  })(),
+);
+check(
+  'validation separates blocking errors from warnings',
+  validateDataset([...parsed, parsed[0]]).ok === false,
+);
+
+// --- Monitoring ------------------------------------------------------------
+// Train on the first nine periods, then check the model against the three it
+// never saw. This is also the honest demonstration of how much a backtest can
+// flatter a model on a genuinely novel period.
+const earlyRecords = parsed.filter(r => r.periodIndex <= 9);
+const earlyTrained = trainForecaster(earlyRecords);
+const earlyArtifact = serializeModel(earlyTrained, 'p1-p9');
+const earlyLoaded = loadModel(JSON.parse(JSON.stringify(earlyArtifact)));
+
+const unseen = accuracyDrift(earlyLoaded.artifact, earlyLoaded.model, parsed, 10);
+check(
+  'monitoring scores a model on periods it never saw',
+  unseen !== undefined && unseen.window.samples === 180 && !unseen.overlapsTraining,
+  `${unseen?.window.samples} samples`,
+);
+check(
+  'monitoring detects real degradation on an unseen window',
+  unseen !== undefined && unseen.maeRatio > 1.25 &&
+    verdict(unseen, [], DEFAULT_THRESHOLDS).accuracyBreached,
+  unseen ? `${unseen.observed.mae.toFixed(2)} vs claimed ${unseen.claimed.mae.toFixed(2)}` : 'none',
+);
+check(
+  'an in-sample window never raises drift, however bad it looks',
+  (() => {
+    const inSample = accuracyDrift(reloaded.artifact, reloaded.model, parsed, 8);
+    return (
+      inSample !== undefined &&
+      inSample.overlapsTraining &&
+      !verdict(inSample, [], DEFAULT_THRESHOLDS).accuracyBreached
+    );
+  })(),
+);
+check(
+  'monitoring returns nothing when no period has closed since training',
+  accuracyDrift(reloaded.artifact, reloaded.model, parsed, 13) === undefined,
+);
+
+const drift = featureDrift(reloaded.model, parsed);
+check(
+  'feature drift covers every feature and is sorted by size',
+  drift.length === FEATURE_NAMES.length &&
+    drift.every((d, i) => i === 0 || Math.abs(drift[i - 1].drift) >= Math.abs(d.drift)),
+);
+check(
+  'feature drift needs no outcomes',
+  featureDrift(reloaded.model, parsed.filter(r => r.periodIndex <= 5)).length === FEATURE_NAMES.length,
 );
 
 // --- PM allocations --------------------------------------------------------

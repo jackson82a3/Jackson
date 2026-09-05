@@ -488,6 +488,12 @@ export interface TrainedForecaster {
     samples: number;
     validationSamples: number;
     features: number;
+    /**
+     * Which periods the fit actually saw. Monitoring needs this to tell an
+     * honest out-of-sample window from one that overlaps training; it is
+     * optional so that an artifact written before it existed still loads.
+     */
+    periodRange?: { first: number; last: number };
   };
 }
 
@@ -580,6 +586,10 @@ export function trainForecaster(records: PeriodedRecord[]): TrainedForecaster {
       samples: samples.length,
       validationSamples: predictions.length,
       features: FEATURE_NAMES.length,
+      periodRange: {
+        first: Math.min(...records.map(r => r.periodIndex)),
+        last: Math.max(...records.map(r => r.periodIndex)),
+      },
     },
   };
 }

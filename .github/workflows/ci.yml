@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 22.18 is the floor: type stripping runs unflagged from there, and these
+        # scripts are executed as .ts directly. 24.x guards against forward drift.
+        node: ['22.18', '22', '24']
+    name: node ${{ matrix.node }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Self-checks
+        run: npm run util:test
+
+      # The dataset and the plans are committed artifacts, and every accuracy
+      # number in the docs is a number about them. If a seeded generator stops
+      # reproducing them byte for byte, those numbers quietly stop being true -
+      # so regenerate and require the working tree to be unchanged.
+      - name: Committed data is reproducible from its seed
+        run: |
+          npm run util:generate
+          npm run util:plans
+          git diff --exit-code -- data/utilization.csv data/utilization-plan.csv
+
+      - name: Train, forecast and monitor
+        run: |
+          npm run util:train
+          npm run util:predict
+          npm run util:monitor
+
+      - name: Head-to-head and experiments
+        run: |
+          npm run util:compare
+          npm run util:experiment

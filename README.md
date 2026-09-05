@@ -101,8 +101,10 @@ already tried and rejected.
 
 ## Environment notes
 
-Node runs the `.ts` files directly via type stripping, so **Node >= 22.6 is
-required**. There is no ts-node, tsx, or build step.
+Node runs the `.ts` files directly via type stripping, so **Node >= 22.18 is
+required** - that is the release where type stripping stopped needing a flag.
+On 22.6-22.17 the same scripts work but must be run with
+`--experimental-strip-types`. There is no ts-node, tsx, or build step.
 
 - Imports between these modules **must carry the `.ts` extension** — Node ESM does
   no extension resolution. `allowImportingTsExtensions` is on (safe: `noEmit`).

@@ -1,6 +1,7 @@
 {
   "kind": "utilization-next-period-ridge",
-  "trainedAt": "2026-09-05T14:18:32.726Z",
+  "formatVersion": 2,
+  "trainedAt": "2026-09-05T14:24:53.307Z",
   "dataset": {
     "file": "data/utilization.csv",
     "rows": 720,
@@ -8,7 +9,11 @@
     "periods": 12,
     "samples": 540,
     "validationSamples": 300,
-    "features": 18
+    "features": 18,
+    "periodRange": {
+      "first": 1,
+      "last": 12
+    }
   },
   "lambda": 3,
   "lambdaGrid": [
@@ -68,6 +73,28 @@
       "rmse": 6.0952601589646624
     }
   ],
+  "lambdaByFold": [
+    {
+      "targetPeriod": 8,
+      "lambda": 3
+    },
+    {
+      "targetPeriod": 9,
+      "lambda": 1
+    },
+    {
+      "targetPeriod": 10,
+      "lambda": 2
+    },
+    {
+      "targetPeriod": 11,
+      "lambda": 2
+    },
+    {
+      "targetPeriod": 12,
+      "lambda": 3
+    }
+  ],
   "metrics": {
     "n": 300,
     "mae": 4.57802920763941,
@@ -75,6 +102,14 @@
     "bias": -0.08239980935476701,
     "r2": 0.8980128521048084,
     "within5": 0.65
+  },
+  "optimisticMetrics": {
+    "n": 300,
+    "mae": 4.557566406368358,
+    "rmse": 6.067002494412537,
+    "bias": -0.13348123183984256,
+    "r2": 0.8988936991507651,
+    "within5": 0.6533333333333333
   },
   "byFold": [
     {
@@ -174,7 +209,65 @@
     "within5": 0.7666666666666667
   },
   "sigma": 6.092816148372999,
+  "fallbackSigma": 6.092718255881816,
   "coverage80": 0.7458333333333333,
+  "interval": {
+    "sigma": 6.092816148372999,
+    "shipped": "gaussian",
+    "methods": [
+      {
+        "name": "gaussian",
+        "low": -7.808553175754836,
+        "high": 7.808553175754836,
+        "coverageWalkForward": 0.7458333333333333
+      },
+      {
+        "name": "conformal_symmetric",
+        "low": -7.279934252154241,
+        "high": 7.279934252154241,
+        "coverageWalkForward": 0.725
+      },
+      {
+        "name": "conformal_asymmetric",
+        "low": -7.353208118271709,
+        "high": 6.951753734319098,
+        "coverageWalkForward": 0.65
+      },
+      {
+        "name": "student_t",
+        "low": -8.992387353383709,
+        "high": 8.992387353383709,
+        "coverageWalkForward": 0.8791666666666667
+      }
+    ],
+    "byFold": [
+      {
+        "targetPeriod": 9,
+        "n": 60,
+        "coverage": 0.8166666666666667,
+        "halfWidth": 6.0055125038653046
+      },
+      {
+        "targetPeriod": 10,
+        "n": 60,
+        "coverage": 0.5666666666666667,
+        "halfWidth": 5.764424339401373
+      },
+      {
+        "targetPeriod": 11,
+        "n": 60,
+        "coverage": 0.8333333333333334,
+        "halfWidth": 7.678564665318694
+      },
+      {
+        "targetPeriod": 12,
+        "n": 60,
+        "coverage": 0.7666666666666667,
+        "halfWidth": 7.6594472614170135
+      }
+    ],
+    "nWalkForward": 240
+  },
   "model": {
     "featureNames": [
       "util_vs_person_mean",
