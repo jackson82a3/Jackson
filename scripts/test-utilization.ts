@@ -52,6 +52,17 @@ function check(name: string, condition: boolean, detail = ''): void {
 
 console.log('utilization pipeline self-checks');
 
+/** Asserts that `fn` refuses its input rather than returning something wrong. */
+const throws = (label: string, fn: () => unknown) => {
+  let threw = false;
+  try {
+    fn();
+  } catch {
+    threw = true;
+  }
+  check(label, threw);
+};
+
 // --- Dataset ---------------------------------------------------------------
 const records = generateDataset({ seed: 20260901 });
 const parsed = parseCsv(toCsv(records));
@@ -82,6 +93,40 @@ check(
   'period is recoverable from Source.Name',
   parsed.every(r => r.sourceName.includes(r.periodMonth) && r.periodIndex >= 1 && r.periodIndex <= 12),
 );
+
+// --- Multi-year generation -------------------------------------------------
+// A second year exists to test seasonality, which one year cannot. The shipped
+// dataset is one year, so the first requirement is that adding the option did
+// not disturb it.
+check(
+  'the one-year dataset is unchanged by the years option',
+  toCsv(generateDataset({ seed: 20260901, years: 1 })) === toCsv(records),
+);
+const twoYears = parseCsv(toCsv(generateDataset({ seed: 20260901, years: 2 })));
+check(
+  'two years gives 24 periods and twice the rows',
+  new Set(twoYears.map(r => r.periodIndex)).size === 24 && twoYears.length === records.length * 2,
+  `${twoYears.length} rows`,
+);
+check(
+  'the fiscal year advances with the periods',
+  twoYears.filter(r => r.periodIndex <= 12).every(r => r.sourceName.startsWith('FY26_')) &&
+    twoYears.filter(r => r.periodIndex >= 13).every(r => r.sourceName.startsWith('FY27_')),
+);
+check(
+  'periods are still recoverable from the second year of file names',
+  twoYears.every(r => r.periodIndex >= 1 && r.periodIndex <= 24 && r.sourceName.includes(r.periodMonth)),
+);
+check('two-year rows satisfy the identities', twoYears.flatMap(r => verifyRecord(r)).length === 0);
+// Year-to-date figures are fiscal-year-to-date, so P13 must restart rather than
+// carry the first year's cumulative hours forward.
+const firstOfYearTwo = twoYears.filter(r => r.periodIndex === 13);
+check(
+  'year-to-date resets at the start of the second fiscal year',
+  firstOfYearTwo.length > 0 &&
+    firstOfYearTwo.every(r => Math.abs(r.utilPctYtd - r.utilPct) < 0.011),
+);
+throws('a non-positive number of years is rejected', () => generateDataset({ years: 0 }));
 
 // --- Ridge solver ----------------------------------------------------------
 const X = Array.from({ length: 200 }, (_, i) => [i / 20, Math.sin(i), (i % 7) - 3]);
@@ -282,15 +327,6 @@ check(
 
 // Degenerate inputs must fail loudly. Both of these used to return quietly:
 // a forecast for period -Infinity, and an interval with NaN bounds.
-const throws = (label: string, fn: () => unknown) => {
-  let threw = false;
-  try {
-    fn();
-  } catch {
-    threw = true;
-  }
-  check(label, threw);
-};
 throws('forecasting with no history is refused', () => forecastAll(trained, []));
 throws('forecasting a roster with no history is refused', () =>
   forecastAll(trained, [], [{ personName: 'X', costCenter: 'CC-1010' }]),

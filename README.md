@@ -8,7 +8,7 @@ baselines.
 npm install
 npm run util:generate   # writes data/utilization.csv (720 rows, deterministic)
 npm run util:train      # writes data/utilization-model.json + utilization-forecast.csv
-npm run util:test       # 86 self-checks
+npm run util:test       # 93 self-checks
 npm run typecheck
 ```
 
@@ -28,6 +28,8 @@ npm run util:predict    # forecast from a saved model, without retraining
 npm run util:monitor    # accuracy + feature drift; exits non-zero on breach
 npm run util:experiment # score model variants through the shipped protocol
 npm run util:horizon    # how far ahead is it still worth using? (answer: t+1 only)
+npm run util:seedstudy  # does any of this survive a different seed? (read this one)
+npm run util:secondyear # does a second year unlock seasonality? (no)
 ```
 
 ## Layout
@@ -72,11 +74,31 @@ Each fold's penalty is chosen inside its own past, so these are held out:
 Penalty `lambda = 3`. Hours-weighted cost-center rollup: MAE 3.26pp over 30
 cost-center periods.
 
-The honest statement of the gain is **1% MAE over "same as last period"**. The
-bias reduction, the 5pp hit rate, and the cost-center rollup are the stronger
-claims. Selecting the penalty on the folds being reported - the usual shortcut -
-would say 4.56pp instead; that 0.02pp is the size of the optimism, and both
-numbers are printed on every run.
+**Read this before quoting the table above.** Those numbers are correct for the
+panel they describe, and that panel is one draw from a simulator. Regenerate the
+world from a different seed and the edge disappears: `npm run util:seedstudy`
+runs 20 seeds and finds the model beats the naive baseline on 7 of them, averaging
+0.55% *worse*. The published seed is the most favourable of the 20.
+
+| claim | model | baseline | model better on |
+| --- | --- | --- | --- |
+| MAE (pp) | 4.033 | 4.011 | 7/20 seeds |
+| absolute bias (pp) | 0.669 | 0.664 | 5/20 seeds |
+| within 5pp | 0.709 | 0.709 | 10/20 seeds |
+| cost-center rollup MAE (pp) | 2.355 | 2.324 | 8/20 seeds |
+| **blend with PM plans (pp)** | **3.939** | 4.011 | **14/20 seeds** |
+
+**None of the history-only model's claims survive re-drawing the world** - not
+level accuracy, not the bias correction, not the hit rate, not the rollup. The
+one that does is blending in PM allocations, and the value there is the extra
+data rather than the estimator.
+
+So: if you have PM allocations, use the blend. If you do not, "same as last
+period" is as good as this model and far simpler to explain.
+
+Selecting the penalty on the folds being reported - the usual shortcut - would
+say 4.56pp instead; that 0.02pp is the size of the optimism, and both numbers are
+printed on every run.
 
 **Use it for t+1 only.** `util:horizon` measures what the model was previously
 only assumed to do beyond one period: it beats the best naive baseline by 1.0% at
@@ -106,11 +128,13 @@ person-periods:
 | PM plan (as-is) | 5.17 | 7.30 | +1.90 | 0.854 | 64.7% |
 
 The plan carries information the model does not have, and using both beats
-either: adding plans is worth -6.5% MAE, more than six times the model's own
--1.0% edge over "same as last period". Over 12 draws of the allocations the blend
-averages 4.28pp (sd 0.05) and is best in 10 of 12, against 4.33pp (sd 0.12) for
-the plan-augmented model. Using the plan beat the history-only model in 12/12
-draws; the raw plan beat it in 0/12.
+either: adding plans is worth -6.5% MAE on this panel. Over 12 draws of the
+allocations the blend averages 4.28pp (sd 0.05) and is best in 10 of 12, against
+4.33pp (sd 0.12) for the plan-augmented model.
+
+Across 20 *actuals* seeds the effect is real but smaller: the blend averages
+3.939pp against the baseline's 4.011pp and wins on 14 of 20. That makes it the
+only claim in this project that survives re-drawing the world.
 
 "The plan loses" is a statement about *assumed planner quality*, so `util:sweep`
 varies it. The raw plan wins in 11 of 30 cells and needs foresight >= 0.50; at 35% pull

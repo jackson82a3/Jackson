@@ -9,7 +9,11 @@ import type { RosterEntry } from './forecast.ts';
  */
 export function sourceNameFor(periodIndex: number, month: string): string {
   const p = String(periodIndex).padStart(2, '0');
-  return `FY26_P${p}_Utilization_${month}.csv`;
+  // The fiscal year advances every twelve periods, so a multi-year extract keeps
+  // FY26 for P01-P12 and moves to FY27 for P13-P24. Period 1-12 file names are
+  // unchanged by this, which is why the committed dataset still reproduces.
+  const fiscalYear = 26 + Math.floor((periodIndex - 1) / 12);
+  return `FY${fiscalYear}_P${p}_Utilization_${month}.csv`;
 }
 
 export function periodFromSourceName(sourceName: string): {

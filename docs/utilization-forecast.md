@@ -121,6 +121,13 @@ the origin must reproduce it bit for bit.
 
 ## 3. Results
 
+> **Read section 2.1 of `OPERATING-GUIDE.md` first.** Everything below is
+> correctly measured on one simulated panel, and does not survive re-generating
+> that panel from a different seed: across 20 seeds the model beats the naive
+> baseline on 7, and this panel is the most favourable of them. The numbers here
+> describe this dataset; they are not evidence about the model in general.
+
+
 Out-of-sample, 300 person-periods, Util % in percentage points:
 
 | model | MAE | RMSE | bias | R2 | within 5pp |

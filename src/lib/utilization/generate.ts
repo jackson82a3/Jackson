@@ -15,6 +15,16 @@ import type { JobLevel, TargetType, UtilizationRecord } from './types.ts';
 
 export interface GenerateOptions {
   seed?: number;
+  /**
+   * Fiscal years to generate, 1 by default.
+   *
+   * The shipped dataset is one year, and every published number is a number
+   * about it. A second year exists to answer the question one year cannot: with
+   * a single period per calendar month, every validation month is a month the
+   * model has never seen, so month effects can be neither learned nor
+   * validated. Two years is the smallest panel where that stops being true.
+   */
+  years?: number;
 }
 
 interface Period {
@@ -202,16 +212,37 @@ function buildRoster(rng: () => number, normal: (m: number, sd: number) => numbe
   return people;
 }
 
+/** Repeats the twelve-month calendar, advancing the period index and the year. */
+function buildCalendar(years: number): Period[] {
+  const periods: Period[] = [];
+  for (let year = 0; year < years; year++) {
+    for (const base of CALENDAR) {
+      const [y, m] = base.month.split('-').map(Number);
+      periods.push({
+        ...base,
+        index: base.index + year * CALENDAR.length,
+        month: `${y + year}-${String(m).padStart(2, '0')}`,
+      });
+    }
+  }
+  return periods;
+}
+
 export function generateDataset(options: GenerateOptions = {}): UtilizationRecord[] {
   const rng = makeRng(options.seed ?? 20260901);
   const normal = makeNormal(rng);
+  const years = options.years ?? 1;
+  if (!Number.isInteger(years) || years < 1) {
+    throw new Error(`years must be a positive integer, got ${years}`);
+  }
+  const calendar = buildCalendar(years);
   const people = buildRoster(rng, normal);
 
   // Firm-wide demand factor: one AR(1) path shared by everybody, which is what
   // makes cost-center averages informative about an individual's next period.
   const marketFactor: number[] = [];
   let market = normal(0, 1.5);
-  for (let t = 0; t < CALENDAR.length; t++) {
+  for (let t = 0; t < calendar.length; t++) {
     market = 0.7 * market + normal(0, 1.6);
     marketFactor.push(market);
   }
@@ -225,15 +256,25 @@ export function generateDataset(options: GenerateOptions = {}): UtilizationRecor
     let cumulativeAvail = 0;
     let cumulativeTotal = 0;
 
-    for (const period of CALENDAR) {
+    for (const period of calendar) {
       const t = period.index - 1;
+      // Seasonality and leave patterns repeat each fiscal year; the market
+      // factor and the personal shock do not.
+      const monthOfYear = t % CALENDAR.length;
       const standardHours = period.workdays * 8;
+
+      // Year-to-date figures are fiscal-year-to-date, so they reset each year.
+      if (monthOfYear === 0) {
+        cumulativeDirect = 0;
+        cumulativeAvail = 0;
+        cumulativeTotal = 0;
+      }
 
       // --- Leave and fringe -------------------------------------------------
       // New hires ramp through their opening periods: little leave, heavy training.
       const ramping = period.index <= person.rampPeriods;
       const vacationDraw =
-        person.vacationBudget * VACATION_WEIGHT[t] * clamp(normal(1, 0.55), 0, 2.6) *
+        person.vacationBudget * VACATION_WEIGHT[monthOfYear] * clamp(normal(1, 0.55), 0, 2.6) *
         (ramping ? 0.25 : 1);
       const vacation = round1(clamp(Math.round(vacationDraw / 4) * 4, 0, standardHours * 0.55));
       const statAndDisc = round1(period.statHours + (rng() < 0.06 ? 8 : 0));
@@ -257,7 +298,7 @@ export function generateDataset(options: GenerateOptions = {}): UtilizationRecor
         person.profile.baseUtil +
         person.effect +
         person.costCenter.utilOffset +
-        SEASONALITY[t] +
+        SEASONALITY[monthOfYear] +
         1.1 * marketFactor[t] +
         shock +
         benchHangover +
@@ -274,10 +315,10 @@ export function generateDataset(options: GenerateOptions = {}): UtilizationRecor
           clamp(normal(1, 0.35), 0.2, 2),
         mngmt: availTotal * person.profile.mngmtShare * clamp(normal(1, 0.25), 0.3, 1.8),
         opportunity:
-          availTotal * (rng() < 0.45 ? rng() * 0.05 * (period.index >= 11 ? 1.6 : 1) : 0),
+          availTotal * (rng() < 0.45 ? rng() * 0.05 * (monthOfYear >= 10 ? 1.6 : 1) : 0),
         training:
           (ramping ? clamp(normal(46, 12), 16, 80) : clamp(normal(4, 3), 0, 14)) +
-          (period.index === 1 || period.index === 7 ? 4 + rng() * 4 : 0),
+          (monthOfYear === 0 || monthOfYear === 6 ? 4 + rng() * 4 : 0),
         other: availTotal * rng() * 0.015,
       };
 

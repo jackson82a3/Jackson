@@ -33,21 +33,26 @@ split into direct, indirect and fringe — and predicts each person's utilizatio
 in the period that has not happened yet. It also ships a simulated dataset, so
 the whole thing runs end to end with no access to real data.
 
-**The honest summary of its accuracy**: it is about **1% better than assuming
-next period equals last period**. That is the whole edge on level. Its real
-contributions are elsewhere — it removes a bias the naive baseline has, it hits
-within 5pp more often, and the cost-centre rollup is materially better than the
-person-level number suggests.
+**The honest summary of its accuracy**: on the panel every published number is
+measured on, it is about 1% better than assuming next period equals last period.
+**Re-generate the world from a different random seed and that edge disappears.**
+Across 20 seeds the model beats the naive baseline on 7, and averages 0.55%
+*worse*. The published panel turns out to be the most favourable of the 20.
 
-If someone tells you this model is a large accuracy win, they have not read the
-backtest. It is a small, honestly-measured win, and the parts that matter most
-are the calibration and the coverage, not the MAE.
+The one thing that does survive re-drawing is **blending in PM hour
+allocations**: that beats the naive baseline on 14 of 20 seeds. The value is in
+the extra data, not in the estimator.
+
+So the short version: if you have PM allocations, use the blend. If you do not,
+"same as last period" is as good as this model and far simpler. §2.1 has the
+numbers.
 
 | | |
 | --- | --- |
 | Predicts | Util % for period t+1, per person |
 | Trained on | 12 monthly periods, 60 people, 720 rows (synthetic) |
-| Out-of-sample MAE | **4.58pp** vs 4.63pp for "same as last period" |
+| Out-of-sample MAE | 4.58pp vs 4.63pp for "same as last period" — **on one seed; see §2.1** |
+| Across 20 seeds | model beats the baseline on **7/20**; blend with plans on **14/20** |
 | Usable horizon | **t+1 only** — it loses to naive baselines at t+2, see §8 |
 | Interval | 80% nominal, **74.6% realised** — see §2 |
 | Cost-centre rollup | 3.26pp MAE, hours-weighted |
@@ -60,7 +65,35 @@ are the calibration and the coverage, not the MAE.
 
 This is the section that stops the model being misused.
 
-### 2.1 "4.58pp MAE" is measured honestly, and is barely better than doing nothing
+### 2.1 The edge over the naive baseline is not reliable
+
+Run `npm run util:seedstudy`. It regenerates the whole world from 20 seeds and
+scores the model identically each time. This is the most important table in the
+project:
+
+| claim | model | baseline | model better on |
+| --- | --- | --- | --- |
+| MAE (pp) | 4.033 | 4.011 | 7/20 seeds |
+| absolute bias (pp) | 0.669 | 0.664 | 5/20 seeds |
+| within 5pp | 0.709 | 0.709 | 10/20 seeds |
+| cost-centre rollup MAE (pp) | 2.355 | 2.324 | 8/20 seeds |
+| **blend with PM plans (pp)** | **3.939** | 4.011 | **14/20 seeds** |
+
+**None of the history-only model's claims survive re-drawing the world.** Not
+level accuracy, not the bias correction, not the 5pp hit rate, not the
+cost-centre rollup — every one of them is a coin flip or worse across seeds. The
+shipped panel gives +1.0%; the other 19 average −0.63%, and +1.0% is the best of
+all 20 draws.
+
+The one claim that does survive is the blend with PM allocations, at 14/20 seeds
+and a mean 4.011 → 3.939pp. It is a modest, real effect, and it comes from having
+more information rather than from the model being clever.
+
+That is not a reason to distrust the numbers below — they are correctly measured
+on the panel they describe. It is a reason not to generalise them. Everything in
+the rest of §2 is *about this panel*.
+
+### 2.1.1 What the published panel says, correctly measured
 
 The model is scored by **rolling-origin cross-validation**: to score period 10,
 it is fitted only on periods that closed before 10, then asked to predict 10.
@@ -75,9 +108,11 @@ That is exactly how it gets used, so the number is not a fit statistic.
 | their target | 9.62 | 13.42 | +3.12 | 0.506 | 36.0% |
 | cost-centre mean | 14.61 | 18.29 | −0.28 | 0.082 | 21.7% |
 
-**Read that first column honestly: 4.58 against 4.63 is a 1% improvement.** The
-stronger claims are the bias (−0.08 vs −0.33) and the 5pp hit rate (65.0% vs
-62.0%), and that the cost-centre rollup lands at 3.26pp.
+**Read that first column honestly: 4.58 against 4.63 is a 1% improvement** — on
+this panel, and per §2.1 not on most others. The bias (−0.08 vs −0.33), the 5pp
+hit rate (65.0% vs 62.0%) and the 3.26pp cost-centre rollup look like stronger
+claims here, and were presented as such before the seed study existed; they do
+not hold up across seeds either.
 
 The penalty is chosen *inside each fold's own past*, not on the folds being
 reported. If it is chosen the usual sloppy way — scan the grid, report the best
@@ -141,8 +176,11 @@ Things tried that did **not** help, all measured through the shipped protocol:
 | Tuning mean reversion to 0.75 | illusory — it was tuned on the validation set |
 
 Run `npm run util:experiment` to re-check the first three at any time. **The
-useful conclusion is that further estimator tuning is not where the gains are.**
-The gains are in more data (a second year), or in better inputs (§2.4).
+useful conclusion is that further estimator tuning is not where the gains are** —
+and §2.1 sharpens that: the estimator has no reliable edge to tune. A second year
+does not help either (`npm run util:secondyear`: neither sin/cos nor month
+dummies improve anything, and dummies make it worse). The one input that moves
+the number is PM allocations (§2.4).
 
 ### 2.4 PM plans beat estimator tuning
 
@@ -157,8 +195,13 @@ times the model's own edge over the naive baseline.
 | PM plan used as-is | 5.17 |
 
 The raw plan is *worse* than the model, but it carries information the model
-structurally cannot have, so combining them beats either. Full protocol,
-sensitivity analysis, and the caveats in
+structurally cannot have, so combining them beats either.
+
+**This is the only claim in the project that survives the seed study**, and even
+it is more modest than this table suggests: across 20 seeds the blend averages
+3.939pp against the baseline's 4.011pp and wins on 14 of 20, an edge of about
+1.8% rather than the 6.5% this panel shows. Full protocol, sensitivity analysis,
+and the caveats in
 [`utilization-plan-headtohead.md`](utilization-plan-headtohead.md).
 
 ---
@@ -167,7 +210,7 @@ sensitivity analysis, and the caveats in
 
 ```bash
 npm install       # no runtime dependencies; TypeScript for typechecking only
-npm run util:test # 86 self-checks - run this first
+npm run util:test # 93 self-checks - run this first
 ```
 
 | Command | What it does | Writes |
@@ -178,10 +221,12 @@ npm run util:test # 86 self-checks - run this first
 | `util:monitor` | Checks a deployed model for drift; **exits non-zero on breach** | `utilization-monitor.json` |
 | `util:experiment` | Scores model variants through the shipped protocol | `utilization-experiments.json` |
 | `util:horizon` | Measures accuracy at t+1..t+4 against baselines | `utilization-horizons.json` |
+| `util:seedstudy` | **Re-runs everything on 20 seeds. Read this before trusting any number.** | `utilization-seedstudy.json` |
+| `util:secondyear` | Tests whether a second year unlocks seasonality (it does not) | `utilization-secondyear.json` |
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
-| `util:test` | 86 self-checks | — |
+| `util:test` | 93 self-checks | — |
 | `typecheck` | `tsc --noEmit` | — |
 
 Every command takes `--data <path>` to point at a different extract. `util:train`
@@ -369,7 +414,7 @@ extrapolation. Only *relative* terms survive.
 The claims in §2 are only true because of specific protocol decisions. These are
 the ones that are easy to break without noticing.
 
-**Run `npm run util:test` before and after any change.** 86 checks, and the ones
+**Run `npm run util:test` before and after any change.** 93 checks, and the ones
 that matter most are the leakage invariants.
 
 ### Rules that are not style preferences
@@ -418,6 +463,11 @@ older readers cannot handle, and note what changed in the comment above it.
 
 Read this before any decision that affects a person.
 
+- **The model has no reliable edge over "same as last period".** Across 20
+  simulated panels it wins on 7 (§2.1). Do not deploy it on the strength of the
+  headline figure. If you have PM allocations, the blend is the defensible
+  choice; if you do not, the naive baseline is as good and far simpler to
+  explain.
 - **Every accuracy number is a number about a simulation.** The dataset is
   synthetic — calibrated to be plausible and internally consistent, not to match
   any real firm. On real data the model-vs-naive gap could go either way. Nothing

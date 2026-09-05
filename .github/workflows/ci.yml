@@ -47,8 +47,10 @@ jobs:
           npm run util:predict
           npm run util:monitor
 
-      - name: Head-to-head, experiments and horizons
+      - name: Head-to-head, experiments, horizons and robustness
         run: |
           npm run util:compare
           npm run util:experiment
           npm run util:horizon
+          npm run util:seedstudy
+          npm run util:secondyear

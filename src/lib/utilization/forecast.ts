@@ -148,12 +148,12 @@ export interface CrossValidation {
   byFold: { targetPeriod: number; n: number; mae: number; rmse: number }[];
 }
 
-function validationPeriods(samples: Sample[]): number[] {
+function validationPeriods(samples: Sample[], first = FIRST_VALIDATION_PERIOD): number[] {
   const periods = [...new Set(samples.map(s => s.targetPeriod))]
-    .filter(p => p >= FIRST_VALIDATION_PERIOD)
+    .filter(p => p >= first)
     .sort((a, b) => a - b);
   if (periods.length === 0) {
-    throw new Error(`No sample reaches period ${FIRST_VALIDATION_PERIOD}; not enough history`);
+    throw new Error(`No sample reaches period ${first}; not enough history`);
   }
   return periods;
 }
@@ -261,12 +261,18 @@ export function selectLambdaBefore(
 export function crossValidateNested(
   samples: Sample[],
   estimator: Estimator = DEFAULT_ESTIMATOR,
+  /**
+   * First period to score. Defaults to the shipped constant; a longer panel can
+   * start later, which is what makes a seasonal effect testable - a month can
+   * only be learned once it has been seen at least once.
+   */
+  firstValidationPeriod = FIRST_VALIDATION_PERIOD,
 ): CrossValidation & { lambdaByFold: { targetPeriod: number; lambda: number }[] } {
   const predictions: FoldPrediction[] = [];
   const byFold: CrossValidation['byFold'] = [];
   const lambdaByFold: { targetPeriod: number; lambda: number }[] = [];
 
-  for (const period of validationPeriods(samples)) {
+  for (const period of validationPeriods(samples, firstValidationPeriod)) {
     const train = samples.filter(s => s.targetPeriod < period);
     const validate = samples.filter(s => s.targetPeriod === period);
     if (train.length === 0 || validate.length === 0) continue;
