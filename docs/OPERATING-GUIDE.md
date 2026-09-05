@@ -167,7 +167,7 @@ sensitivity analysis, and the caveats in
 
 ```bash
 npm install       # no runtime dependencies; TypeScript for typechecking only
-npm run util:test # 80 self-checks - run this first
+npm run util:test # 86 self-checks - run this first
 ```
 
 | Command | What it does | Writes |
@@ -181,7 +181,7 @@ npm run util:test # 80 self-checks - run this first
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
-| `util:test` | 80 self-checks | — |
+| `util:test` | 86 self-checks | — |
 | `typecheck` | `tsc --noEmit` | — |
 
 Every command takes `--data <path>` to point at a different extract. `util:train`
@@ -369,7 +369,7 @@ extrapolation. Only *relative* terms survive.
 The claims in §2 are only true because of specific protocol decisions. These are
 the ones that are easy to break without noticing.
 
-**Run `npm run util:test` before and after any change.** 80 checks, and the ones
+**Run `npm run util:test` before and after any change.** 86 checks, and the ones
 that matter most are the leakage invariants.
 
 ### Rules that are not style preferences
@@ -480,10 +480,16 @@ Training needs at least 9 periods so the rolling origin has folds to score.
 Forecasting from an existing model does not — use `util:predict`.
 
 **Monitoring exits 1**
-Thresholds breached. Check whether accuracy or feature drift fired. Accuracy
-drift means retrain and re-review. Feature drift alone means something changed
-in the inputs — find out what before assuming the model is still valid. Tune
-with `--mae-ratio` and `--drift-sds` if the defaults are wrong for your data.
+Either a threshold was breached, or neither signal could be measured. Check
+which. Accuracy drift means retrain and re-review. Feature drift alone means
+something changed in the inputs — find out what before assuming the model is
+still valid. Tune with `--mae-ratio` and `--drift-sds` if the defaults are wrong
+for your data.
+
+**`Feature drift: NOT MEASURED`**
+There was not enough contiguous history to build a feature row (it needs four
+periods). This is reported loudly and exits non-zero on purpose: a monitor that
+quietly reports "no drift" when it checked nothing is worse than no monitor.
 
 **CI fails on "Committed data is reproducible from its seed"**
 The generator changed and the committed dataset no longer matches. Run

@@ -402,6 +402,12 @@ function intervalsFrom(residuals: number[], priorFolds: number): Record<string, 
 export const SHIPPED_INTERVAL = 'gaussian';
 
 export function calibrateIntervals(predictions: FoldPrediction[]): IntervalCalibration {
+  // Widths come from residuals; with none there is nothing to calibrate, and
+  // returning NaN bounds would put an interval on a forecast that has no basis
+  // for one.
+  if (predictions.length === 0) {
+    throw new Error('Cannot calibrate an interval with no out-of-sample predictions');
+  }
   const residuals = predictions.map(p => p.predicted - p.sample.y);
   const sigma = sdOf(residuals);
 
@@ -703,6 +709,12 @@ export function forecastAll(
   records: PeriodedRecord[],
   roster?: RosterEntry[],
 ): ForecastResult {
+  // The period being forecast is defined as the one after the last closed
+  // period, so with no records there is no such period - and a roster alone
+  // would otherwise yield forecasts for period -Infinity.
+  if (records.length === 0) {
+    throw new Error('Cannot forecast without at least one period of history');
+  }
   const firstPeriod = Math.min(...records.map(r => r.periodIndex));
   const lastPeriod = Math.max(...records.map(r => r.periodIndex));
   const firstMonth = records.find(r => r.periodIndex === firstPeriod)?.periodMonth ?? '2025-10';

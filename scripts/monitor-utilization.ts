@@ -64,8 +64,17 @@ const since = Number(
 );
 
 const accuracy = accuracyDrift(artifact, model, records, since);
-const drift = featureDrift(model, records);
-const result = verdict(accuracy, drift, thresholds);
+// Feature drift needs enough contiguous history to build a feature row. If it
+// cannot be measured, say so - never let "nothing exceeded the threshold" stand
+// in for "nothing was checked".
+let drift;
+let driftError;
+try {
+  drift = featureDrift(model, records);
+} catch (error) {
+  driftError = (error as Error).message;
+}
+const result = verdict(accuracy, drift ?? [], thresholds);
 
 const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
 const signed = (x: number, d = 2) => `${x >= 0 ? '+' : '-'}${Math.abs(x).toFixed(d)}`;
@@ -113,27 +122,37 @@ if (!accuracy) {
   console.log('');
 }
 
-console.log('Feature drift (current mean vs the training mean, in training sds)');
-console.log('feature'.padEnd(28) + 'trained'.padStart(10) + 'now'.padStart(10) + 'drift'.padStart(10));
-console.log('-'.repeat(78));
-for (const r of drift.slice(0, 8)) {
+if (!drift) {
+  console.log('Feature drift: NOT MEASURED');
+  console.log(`  ${driftError}.`);
+  console.log('  This is not a pass. Nothing was checked.');
+} else {
+  console.log('Feature drift (current mean vs the training mean, in training sds)');
+  console.log('feature'.padEnd(28) + 'trained'.padStart(10) + 'now'.padStart(10) + 'drift'.padStart(10));
+  console.log('-'.repeat(78));
+  for (const r of drift.slice(0, 8)) {
+    console.log(
+      r.feature.padEnd(28) + r.trained.toFixed(2).padStart(10) + r.now.toFixed(2).padStart(10) +
+        signed(r.drift).padStart(10),
+    );
+  }
+  console.log('');
   console.log(
-    r.feature.padEnd(28) + r.trained.toFixed(2).padStart(10) + r.now.toFixed(2).padStart(10) +
-      signed(r.drift).padStart(10),
+    result.driftedFeatures.length > 0
+      ? `  DRIFT: ${result.driftedFeatures.length} feature(s) beyond ${thresholds.featureSds} sd: ` +
+          `${result.driftedFeatures.map(d => d.feature).join(', ')}.`
+      : `  No feature has moved more than ${thresholds.featureSds} sd from its training distribution.`,
   );
 }
-console.log('');
-console.log(
-  result.driftedFeatures.length > 0
-    ? `  DRIFT: ${result.driftedFeatures.length} feature(s) beyond ${thresholds.featureSds} sd: ` +
-        `${result.driftedFeatures.map(d => d.feature).join(', ')}.`
-    : `  No feature has moved more than ${thresholds.featureSds} sd from its training distribution.`,
-);
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(
   outPath,
-  JSON.stringify({ checkedAt: new Date().toISOString(), since, accuracy, drift, verdict: result }, null, 2) + '\n',
+  JSON.stringify(
+    { checkedAt: new Date().toISOString(), since, accuracy, drift: drift ?? null, driftError, verdict: result },
+    null,
+    2,
+  ) + '\n',
 );
 console.log(`\nWrote ${path.relative(process.cwd(), outPath)}`);
 
@@ -141,4 +160,7 @@ if (result.breached) {
   console.error('\nMonitoring thresholds breached.');
   process.exit(1);
 }
-console.log(`Coverage of the roster is checked by \`npm run util:predict\`.`);
+if (!drift && !accuracy) {
+  console.error('\nNeither signal could be measured. This run says nothing about the model.');
+  process.exit(1);
+}

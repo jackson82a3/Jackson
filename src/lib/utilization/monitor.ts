@@ -1,4 +1,4 @@
-import { buildTrainingSamples, FEATURE_NAMES } from './features.ts';
+import { buildTrainingSamples, FEATURE_NAMES, MIN_HISTORY } from './features.ts';
 import { evaluate } from './forecast.ts';
 import type { Metrics } from './forecast.ts';
 import type { ModelArtifact } from './model-io.ts';
@@ -104,15 +104,25 @@ export function featureDrift(
   model: RidgeModel,
   records: PeriodedRecord[],
 ): FeatureDrift[] {
+  const samples = records.length > 0 ? buildTrainingSamples(records) : [];
+  // Silently returning NaN here would be the worst failure a monitor can have:
+  // `verdict` finds no drift above threshold, reports that nothing has moved,
+  // and the fact that nothing was measured never surfaces. Callers that cannot
+  // supply enough history should be told so.
+  if (samples.length === 0) {
+    throw new Error(
+      `Feature drift needs at least ${MIN_HISTORY + 1} contiguous periods to build a ` +
+        `feature row; got ${new Set(records.map(r => r.periodIndex)).size}`,
+    );
+  }
+
   const lastPeriod = Math.max(...records.map(r => r.periodIndex));
-  const samples = buildTrainingSamples(records);
   const recent = samples.filter(s => s.targetPeriod === lastPeriod);
   const rows = recent.length > 0 ? recent : samples;
 
   return FEATURE_NAMES.map((feature, j) => {
     const values = rows.map(s => s.x[j]);
-    const now =
-      values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : Number.NaN;
+    const now = values.reduce((a, b) => a + b, 0) / values.length;
     return {
       feature,
       trained: model.means[j],

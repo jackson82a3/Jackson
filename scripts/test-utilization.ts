@@ -280,6 +280,23 @@ check(
   joiner !== undefined && Number.isNaN(joiner.lastUtil),
 );
 
+// Degenerate inputs must fail loudly. Both of these used to return quietly:
+// a forecast for period -Infinity, and an interval with NaN bounds.
+const throws = (label: string, fn: () => unknown) => {
+  let threw = false;
+  try {
+    fn();
+  } catch {
+    threw = true;
+  }
+  check(label, threw);
+};
+throws('forecasting with no history is refused', () => forecastAll(trained, []));
+throws('forecasting a roster with no history is refused', () =>
+  forecastAll(trained, [], [{ personName: 'X', costCenter: 'CC-1010' }]),
+);
+throws('calibrating an interval with no predictions is refused', () => calibrateIntervals([]));
+
 // Someone who left mid-year has no period to forecast from.
 const leaver = `${parsed[0].costCenter}|${parsed[0].personName}`;
 const withLeaver = parsed.filter(
@@ -477,6 +494,13 @@ check(
   accuracyDrift(reloaded.artifact, reloaded.model, parsed, 13) === undefined,
 );
 
+// A monitor that cannot measure must say so. Returning NaN would let `verdict`
+// report "nothing exceeded the threshold" when nothing was checked at all.
+throws('feature drift with too little history is refused, not silently NaN', () =>
+  featureDrift(reloaded.model, parsed.filter(r => r.periodIndex <= 2)),
+);
+throws('feature drift with no records at all is refused', () => featureDrift(reloaded.model, []));
+
 const drift = featureDrift(reloaded.model, parsed);
 check(
   'feature drift covers every feature and is sorted by size',
@@ -486,6 +510,10 @@ check(
 check(
   'feature drift needs no outcomes',
   featureDrift(reloaded.model, parsed.filter(r => r.periodIndex <= 5)).length === FEATURE_NAMES.length,
+);
+check(
+  'every drift figure is a real number',
+  drift.every(d => Number.isFinite(d.now) && Number.isFinite(d.drift)),
 );
 
 // --- PM allocations --------------------------------------------------------
