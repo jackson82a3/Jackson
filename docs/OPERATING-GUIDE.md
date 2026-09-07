@@ -202,7 +202,25 @@ Across 200 seeds it beats the plain blend on 99 of them. **A single panel
 endorsed a change that 200 panels say is nothing**, which is the whole argument
 for `util:seedstudy`. It is kept in the comparison, and not deployed.
 
-Run `npm run util:experiment` to re-check the estimator variants at any time. **The
+Run `npm run util:experiment` to re-check the estimator variants at any time.
+
+### 2.3.1 A note on how many things have been tried
+
+Counting the table above and the four interval methods in §2.2, roughly a dozen
+variants have now been measured against this model. None won. That is worth
+knowing for two reasons.
+
+The first is the obvious one: the estimator is not where the value is, and a
+thirteenth variant is unlikely to change that.
+
+The second is less obvious and matters more for whatever you try next. **With a
+dozen comparisons already run, the next one that looks good is more likely to be
+luck than the first would have been.** Testing enough candidates against a
+noisy target eventually produces a winner by chance — the staleness-weighted
+blend already did exactly that on the shipped panel. So a new variant should
+clear a higher bar than "it beat the incumbent once": run it through
+`util:seedstudy`, and expect a majority across seeds rather than a margin on one
+panel. The scripts are set up to make that the easy path. **The
 useful conclusion is that further estimator tuning is not where the gains are** —
 and §2.1 sharpens that: the estimator has no reliable edge to tune. A second year
 does not help either (`npm run util:secondyear`: neither sin/cos nor month
