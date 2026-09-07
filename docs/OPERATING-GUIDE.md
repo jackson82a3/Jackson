@@ -184,6 +184,7 @@ Things tried that did **not** help, all measured through the shipped protocol:
 
 | tried | result |
 | --- | --- |
+| Weighting the blend by plan staleness | **99/200 seeds vs the plain blend — a coin flip** |
 | Huber loss (targets MAE directly) | 4.61 vs 4.58 — worse, wins 2/5 folds |
 | Recency weighting (half-life 3) | 4.67 — worse, wins 0/5 folds |
 | Both together | 4.66 — worse |
@@ -193,7 +194,15 @@ Things tried that did **not** help, all measured through the shipped protocol:
 | Month sin/cos | cannot be validated on one fiscal year |
 | Tuning mean reversion to 0.75 | illusory — it was tuned on the validation set |
 
-Run `npm run util:experiment` to re-check the first three at any time. **The
+The staleness one is worth dwelling on, because it is the trap this project
+keeps finding. Stale allocations really are worse — 4.9pp fresh against 6.3pp at
+age 1 — so giving them less weight is a mechanism, not a knob. On the shipped
+panel it duly comes out best of everything, 4.27 against the plain blend's 4.28.
+Across 200 seeds it beats the plain blend on 99 of them. **A single panel
+endorsed a change that 200 panels say is nothing**, which is the whole argument
+for `util:seedstudy`. It is kept in the comparison, and not deployed.
+
+Run `npm run util:experiment` to re-check the estimator variants at any time. **The
 useful conclusion is that further estimator tuning is not where the gains are** —
 and §2.1 sharpens that: the estimator has no reliable edge to tune. A second year
 does not help either (`npm run util:secondyear`: neither sin/cos nor month
@@ -228,7 +237,7 @@ and the caveats in
 
 ```bash
 npm install       # no runtime dependencies; TypeScript for typechecking only
-npm run util:test # 101 self-checks - run this first
+npm run util:test # 104 self-checks - run this first
 ```
 
 | Command | What it does | Writes |
@@ -244,7 +253,7 @@ npm run util:test # 101 self-checks - run this first
 | `util:plans` | Generates simulated PM allocations | `utilization-plan.csv` |
 | `util:compare` | PM plan vs model vs blend | `utilization-headtohead.json` |
 | `util:sweep` | How good would PM plans have to be? | `utilization-sweep.json` |
-| `util:test` | 101 self-checks | — |
+| `util:test` | 104 self-checks | — |
 | `typecheck` | `tsc --noEmit` | — |
 
 Every command takes `--data <path>` to point at a different extract. `util:train`
@@ -437,7 +446,7 @@ extrapolation. Only *relative* terms survive.
 The claims in §2 are only true because of specific protocol decisions. These are
 the ones that are easy to break without noticing.
 
-**Run `npm run util:test` before and after any change.** 101 checks, and the ones
+**Run `npm run util:test` before and after any change.** 104 checks, and the ones
 that matter most are the leakage invariants.
 
 ### Rules that are not style preferences

@@ -39,6 +39,7 @@ const LABELS: Record<ForecasterName, string> = {
   history_ridge: 'model (history only)',
   plan_ridge: 'model on plan + history',
   blend: 'blend (plan + model)',
+  blend_by_age: 'blend, weight by staleness',
 };
 
 const rule = '='.repeat(78);

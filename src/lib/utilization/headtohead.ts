@@ -175,9 +175,33 @@ export function buildPlanSamples(
   return out;
 }
 
-export type ForecasterName = 'plan' | 'history_ridge' | 'plan_ridge' | 'blend';
+export type ForecasterName =
+  | 'plan'
+  | 'history_ridge'
+  | 'plan_ridge'
+  | 'blend'
+  | 'blend_by_age';
 
-export const FORECASTERS: ForecasterName[] = ['plan', 'history_ridge', 'plan_ridge', 'blend'];
+export const FORECASTERS: ForecasterName[] = [
+  'plan',
+  'history_ridge',
+  'plan_ridge',
+  'blend',
+  'blend_by_age',
+];
+
+/**
+ * How stale an allocation is, bucketed. A carried-forward plan describes a
+ * period it was never written for, and the generator makes that cost real:
+ * fresh plans score around 4.9pp against 6.3pp at age 1. A single blend weight
+ * has to average over that, trusting a stale plan as much as a fresh one.
+ */
+function ageBucket(planAgePeriods: number): string {
+  return planAgePeriods === 0 ? 'fresh' : 'stale';
+}
+
+/** Rows a bucket needs before its own weight is preferred to the global one. */
+const MIN_BUCKET_ROWS = 40;
 
 export interface HeadToHeadPrediction {
   sample: PlanSample;
@@ -193,6 +217,8 @@ export interface FoldSummary {
   mae: Record<ForecasterName, number>;
   /** Weight on the plan used by the blend, fitted on earlier folds only. */
   blendWeight: number;
+  /** Per-staleness weights, where a bucket had enough earlier rows to fit one. */
+  blendWeightByAge: Record<string, number>;
 }
 
 export interface HeadToHead {
@@ -268,7 +294,7 @@ function rollingOrigin(samples: PlanSample[]): RollingPass {
   const lambdaByFold: { targetPeriod: number; history: number; plan: number }[] = [];
   // Out-of-sample rows from folds already scored, which is all the blend weight
   // is ever allowed to see.
-  const seen: { actual: number; plan: number; model: number }[] = [];
+  const seen: { actual: number; plan: number; model: number; bucket: string }[] = [];
 
   for (const period of validationPeriods(samples)) {
     const train = samples.filter(s => s.base.targetPeriod < period);
@@ -295,6 +321,17 @@ function rollingOrigin(samples: PlanSample[]): RollingPass {
     );
 
     const blendWeight = fitBlendWeight(seen) ?? 0.5;
+    // A weight per staleness bucket, fitted on earlier folds only, exactly as the
+    // global weight is. A bucket with too little history falls back to the global
+    // weight rather than to a number fitted on a handful of rows.
+    const blendWeightByAge: Record<string, number> = {};
+    for (const bucket of new Set(seen.map(row => row.bucket))) {
+      const rows = seen.filter(row => row.bucket === bucket);
+      if (rows.length < MIN_BUCKET_ROWS) continue;
+      const fitted = fitBlendWeight(rows);
+      if (fitted !== undefined) blendWeightByAge[bucket] = fitted;
+    }
+
     const foldRows: HeadToHeadPrediction[] = [];
 
     for (const sample of validate) {
@@ -302,11 +339,20 @@ function rollingOrigin(samples: PlanSample[]): RollingPass {
       const history = clampUtil(sample.base.anchor + predictOne(historyModel, sample.base.x));
       const corrected = clampUtil(plan + predictOne(planModel, augmentedX(sample)));
       const blend = clampUtil(blendWeight * plan + (1 - blendWeight) * history);
+      const bucketWeight =
+        blendWeightByAge[ageBucket(sample.plan.planAgePeriods)] ?? blendWeight;
+      const blendByAge = clampUtil(bucketWeight * plan + (1 - bucketWeight) * history);
       foldRows.push({
         sample,
         targetPeriod: period,
         actual: sample.base.y,
-        byForecaster: { plan, history_ridge: history, plan_ridge: corrected, blend },
+        byForecaster: {
+          plan,
+          history_ridge: history,
+          plan_ridge: corrected,
+          blend,
+          blend_by_age: blendByAge,
+        },
       });
     }
 
@@ -315,7 +361,7 @@ function rollingOrigin(samples: PlanSample[]): RollingPass {
     for (const name of FORECASTERS) {
       mae[name] = evaluate(actual, foldRows.map(r => r.byForecaster[name])).mae;
     }
-    byFold.push({ targetPeriod: period, n: foldRows.length, mae, blendWeight });
+    byFold.push({ targetPeriod: period, n: foldRows.length, mae, blendWeight, blendWeightByAge });
 
     predictions.push(...foldRows);
     for (const row of foldRows) {
@@ -323,6 +369,7 @@ function rollingOrigin(samples: PlanSample[]): RollingPass {
         actual: row.actual,
         plan: row.byForecaster.plan,
         model: row.byForecaster.history_ridge,
+        bucket: ageBucket(row.sample.plan.planAgePeriods),
       });
     }
   }

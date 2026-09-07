@@ -145,6 +145,14 @@ The four forecasters:
   *plan's* error so shrinkage falls back to the raw plan. Same anchoring logic
   that makes the history model fall back to "same as last period".
 - `blend` — a convex combination of `plan` and `history_ridge`.
+- `blend_by_age` — the same, with a separate weight per staleness bucket, each
+  fitted on earlier folds only and falling back to the global weight below 40
+  rows. **Measured and rejected**: stale allocations really are worse (4.9pp
+  fresh against 6.3pp at age 1), so trusting them less is a mechanism rather
+  than a knob, and on this panel it comes out best of all five at 4.27pp. Across
+  200 seeds it beats the plain blend on 99 — a coin flip. It stays in the
+  comparison as the clearest example of a single panel endorsing a change that
+  is not there.
 
 The plan block is 7 features: `plan_vs_last`, `plan_vs_person_mean`,
 `plan_vs_target`, `plan_age`, `plan_error_ma` (this person's own past plan

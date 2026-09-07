@@ -412,6 +412,29 @@ refuses('a model with no interval calibration is refused', a => {
 const blendPlans = generatePlans(parsed);
 const deployed = runHeadToHead(parsed, blendPlans).deployedBlendWeight;
 check(
+  'every forecaster including the staleness variant is scored on the same rows',
+  (() => {
+    const head = runHeadToHead(parsed, generatePlans(parsed));
+    return Object.values(head.metrics).every(m => m.n === head.validationRows);
+  })(),
+);
+check(
+  'per-staleness blend weights are convex, or absent when a bucket is too thin',
+  (() => {
+    const head = runHeadToHead(parsed, generatePlans(parsed));
+    return head.byFold.every(f =>
+      Object.values(f.blendWeightByAge).every(w => w >= 0 && w <= 1 && Number.isFinite(w)),
+    );
+  })(),
+);
+check(
+  'the first fold has no per-staleness weights to fit from',
+  (() => {
+    const head = runHeadToHead(parsed, generatePlans(parsed));
+    return Object.keys(head.byFold[0].blendWeightByAge).length === 0;
+  })(),
+);
+check(
   'the deployed blend weight is a genuine convex weight',
   deployed >= 0 && deployed <= 1 && Number.isFinite(deployed),
   deployed.toFixed(3),

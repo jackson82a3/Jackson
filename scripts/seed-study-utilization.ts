@@ -83,6 +83,7 @@ interface SeedResult {
   planMae?: number;
   planRidgeMae?: number;
   blendMae?: number;
+  blendByAgeMae?: number;
 }
 
 const results: SeedResult[] = [];
@@ -158,6 +159,7 @@ for (const seed of seeds) {
             planMae: head.metrics.plan.mae,
             planRidgeMae: head.metrics.plan_ridge.mae,
             blendMae: head.metrics.blend.mae,
+            blendByAgeMae: head.metrics.blend_by_age.mae,
           };
         })()
       : {}),
@@ -259,6 +261,20 @@ if (withPlans && results.every(r => r.blendMae !== undefined)) {
     'model + plans, MAE (pp)',
     results.map(r => r.planRidgeMae as number),
     results.map(r => r.baselineMae),
+    true,
+  );
+  claim(
+    'blend, weight by staleness',
+    results.map(r => r.blendByAgeMae as number),
+    results.map(r => r.baselineMae),
+    true,
+  );
+  // The comparison that decides whether staleness weighting is worth having is
+  // against the plain blend, not against the baseline.
+  claim(
+    '  ...vs the plain blend',
+    results.map(r => r.blendByAgeMae as number),
+    results.map(r => r.blendMae as number),
     true,
   );
 }

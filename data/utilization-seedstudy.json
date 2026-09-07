@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-05T17:01:26.749Z",
+  "generatedAt": "2026-09-07T00:10:33.865Z",
   "shippedSeed": 20260901,
   "results": [
     {
@@ -19,7 +19,8 @@
       "baselineRollupMae": 3.30673696503582,
       "planMae": 5.174233333333331,
       "planRidgeMae": 4.490752422725916,
-      "blendMae": 4.282229431802946
+      "blendMae": 4.282229431802946,
+      "blendByAgeMae": 4.272972586556538
     },
     {
       "seed": 1000,
@@ -38,7 +39,8 @@
       "baselineRollupMae": 2.0560439132822,
       "planMae": 5.212300000000002,
       "planRidgeMae": 4.332510447114432,
-      "blendMae": 4.163878576225066
+      "blendMae": 4.163878576225066,
+      "blendByAgeMae": 4.2116599329107
     },
     {
       "seed": 1017,
@@ -57,7 +59,8 @@
       "baselineRollupMae": 1.6593041019448114,
       "planMae": 4.482366666666665,
       "planRidgeMae": 3.348664832085758,
-      "blendMae": 3.211614256939721
+      "blendMae": 3.211614256939721,
+      "blendByAgeMae": 3.2316049108224534
     },
     {
       "seed": 1034,
@@ -76,7 +79,8 @@
       "baselineRollupMae": 2.2723136906786956,
       "planMae": 5.616199999999999,
       "planRidgeMae": 3.8397023114512723,
-      "blendMae": 4.035487087438429
+      "blendMae": 4.035487087438429,
+      "blendByAgeMae": 4.007448447122678
     },
     {
       "seed": 1051,
@@ -95,7 +99,8 @@
       "baselineRollupMae": 2.302145304422436,
       "planMae": 5.808433333333332,
       "planRidgeMae": 3.9331027469786144,
-      "blendMae": 4.120388559395052
+      "blendMae": 4.120388559395052,
+      "blendByAgeMae": 4.102768703414001
     },
     {
       "seed": 1068,
@@ -114,7 +119,8 @@
       "baselineRollupMae": 2.5709527505326792,
       "planMae": 5.802266666666664,
       "planRidgeMae": 4.042912528267877,
-      "blendMae": 3.980201538449053
+      "blendMae": 3.980201538449053,
+      "blendByAgeMae": 3.929813328174559
     },
     {
       "seed": 1085,
@@ -133,7 +139,8 @@
       "baselineRollupMae": 3.00666274040838,
       "planMae": 7.369433333333336,
       "planRidgeMae": 4.413271082193395,
-      "blendMae": 4.509313383408795
+      "blendMae": 4.509313383408795,
+      "blendByAgeMae": 4.53972617621762
     },
     {
       "seed": 1102,
@@ -152,7 +159,8 @@
       "baselineRollupMae": 2.1243866235545066,
       "planMae": 5.470333333333334,
       "planRidgeMae": 3.7306784949353227,
-      "blendMae": 3.892585575958229
+      "blendMae": 3.892585575958229,
+      "blendByAgeMae": 3.867122451115524
     },
     {
       "seed": 1119,
@@ -171,7 +179,8 @@
       "baselineRollupMae": 1.9913291849495967,
       "planMae": 6.926266666666669,
       "planRidgeMae": 3.87720091953649,
-      "blendMae": 4.0090086754372
+      "blendMae": 4.0090086754372,
+      "blendByAgeMae": 4.052110362840745
     },
     {
       "seed": 1136,
@@ -190,7 +199,8 @@
       "baselineRollupMae": 2.096348219313193,
       "planMae": 5.702866666666671,
       "planRidgeMae": 4.193082507843472,
-      "blendMae": 3.7996892590718234
+      "blendMae": 3.7996892590718234,
+      "blendByAgeMae": 3.764944160366234
     },
     {
       "seed": 1153,
@@ -209,7 +219,8 @@
       "baselineRollupMae": 2.650963987921345,
       "planMae": 5.581633333333337,
       "planRidgeMae": 4.144443908456267,
-      "blendMae": 4.024708177364976
+      "blendMae": 4.024708177364976,
+      "blendByAgeMae": 3.9826893610044856
     },
     {
       "seed": 1170,
@@ -228,7 +239,8 @@
       "baselineRollupMae": 2.262645589023516,
       "planMae": 4.503866666666665,
       "planRidgeMae": 4.197974995762811,
-      "blendMae": 3.568372778042391
+      "blendMae": 3.568372778042391,
+      "blendByAgeMae": 3.562696596482638
     },
     {
       "seed": 1187,
@@ -247,7 +259,8 @@
       "baselineRollupMae": 2.2451545492521734,
       "planMae": 5.639633333333335,
       "planRidgeMae": 4.139665577091379,
-      "blendMae": 4.042640913367415
+      "blendMae": 4.042640913367415,
+      "blendByAgeMae": 4.136870060289791
     },
     {
       "seed": 1204,
@@ -266,7 +279,8 @@
       "baselineRollupMae": 1.5979361857004755,
       "planMae": 4.826266666666669,
       "planRidgeMae": 3.3455068903685206,
-      "blendMae": 3.3218584672093825
+      "blendMae": 3.3218584672093825,
+      "blendByAgeMae": 3.2990956850502577
     },
     {
       "seed": 1221,
@@ -285,7 +299,8 @@
       "baselineRollupMae": 2.560844492675316,
       "planMae": 5.399333333333333,
       "planRidgeMae": 3.983276479602414,
-      "blendMae": 3.9205594294059822
+      "blendMae": 3.9205594294059822,
+      "blendByAgeMae": 3.9209312384746577
     },
     {
       "seed": 1238,
@@ -304,7 +319,8 @@
       "baselineRollupMae": 2.8269498464021665,
       "planMae": 5.790600000000003,
       "planRidgeMae": 4.198195413672864,
-      "blendMae": 4.383067184439099
+      "blendMae": 4.383067184439099,
+      "blendByAgeMae": 4.545405094671346
     },
     {
       "seed": 1255,
@@ -323,7 +339,8 @@
       "baselineRollupMae": 2.4089196189017383,
       "planMae": 6.031500000000001,
       "planRidgeMae": 4.207861181608443,
-      "blendMae": 4.094372972761809
+      "blendMae": 4.094372972761809,
+      "blendByAgeMae": 4.105152990367192
     },
     {
       "seed": 1272,
@@ -342,7 +359,8 @@
       "baselineRollupMae": 2.6445488537807904,
       "planMae": 5.5247666666666655,
       "planRidgeMae": 4.168610661556712,
-      "blendMae": 4.22446301112494
+      "blendMae": 4.22446301112494,
+      "blendByAgeMae": 4.246600764232505
     },
     {
       "seed": 1289,
@@ -361,7 +379,8 @@
       "baselineRollupMae": 2.5548640304589307,
       "planMae": 5.790333333333335,
       "planRidgeMae": 4.038425460527806,
-      "blendMae": 4.047167600079986
+      "blendMae": 4.047167600079986,
+      "blendByAgeMae": 4.117090320131458
     },
     {
       "seed": 1306,
@@ -380,7 +399,8 @@
       "baselineRollupMae": 1.335059829069594,
       "planMae": 4.616866666666665,
       "planRidgeMae": 3.5859320169424094,
-      "blendMae": 3.1524657061716064
+      "blendMae": 3.1524657061716064,
+      "blendByAgeMae": 3.168324031499533
     },
     {
       "seed": 1323,
@@ -399,7 +419,8 @@
       "baselineRollupMae": 2.2653028366713945,
       "planMae": 5.3075,
       "planRidgeMae": 4.052619354060905,
-      "blendMae": 3.734135383796513
+      "blendMae": 3.734135383796513,
+      "blendByAgeMae": 3.7600958646722096
     },
     {
       "seed": 1340,
@@ -418,7 +439,8 @@
       "baselineRollupMae": 3.204406338327924,
       "planMae": 6.167633333333333,
       "planRidgeMae": 4.715505067073637,
-      "blendMae": 4.914208526854781
+      "blendMae": 4.914208526854781,
+      "blendByAgeMae": 4.837482053820763
     },
     {
       "seed": 1357,
@@ -437,7 +459,8 @@
       "baselineRollupMae": 1.7296250969802573,
       "planMae": 4.903833333333333,
       "planRidgeMae": 3.709011449696962,
-      "blendMae": 3.521608233194615
+      "blendMae": 3.521608233194615,
+      "blendByAgeMae": 3.5061641398331282
     },
     {
       "seed": 1374,
@@ -456,7 +479,8 @@
       "baselineRollupMae": 2.855826781926073,
       "planMae": 5.491399999999994,
       "planRidgeMae": 4.580226765469234,
-      "blendMae": 4.723756763378285
+      "blendMae": 4.723756763378285,
+      "blendByAgeMae": 4.595105440882846
     },
     {
       "seed": 1391,
@@ -475,7 +499,8 @@
       "baselineRollupMae": 3.0850283663927476,
       "planMae": 5.893666666666669,
       "planRidgeMae": 4.418324981960583,
-      "blendMae": 4.5923627353275345
+      "blendMae": 4.5923627353275345,
+      "blendByAgeMae": 4.550994143072171
     },
     {
       "seed": 1408,
@@ -494,7 +519,8 @@
       "baselineRollupMae": 2.4372494287472777,
       "planMae": 4.911166666666667,
       "planRidgeMae": 4.140382552921576,
-      "blendMae": 4.107095632670336
+      "blendMae": 4.107095632670336,
+      "blendByAgeMae": 4.008183763319583
     },
     {
       "seed": 1425,
@@ -513,7 +539,8 @@
       "baselineRollupMae": 1.8232889880990186,
       "planMae": 6.32533333333333,
       "planRidgeMae": 4.496116543344646,
-      "blendMae": 3.994793915379634
+      "blendMae": 3.994793915379634,
+      "blendByAgeMae": 4.019992996745879
     },
     {
       "seed": 1442,
@@ -532,7 +559,8 @@
       "baselineRollupMae": 2.162439008233009,
       "planMae": 5.145966666666668,
       "planRidgeMae": 4.020754466704447,
-      "blendMae": 3.8415565009956647
+      "blendMae": 3.8415565009956647,
+      "blendByAgeMae": 3.86687636770795
     },
     {
       "seed": 1459,
@@ -551,7 +579,8 @@
       "baselineRollupMae": 2.040159730888315,
       "planMae": 6.5332666666666706,
       "planRidgeMae": 4.622472360664368,
-      "blendMae": 3.8458889861803915
+      "blendMae": 3.8458889861803915,
+      "blendByAgeMae": 3.8825961634293504
     },
     {
       "seed": 1476,
@@ -570,7 +599,8 @@
       "baselineRollupMae": 2.8385312222968984,
       "planMae": 6.615699999999995,
       "planRidgeMae": 4.319876547846843,
-      "blendMae": 4.4414851748842485
+      "blendMae": 4.4414851748842485,
+      "blendByAgeMae": 4.424988365223538
     },
     {
       "seed": 1493,
@@ -589,7 +619,8 @@
       "baselineRollupMae": 2.301580017638138,
       "planMae": 5.9697333333333376,
       "planRidgeMae": 3.8932577092536387,
-      "blendMae": 3.963715114351017
+      "blendMae": 3.963715114351017,
+      "blendByAgeMae": 3.99344293819146
     },
     {
       "seed": 1510,
@@ -608,7 +639,8 @@
       "baselineRollupMae": 2.037039889245182,
       "planMae": 4.582333333333332,
       "planRidgeMae": 3.4343071717971996,
-      "blendMae": 3.51399329238247
+      "blendMae": 3.51399329238247,
+      "blendByAgeMae": 3.459006605487766
     },
     {
       "seed": 1527,
@@ -627,7 +659,8 @@
       "baselineRollupMae": 2.159064594835209,
       "planMae": 4.734066666666667,
       "planRidgeMae": 3.5987458293603396,
-      "blendMae": 3.620300134639974
+      "blendMae": 3.620300134639974,
+      "blendByAgeMae": 3.608068741621423
     },
     {
       "seed": 1544,
@@ -646,7 +679,8 @@
       "baselineRollupMae": 2.2541257091033264,
       "planMae": 5.306400000000002,
       "planRidgeMae": 3.7191220566778633,
-      "blendMae": 3.768887897811675
+      "blendMae": 3.768887897811675,
+      "blendByAgeMae": 3.7992363756707497
     },
     {
       "seed": 1561,
@@ -665,7 +699,8 @@
       "baselineRollupMae": 2.5390647783406006,
       "planMae": 6.102499999999998,
       "planRidgeMae": 4.7118140818502745,
-      "blendMae": 4.481505977968994
+      "blendMae": 4.481505977968994,
+      "blendByAgeMae": 4.497708486650164
     },
     {
       "seed": 1578,
@@ -684,7 +719,8 @@
       "baselineRollupMae": 2.8668392230284296,
       "planMae": 4.793333333333336,
       "planRidgeMae": 4.069758308604176,
-      "blendMae": 3.99115162302371
+      "blendMae": 3.99115162302371,
+      "blendByAgeMae": 4.040524714560619
     },
     {
       "seed": 1595,
@@ -703,7 +739,8 @@
       "baselineRollupMae": 2.515318119494381,
       "planMae": 6.338000000000003,
       "planRidgeMae": 4.338454802661141,
-      "blendMae": 4.352429897020909
+      "blendMae": 4.352429897020909,
+      "blendByAgeMae": 4.422192061148134
     },
     {
       "seed": 1612,
@@ -722,7 +759,8 @@
       "baselineRollupMae": 2.756595937735581,
       "planMae": 5.960100000000001,
       "planRidgeMae": 3.964793990319601,
-      "blendMae": 4.062408287309085
+      "blendMae": 4.062408287309085,
+      "blendByAgeMae": 4.04890520443985
     },
     {
       "seed": 1629,
@@ -741,7 +779,8 @@
       "baselineRollupMae": 1.3724623915849499,
       "planMae": 5.668433333333333,
       "planRidgeMae": 4.201762761005897,
-      "blendMae": 3.373841605685754
+      "blendMae": 3.373841605685754,
+      "blendByAgeMae": 3.307222767484718
     },
     {
       "seed": 1646,
@@ -760,7 +799,8 @@
       "baselineRollupMae": 2.2712896724228093,
       "planMae": 5.295533333333333,
       "planRidgeMae": 3.9477661038069347,
-      "blendMae": 3.687240275134215
+      "blendMae": 3.687240275134215,
+      "blendByAgeMae": 3.750495850629768
     },
     {
       "seed": 1663,
@@ -779,7 +819,8 @@
       "baselineRollupMae": 3.01315527198116,
       "planMae": 6.493633333333334,
       "planRidgeMae": 4.276698611000721,
-      "blendMae": 4.36912492174503
+      "blendMae": 4.36912492174503,
+      "blendByAgeMae": 4.443876420085522
     },
     {
       "seed": 1680,
@@ -798,7 +839,8 @@
       "baselineRollupMae": 1.8571802787035019,
       "planMae": 5.365733333333336,
       "planRidgeMae": 3.910624386205267,
-      "blendMae": 3.968029670346225
+      "blendMae": 3.968029670346225,
+      "blendByAgeMae": 3.9368453038357947
     },
     {
       "seed": 1697,
@@ -817,7 +859,8 @@
       "baselineRollupMae": 1.8508941147914901,
       "planMae": 5.651999999999998,
       "planRidgeMae": 3.882107005566504,
-      "blendMae": 3.7065924674522224
+      "blendMae": 3.7065924674522224,
+      "blendByAgeMae": 3.644576272645132
     },
     {
       "seed": 1714,
@@ -836,7 +879,8 @@
       "baselineRollupMae": 2.680951359928494,
       "planMae": 4.760133333333334,
       "planRidgeMae": 3.9883963539895757,
-      "blendMae": 3.995303200769293
+      "blendMae": 3.995303200769293,
+      "blendByAgeMae": 3.9732530179399745
     },
     {
       "seed": 1731,
@@ -855,7 +899,8 @@
       "baselineRollupMae": 2.313278780779813,
       "planMae": 6.856700000000001,
       "planRidgeMae": 4.155485706210055,
-      "blendMae": 4.131989951249289
+      "blendMae": 4.131989951249289,
+      "blendByAgeMae": 4.129642133868047
     },
     {
       "seed": 1748,
@@ -874,7 +919,8 @@
       "baselineRollupMae": 2.0620317381517546,
       "planMae": 5.4795,
       "planRidgeMae": 3.6525033341249604,
-      "blendMae": 3.7301607592572523
+      "blendMae": 3.7301607592572523,
+      "blendByAgeMae": 3.7137537100742035
     },
     {
       "seed": 1765,
@@ -893,7 +939,8 @@
       "baselineRollupMae": 2.712144034711687,
       "planMae": 7.360799999999998,
       "planRidgeMae": 4.557377663167554,
-      "blendMae": 4.373105759770943
+      "blendMae": 4.373105759770943,
+      "blendByAgeMae": 4.316388710780684
     },
     {
       "seed": 1782,
@@ -912,7 +959,8 @@
       "baselineRollupMae": 2.5558880218131805,
       "planMae": 5.511299999999998,
       "planRidgeMae": 3.9589794716273694,
-      "blendMae": 4.118581797166738
+      "blendMae": 4.118581797166738,
+      "blendByAgeMae": 4.003123025685663
     },
     {
       "seed": 1799,
@@ -931,7 +979,8 @@
       "baselineRollupMae": 2.069216206243982,
       "planMae": 4.352266666666666,
       "planRidgeMae": 3.5341313156392333,
-      "blendMae": 3.4884528692897403
+      "blendMae": 3.4884528692897403,
+      "blendByAgeMae": 3.481442020083263
     },
     {
       "seed": 1816,
@@ -950,7 +999,8 @@
       "baselineRollupMae": 2.183643027959916,
       "planMae": 5.083966666666669,
       "planRidgeMae": 4.265025752191486,
-      "blendMae": 3.770446479424737
+      "blendMae": 3.770446479424737,
+      "blendByAgeMae": 3.80746082803533
     },
     {
       "seed": 1833,
@@ -969,7 +1019,8 @@
       "baselineRollupMae": 3.4042751539870935,
       "planMae": 6.3370000000000015,
       "planRidgeMae": 5.029786532833945,
-      "blendMae": 5.187461023837133
+      "blendMae": 5.187461023837133,
+      "blendByAgeMae": 5.138196650041362
     },
     {
       "seed": 1850,
@@ -988,7 +1039,8 @@
       "baselineRollupMae": 3.8903634052973266,
       "planMae": 7.239433333333333,
       "planRidgeMae": 5.231096882055867,
-      "blendMae": 5.454223902344157
+      "blendMae": 5.454223902344157,
+      "blendByAgeMae": 5.338393678215391
     },
     {
       "seed": 1867,
@@ -1007,7 +1059,8 @@
       "baselineRollupMae": 2.420941804529592,
       "planMae": 6.268366666666666,
       "planRidgeMae": 4.632915271514484,
-      "blendMae": 4.144777187894525
+      "blendMae": 4.144777187894525,
+      "blendByAgeMae": 4.139201746049599
     },
     {
       "seed": 1884,
@@ -1026,7 +1079,8 @@
       "baselineRollupMae": 2.3846329308323075,
       "planMae": 6.0104000000000015,
       "planRidgeMae": 4.2654495012316795,
-      "blendMae": 4.050449399425609
+      "blendMae": 4.050449399425609,
+      "blendByAgeMae": 4.020564231704946
     },
     {
       "seed": 1901,
@@ -1045,7 +1099,8 @@
       "baselineRollupMae": 2.158801486191477,
       "planMae": 4.934800000000001,
       "planRidgeMae": 3.8060207166457487,
-      "blendMae": 3.870801798606288
+      "blendMae": 3.870801798606288,
+      "blendByAgeMae": 3.8191316665166695
     },
     {
       "seed": 1918,
@@ -1064,7 +1119,8 @@
       "baselineRollupMae": 2.2625621676433494,
       "planMae": 5.314999999999997,
       "planRidgeMae": 3.821554505704259,
-      "blendMae": 4.106989984482305
+      "blendMae": 4.106989984482305,
+      "blendByAgeMae": 4.14120706865173
     },
     {
       "seed": 1935,
@@ -1083,7 +1139,8 @@
       "baselineRollupMae": 2.6898265239301207,
       "planMae": 6.311333333333334,
       "planRidgeMae": 4.522662059972853,
-      "blendMae": 4.4358539380663204
+      "blendMae": 4.4358539380663204,
+      "blendByAgeMae": 4.4472501807638185
     },
     {
       "seed": 1952,
@@ -1102,7 +1159,8 @@
       "baselineRollupMae": 3.197666574288745,
       "planMae": 5.727300000000002,
       "planRidgeMae": 4.652480157565391,
-      "blendMae": 4.578524413303391
+      "blendMae": 4.578524413303391,
+      "blendByAgeMae": 4.497407480365767
     },
     {
       "seed": 1969,
@@ -1121,7 +1179,8 @@
       "baselineRollupMae": 1.6058703053240542,
       "planMae": 6.097800000000004,
       "planRidgeMae": 4.20058032960853,
-      "blendMae": 3.763760052657167
+      "blendMae": 3.763760052657167,
+      "blendByAgeMae": 3.780844274059677
     },
     {
       "seed": 1986,
@@ -1140,7 +1199,8 @@
       "baselineRollupMae": 2.7910895844630326,
       "planMae": 5.589533333333333,
       "planRidgeMae": 4.305245365884557,
-      "blendMae": 4.243558434222892
+      "blendMae": 4.243558434222892,
+      "blendByAgeMae": 4.257724721841841
     },
     {
       "seed": 2003,
@@ -1159,7 +1219,8 @@
       "baselineRollupMae": 1.667984556516758,
       "planMae": 5.327200000000002,
       "planRidgeMae": 3.3355651583502377,
-      "blendMae": 3.2709575208915527
+      "blendMae": 3.2709575208915527,
+      "blendByAgeMae": 3.2516817722741767
     },
     {
       "seed": 2020,
@@ -1178,7 +1239,8 @@
       "baselineRollupMae": 2.058384328791087,
       "planMae": 5.379099999999999,
       "planRidgeMae": 3.8130778883788214,
-      "blendMae": 3.9053354587332234
+      "blendMae": 3.9053354587332234,
+      "blendByAgeMae": 3.933720164041205
     },
     {
       "seed": 2037,
@@ -1197,7 +1259,8 @@
       "baselineRollupMae": 2.4979777412852204,
       "planMae": 6.047366666666665,
       "planRidgeMae": 3.9817729096798846,
-      "blendMae": 4.145654096760172
+      "blendMae": 4.145654096760172,
+      "blendByAgeMae": 4.126594244256276
     },
     {
       "seed": 2054,
@@ -1216,7 +1279,8 @@
       "baselineRollupMae": 2.263116631279433,
       "planMae": 5.54046666666667,
       "planRidgeMae": 3.9702910661448048,
-      "blendMae": 4.082705099443614
+      "blendMae": 4.082705099443614,
+      "blendByAgeMae": 4.148139210952415
     },
     {
       "seed": 2071,
@@ -1235,7 +1299,8 @@
       "baselineRollupMae": 3.8245017989075873,
       "planMae": 5.9233999999999964,
       "planRidgeMae": 5.012145909830888,
-      "blendMae": 4.933437759898936
+      "blendMae": 4.933437759898936,
+      "blendByAgeMae": 4.853972306125413
     },
     {
       "seed": 2088,
@@ -1254,7 +1319,8 @@
       "baselineRollupMae": 3.718035903943874,
       "planMae": 6.800266666666671,
       "planRidgeMae": 4.67741578723984,
-      "blendMae": 4.933249656728505
+      "blendMae": 4.933249656728505,
+      "blendByAgeMae": 4.895404633294468
     },
     {
       "seed": 2105,
@@ -1273,7 +1339,8 @@
       "baselineRollupMae": 3.305219254663346,
       "planMae": 6.845233333333334,
       "planRidgeMae": 4.332424447159583,
-      "blendMae": 4.4628993081971196
+      "blendMae": 4.4628993081971196,
+      "blendByAgeMae": 4.45628300150133
     },
     {
       "seed": 2122,
@@ -1292,7 +1359,8 @@
       "baselineRollupMae": 2.0669340024155645,
       "planMae": 4.96113333333333,
       "planRidgeMae": 3.8437843643348555,
-      "blendMae": 4.044658779087029
+      "blendMae": 4.044658779087029,
+      "blendByAgeMae": 4.046615235454244
     },
     {
       "seed": 2139,
@@ -1311,7 +1379,8 @@
       "baselineRollupMae": 2.517625133308558,
       "planMae": 5.255800000000002,
       "planRidgeMae": 4.009660534670107,
-      "blendMae": 4.163939526550317
+      "blendMae": 4.163939526550317,
+      "blendByAgeMae": 4.205001481651362
     },
     {
       "seed": 2156,
@@ -1330,7 +1399,8 @@
       "baselineRollupMae": 2.453508708776289,
       "planMae": 5.603666666666667,
       "planRidgeMae": 3.5874909798698424,
-      "blendMae": 4.044890599675585
+      "blendMae": 4.044890599675585,
+      "blendByAgeMae": 4.044250679340185
     },
     {
       "seed": 2173,
@@ -1349,7 +1419,8 @@
       "baselineRollupMae": 2.458149461965318,
       "planMae": 5.444033333333333,
       "planRidgeMae": 4.4225398087353724,
-      "blendMae": 4.015710456899427
+      "blendMae": 4.015710456899427,
+      "blendByAgeMae": 4.027414020841399
     },
     {
       "seed": 2190,
@@ -1368,7 +1439,8 @@
       "baselineRollupMae": 2.0028532336669267,
       "planMae": 5.130099999999997,
       "planRidgeMae": 3.632868996775776,
-      "blendMae": 3.6397416614291185
+      "blendMae": 3.6397416614291185,
+      "blendByAgeMae": 3.6196912897458566
     },
     {
       "seed": 2207,
@@ -1387,7 +1459,8 @@
       "baselineRollupMae": 1.4136524554228997,
       "planMae": 5.228133333333338,
       "planRidgeMae": 3.4285253874023063,
-      "blendMae": 3.3514865578659885
+      "blendMae": 3.3514865578659885,
+      "blendByAgeMae": 3.3501147164354736
     },
     {
       "seed": 2224,
@@ -1406,7 +1479,8 @@
       "baselineRollupMae": 2.085869921315299,
       "planMae": 4.623166666666664,
       "planRidgeMae": 3.609054110908443,
-      "blendMae": 3.6852538398403833
+      "blendMae": 3.6852538398403833,
+      "blendByAgeMae": 3.707717256802807
     },
     {
       "seed": 2241,
@@ -1425,7 +1499,8 @@
       "baselineRollupMae": 2.944074285758804,
       "planMae": 5.5965,
       "planRidgeMae": 4.251220259395022,
-      "blendMae": 4.597518083466941
+      "blendMae": 4.597518083466941,
+      "blendByAgeMae": 4.565505569599267
     },
     {
       "seed": 2258,
@@ -1444,7 +1519,8 @@
       "baselineRollupMae": 1.739478022513451,
       "planMae": 5.687900000000004,
       "planRidgeMae": 3.8113059610106603,
-      "blendMae": 3.612887173247955
+      "blendMae": 3.612887173247955,
+      "blendByAgeMae": 3.6753318946766655
     },
     {
       "seed": 2275,
@@ -1463,7 +1539,8 @@
       "baselineRollupMae": 2.305699569489832,
       "planMae": 5.551566666666667,
       "planRidgeMae": 4.198908461741635,
-      "blendMae": 4.297013925873428
+      "blendMae": 4.297013925873428,
+      "blendByAgeMae": 4.375476439083986
     },
     {
       "seed": 2292,
@@ -1482,7 +1559,8 @@
       "baselineRollupMae": 3.087233781359703,
       "planMae": 6.698433333333329,
       "planRidgeMae": 4.387975164621236,
-      "blendMae": 4.619793553018973
+      "blendMae": 4.619793553018973,
+      "blendByAgeMae": 4.591140237825416
     },
     {
       "seed": 2309,
@@ -1501,7 +1579,8 @@
       "baselineRollupMae": 1.8361628518367112,
       "planMae": 5.019466666666667,
       "planRidgeMae": 4.037786892786211,
-      "blendMae": 3.6846580582482065
+      "blendMae": 3.6846580582482065,
+      "blendByAgeMae": 3.784236585623333
     },
     {
       "seed": 2326,
@@ -1520,7 +1599,8 @@
       "baselineRollupMae": 1.723228938708281,
       "planMae": 5.869933333333331,
       "planRidgeMae": 3.5950197366360936,
-      "blendMae": 3.748042060381273
+      "blendMae": 3.748042060381273,
+      "blendByAgeMae": 3.7520429332011904
     },
     {
       "seed": 2343,
@@ -1539,7 +1619,8 @@
       "baselineRollupMae": 1.888221264665326,
       "planMae": 5.613866666666663,
       "planRidgeMae": 3.9580801824879055,
-      "blendMae": 3.9891499952761844
+      "blendMae": 3.9891499952761844,
+      "blendByAgeMae": 4.000923744229239
     },
     {
       "seed": 2360,
@@ -1558,7 +1639,8 @@
       "baselineRollupMae": 3.1917825341974986,
       "planMae": 5.737999999999997,
       "planRidgeMae": 4.251765063059163,
-      "blendMae": 4.337549618300394
+      "blendMae": 4.337549618300394,
+      "blendByAgeMae": 4.328075722690303
     },
     {
       "seed": 2377,
@@ -1577,7 +1659,8 @@
       "baselineRollupMae": 2.5166425199367577,
       "planMae": 5.360300000000006,
       "planRidgeMae": 3.8443018681179435,
-      "blendMae": 4.056349945760427
+      "blendMae": 4.056349945760427,
+      "blendByAgeMae": 3.997056014700335
     },
     {
       "seed": 2394,
@@ -1596,7 +1679,8 @@
       "baselineRollupMae": 1.856704176366674,
       "planMae": 4.413166666666668,
       "planRidgeMae": 3.7274805727229468,
-      "blendMae": 3.741574797883301
+      "blendMae": 3.741574797883301,
+      "blendByAgeMae": 3.706563784741896
     },
     {
       "seed": 2411,
@@ -1615,7 +1699,8 @@
       "baselineRollupMae": 2.233475262748293,
       "planMae": 5.9518999999999975,
       "planRidgeMae": 4.316603120099917,
-      "blendMae": 4.237322515023141
+      "blendMae": 4.237322515023141,
+      "blendByAgeMae": 4.226260074099678
     },
     {
       "seed": 2428,
@@ -1634,7 +1719,8 @@
       "baselineRollupMae": 2.960818581479138,
       "planMae": 5.496666666666669,
       "planRidgeMae": 4.316193916861921,
-      "blendMae": 4.458683683503052
+      "blendMae": 4.458683683503052,
+      "blendByAgeMae": 4.458784362105868
     },
     {
       "seed": 2445,
@@ -1653,7 +1739,8 @@
       "baselineRollupMae": 1.5038560432223418,
       "planMae": 5.553900000000001,
       "planRidgeMae": 4.15193933310881,
-      "blendMae": 4.026569984571473
+      "blendMae": 4.026569984571473,
+      "blendByAgeMae": 4.01385795050325
     },
     {
       "seed": 2462,
@@ -1672,7 +1759,8 @@
       "baselineRollupMae": 1.876740077121536,
       "planMae": 5.2741,
       "planRidgeMae": 4.2392795319315075,
-      "blendMae": 3.704833042941028
+      "blendMae": 3.704833042941028,
+      "blendByAgeMae": 3.6975927370797717
     },
     {
       "seed": 2479,
@@ -1691,7 +1779,8 @@
       "baselineRollupMae": 1.5556996427045116,
       "planMae": 4.9477333333333275,
       "planRidgeMae": 3.6678801888971733,
-      "blendMae": 3.7157643781726644
+      "blendMae": 3.7157643781726644,
+      "blendByAgeMae": 3.719351980457861
     },
     {
       "seed": 2496,
@@ -1710,7 +1799,8 @@
       "baselineRollupMae": 2.635654926940209,
       "planMae": 6.5623000000000005,
       "planRidgeMae": 4.148765190106743,
-      "blendMae": 4.054482148112236
+      "blendMae": 4.054482148112236,
+      "blendByAgeMae": 4.163252529878437
     },
     {
       "seed": 2513,
@@ -1729,7 +1819,8 @@
       "baselineRollupMae": 2.723152563341102,
       "planMae": 7.372933333333332,
       "planRidgeMae": 4.645569022711531,
-      "blendMae": 4.539329099228002
+      "blendMae": 4.539329099228002,
+      "blendByAgeMae": 4.678384061895243
     },
     {
       "seed": 2530,
@@ -1748,7 +1839,8 @@
       "baselineRollupMae": 2.2687411271979627,
       "planMae": 6.51833333333333,
       "planRidgeMae": 4.453379844493858,
-      "blendMae": 4.388129311372321
+      "blendMae": 4.388129311372321,
+      "blendByAgeMae": 4.420660039326855
     },
     {
       "seed": 2547,
@@ -1767,7 +1859,8 @@
       "baselineRollupMae": 2.887017876614173,
       "planMae": 5.968700000000003,
       "planRidgeMae": 4.319564562347849,
-      "blendMae": 4.373484338843563
+      "blendMae": 4.373484338843563,
+      "blendByAgeMae": 4.348084906448768
     },
     {
       "seed": 2564,
@@ -1786,7 +1879,8 @@
       "baselineRollupMae": 2.0054897302139985,
       "planMae": 5.094899999999997,
       "planRidgeMae": 3.7881166137269178,
-      "blendMae": 3.5984481477972783
+      "blendMae": 3.5984481477972783,
+      "blendByAgeMae": 3.6347059313990977
     },
     {
       "seed": 2581,
@@ -1805,7 +1899,8 @@
       "baselineRollupMae": 2.6590912137832428,
       "planMae": 6.973999999999999,
       "planRidgeMae": 3.8110488839337804,
-      "blendMae": 4.175392217222059
+      "blendMae": 4.175392217222059,
+      "blendByAgeMae": 4.110708717273988
     },
     {
       "seed": 2598,
@@ -1824,7 +1919,8 @@
       "baselineRollupMae": 2.21516814164405,
       "planMae": 5.435766666666667,
       "planRidgeMae": 3.7128564648462867,
-      "blendMae": 3.808836765106473
+      "blendMae": 3.808836765106473,
+      "blendByAgeMae": 3.804523401849343
     },
     {
       "seed": 2615,
@@ -1843,7 +1939,8 @@
       "baselineRollupMae": 1.5479234178452217,
       "planMae": 5.688233333333328,
       "planRidgeMae": 4.907347127040368,
-      "blendMae": 3.133704193270917
+      "blendMae": 3.133704193270917,
+      "blendByAgeMae": 3.1388231170514356
     },
     {
       "seed": 2632,
@@ -1862,7 +1959,8 @@
       "baselineRollupMae": 2.5352909015420266,
       "planMae": 5.723433333333334,
       "planRidgeMae": 4.502712301260515,
-      "blendMae": 4.077017092224879
+      "blendMae": 4.077017092224879,
+      "blendByAgeMae": 4.195803249823136
     },
     {
       "seed": 2649,
@@ -1881,7 +1979,8 @@
       "baselineRollupMae": 2.2050685730592297,
       "planMae": 6.669733333333335,
       "planRidgeMae": 4.390352195970177,
-      "blendMae": 4.413312127483558
+      "blendMae": 4.413312127483558,
+      "blendByAgeMae": 4.487398747091423
     },
     {
       "seed": 2666,
@@ -1900,7 +1999,8 @@
       "baselineRollupMae": 1.9774684386314016,
       "planMae": 5.851933333333329,
       "planRidgeMae": 5.487105420258951,
-      "blendMae": 3.882899190100117
+      "blendMae": 3.882899190100117,
+      "blendByAgeMae": 3.866546044646191
     },
     {
       "seed": 2683,
@@ -1919,7 +2019,8 @@
       "baselineRollupMae": 2.0613247874676595,
       "planMae": 4.923533333333332,
       "planRidgeMae": 4.486124813219584,
-      "blendMae": 3.6687614220353915
+      "blendMae": 3.6687614220353915,
+      "blendByAgeMae": 3.660922866352074
     },
     {
       "seed": 2700,
@@ -1938,7 +2039,8 @@
       "baselineRollupMae": 1.6449483919162893,
       "planMae": 5.985966666666666,
       "planRidgeMae": 3.8236653560255602,
-      "blendMae": 3.8138911617135864
+      "blendMae": 3.8138911617135864,
+      "blendByAgeMae": 3.8480701663963894
     },
     {
       "seed": 2717,
@@ -1957,7 +2059,8 @@
       "baselineRollupMae": 1.9206860334664635,
       "planMae": 5.601466666666667,
       "planRidgeMae": 4.617744970295013,
-      "blendMae": 3.7758515205497374
+      "blendMae": 3.7758515205497374,
+      "blendByAgeMae": 3.767818105959897
     },
     {
       "seed": 2734,
@@ -1976,7 +2079,8 @@
       "baselineRollupMae": 1.847704988974162,
       "planMae": 5.189233333333335,
       "planRidgeMae": 3.8218562350768646,
-      "blendMae": 3.5748810757834426
+      "blendMae": 3.5748810757834426,
+      "blendByAgeMae": 3.672082531124832
     },
     {
       "seed": 2751,
@@ -1995,7 +2099,8 @@
       "baselineRollupMae": 1.9622053947522138,
       "planMae": 4.994199999999997,
       "planRidgeMae": 3.6808779849799618,
-      "blendMae": 3.6101050773698162
+      "blendMae": 3.6101050773698162,
+      "blendByAgeMae": 3.6979229934881874
     },
     {
       "seed": 2768,
@@ -2014,7 +2119,8 @@
       "baselineRollupMae": 4.078165004488081,
       "planMae": 5.663400000000002,
       "planRidgeMae": 5.561432776043556,
-      "blendMae": 4.965504845485814
+      "blendMae": 4.965504845485814,
+      "blendByAgeMae": 5.143240373624509
     },
     {
       "seed": 2785,
@@ -2033,7 +2139,8 @@
       "baselineRollupMae": 2.4919174722409005,
       "planMae": 6.254133333333336,
       "planRidgeMae": 4.721821268152143,
-      "blendMae": 4.462946485899318
+      "blendMae": 4.462946485899318,
+      "blendByAgeMae": 4.412365106918969
     },
     {
       "seed": 2802,
@@ -2052,7 +2159,8 @@
       "baselineRollupMae": 2.5830425027969257,
       "planMae": 5.515566666666666,
       "planRidgeMae": 4.302756968763397,
-      "blendMae": 4.175634942032398
+      "blendMae": 4.175634942032398,
+      "blendByAgeMae": 4.12676742659512
     },
     {
       "seed": 2819,
@@ -2071,7 +2179,8 @@
       "baselineRollupMae": 2.128561992291383,
       "planMae": 5.415466666666669,
       "planRidgeMae": 3.609312748184726,
-      "blendMae": 3.9845621578642505
+      "blendMae": 3.9845621578642505,
+      "blendByAgeMae": 3.9881845307246166
     },
     {
       "seed": 2836,
@@ -2090,7 +2199,8 @@
       "baselineRollupMae": 2.125948830347293,
       "planMae": 5.4066,
       "planRidgeMae": 3.76311197341234,
-      "blendMae": 4.035019017023122
+      "blendMae": 4.035019017023122,
+      "blendByAgeMae": 4.070481455207851
     },
     {
       "seed": 2853,
@@ -2109,7 +2219,8 @@
       "baselineRollupMae": 2.1833953932636025,
       "planMae": 5.987133333333327,
       "planRidgeMae": 3.990786273391704,
-      "blendMae": 4.361024723968154
+      "blendMae": 4.361024723968154,
+      "blendByAgeMae": 4.375720264257741
     },
     {
       "seed": 2870,
@@ -2128,7 +2239,8 @@
       "baselineRollupMae": 1.7602802963306527,
       "planMae": 4.512366666666665,
       "planRidgeMae": 3.3170097262480347,
-      "blendMae": 3.3234950849178397
+      "blendMae": 3.3234950849178397,
+      "blendByAgeMae": 3.335276613761212
     },
     {
       "seed": 2887,
@@ -2147,7 +2259,8 @@
       "baselineRollupMae": 2.443982169106678,
       "planMae": 6.1301000000000005,
       "planRidgeMae": 3.698463346748886,
-      "blendMae": 4.166769198610408
+      "blendMae": 4.166769198610408,
+      "blendByAgeMae": 4.219303446114853
     },
     {
       "seed": 2904,
@@ -2166,7 +2279,8 @@
       "baselineRollupMae": 2.956481788194753,
       "planMae": 5.559566666666668,
       "planRidgeMae": 4.111698753369512,
-      "blendMae": 4.421761201935066
+      "blendMae": 4.421761201935066,
+      "blendByAgeMae": 4.452906132169433
     },
     {
       "seed": 2921,
@@ -2185,7 +2299,8 @@
       "baselineRollupMae": 1.7946116431191768,
       "planMae": 6.345466666666662,
       "planRidgeMae": 3.671110519519926,
-      "blendMae": 3.7636853228015132
+      "blendMae": 3.7636853228015132,
+      "blendByAgeMae": 3.7519768547527526
     },
     {
       "seed": 2938,
@@ -2204,7 +2319,8 @@
       "baselineRollupMae": 2.7707073276412824,
       "planMae": 5.759,
       "planRidgeMae": 4.34047525259162,
-      "blendMae": 4.169871386046861
+      "blendMae": 4.169871386046861,
+      "blendByAgeMae": 4.200793810481449
     },
     {
       "seed": 2955,
@@ -2223,7 +2339,8 @@
       "baselineRollupMae": 3.746010048482583,
       "planMae": 6.792766666666664,
       "planRidgeMae": 4.881067527580554,
-      "blendMae": 5.096393261222775
+      "blendMae": 5.096393261222775,
+      "blendByAgeMae": 5.126597674995009
     },
     {
       "seed": 2972,
@@ -2242,7 +2359,8 @@
       "baselineRollupMae": 2.3166788549690276,
       "planMae": 4.822333333333333,
       "planRidgeMae": 3.805212465698388,
-      "blendMae": 3.698981765122352
+      "blendMae": 3.698981765122352,
+      "blendByAgeMae": 3.73048307030357
     },
     {
       "seed": 2989,
@@ -2261,7 +2379,8 @@
       "baselineRollupMae": 1.685338839263658,
       "planMae": 6.163366666666669,
       "planRidgeMae": 3.9204360961680407,
-      "blendMae": 3.9455157648334165
+      "blendMae": 3.9455157648334165,
+      "blendByAgeMae": 3.900937390346161
     },
     {
       "seed": 3006,
@@ -2280,7 +2399,8 @@
       "baselineRollupMae": 1.6090820646773907,
       "planMae": 6.663666666666666,
       "planRidgeMae": 3.607245375139775,
-      "blendMae": 3.710081578873721
+      "blendMae": 3.710081578873721,
+      "blendByAgeMae": 3.7522415550150794
     },
     {
       "seed": 3023,
@@ -2299,7 +2419,8 @@
       "baselineRollupMae": 1.7513378086966824,
       "planMae": 4.898766666666663,
       "planRidgeMae": 3.552782956428666,
-      "blendMae": 3.5390103484334023
+      "blendMae": 3.5390103484334023,
+      "blendByAgeMae": 3.5571987432067353
     },
     {
       "seed": 3040,
@@ -2318,7 +2439,8 @@
       "baselineRollupMae": 2.8375903425983284,
       "planMae": 5.3365333333333345,
       "planRidgeMae": 4.518365912053254,
-      "blendMae": 4.576772792859501
+      "blendMae": 4.576772792859501,
+      "blendByAgeMae": 4.563192346706142
     },
     {
       "seed": 3057,
@@ -2337,7 +2459,8 @@
       "baselineRollupMae": 1.3333649795361455,
       "planMae": 4.967700000000002,
       "planRidgeMae": 3.809090392610846,
-      "blendMae": 3.9114295189055928
+      "blendMae": 3.9114295189055928,
+      "blendByAgeMae": 3.89515694408401
     },
     {
       "seed": 3074,
@@ -2356,7 +2479,8 @@
       "baselineRollupMae": 2.400326230240109,
       "planMae": 6.129666666666665,
       "planRidgeMae": 4.234032019634438,
-      "blendMae": 4.296065703569626
+      "blendMae": 4.296065703569626,
+      "blendByAgeMae": 4.303902706611559
     },
     {
       "seed": 3091,
@@ -2375,7 +2499,8 @@
       "baselineRollupMae": 3.327337538642231,
       "planMae": 6.784433333333333,
       "planRidgeMae": 4.963772654223012,
-      "blendMae": 4.892119738967975
+      "blendMae": 4.892119738967975,
+      "blendByAgeMae": 4.902858406835598
     },
     {
       "seed": 3108,
@@ -2394,7 +2519,8 @@
       "baselineRollupMae": 2.6922646950032405,
       "planMae": 6.239233333333334,
       "planRidgeMae": 4.317184767296337,
-      "blendMae": 4.4147906690789585
+      "blendMae": 4.4147906690789585,
+      "blendByAgeMae": 4.4005229636048036
     },
     {
       "seed": 3125,
@@ -2413,7 +2539,8 @@
       "baselineRollupMae": 1.7442934533027332,
       "planMae": 5.4004,
       "planRidgeMae": 3.9651465201980263,
-      "blendMae": 3.505305284213369
+      "blendMae": 3.505305284213369,
+      "blendByAgeMae": 3.507595131241648
     },
     {
       "seed": 3142,
@@ -2432,7 +2559,8 @@
       "baselineRollupMae": 1.9211184649448003,
       "planMae": 5.494166666666671,
       "planRidgeMae": 3.972368269278464,
-      "blendMae": 3.9431549581319194
+      "blendMae": 3.9431549581319194,
+      "blendByAgeMae": 3.931189584371581
     },
     {
       "seed": 3159,
@@ -2451,7 +2579,8 @@
       "baselineRollupMae": 1.9921737867010105,
       "planMae": 5.150533333333331,
       "planRidgeMae": 4.358688857169764,
-      "blendMae": 3.556829012845468
+      "blendMae": 3.556829012845468,
+      "blendByAgeMae": 3.5405732890119967
     },
     {
       "seed": 3176,
@@ -2470,7 +2599,8 @@
       "baselineRollupMae": 1.3466801866858902,
       "planMae": 5.4411999999999985,
       "planRidgeMae": 3.355325559414393,
-      "blendMae": 3.581155010337151
+      "blendMae": 3.581155010337151,
+      "blendByAgeMae": 3.604072640106248
     },
     {
       "seed": 3193,
@@ -2489,7 +2619,8 @@
       "baselineRollupMae": 2.672180557419644,
       "planMae": 5.8405333333333305,
       "planRidgeMae": 4.6315531725152965,
-      "blendMae": 4.163744000869791
+      "blendMae": 4.163744000869791,
+      "blendByAgeMae": 4.081751870098154
     },
     {
       "seed": 3210,
@@ -2508,7 +2639,8 @@
       "baselineRollupMae": 1.8190874921806335,
       "planMae": 5.192166666666664,
       "planRidgeMae": 3.849396623167185,
-      "blendMae": 3.769598706905404
+      "blendMae": 3.769598706905404,
+      "blendByAgeMae": 3.6702145224878495
     },
     {
       "seed": 3227,
@@ -2527,7 +2659,8 @@
       "baselineRollupMae": 2.142345188725137,
       "planMae": 6.717966666666662,
       "planRidgeMae": 3.981226864750654,
-      "blendMae": 4.061020241268781
+      "blendMae": 4.061020241268781,
+      "blendByAgeMae": 4.046054583932288
     },
     {
       "seed": 3244,
@@ -2546,7 +2679,8 @@
       "baselineRollupMae": 2.4304584455053635,
       "planMae": 6.2754666666666665,
       "planRidgeMae": 3.842230464831941,
-      "blendMae": 4.363625295478887
+      "blendMae": 4.363625295478887,
+      "blendByAgeMae": 4.309762046711186
     },
     {
       "seed": 3261,
@@ -2565,7 +2699,8 @@
       "baselineRollupMae": 2.7899450492266147,
       "planMae": 5.616499999999997,
       "planRidgeMae": 4.317895365814335,
-      "blendMae": 4.389880878465036
+      "blendMae": 4.389880878465036,
+      "blendByAgeMae": 4.229298383749079
     },
     {
       "seed": 3278,
@@ -2584,7 +2719,8 @@
       "baselineRollupMae": 2.617380651553046,
       "planMae": 5.402966666666661,
       "planRidgeMae": 4.197961221084958,
-      "blendMae": 4.216047750424057
+      "blendMae": 4.216047750424057,
+      "blendByAgeMae": 4.273447760969863
     },
     {
       "seed": 3295,
@@ -2603,7 +2739,8 @@
       "baselineRollupMae": 2.6568097865380866,
       "planMae": 5.627299999999994,
       "planRidgeMae": 3.9313068136783316,
-      "blendMae": 4.207825828069398
+      "blendMae": 4.207825828069398,
+      "blendByAgeMae": 4.1936908420235035
     },
     {
       "seed": 3312,
@@ -2622,7 +2759,8 @@
       "baselineRollupMae": 1.5575987244167981,
       "planMae": 5.544266666666668,
       "planRidgeMae": 3.496854624215345,
-      "blendMae": 3.600852889143169
+      "blendMae": 3.600852889143169,
+      "blendByAgeMae": 3.591976993736968
     },
     {
       "seed": 3329,
@@ -2641,7 +2779,8 @@
       "baselineRollupMae": 2.250412934677245,
       "planMae": 6.181466666666665,
       "planRidgeMae": 4.15672370121212,
-      "blendMae": 4.035183125507673
+      "blendMae": 4.035183125507673,
+      "blendByAgeMae": 4.041356554972788
     },
     {
       "seed": 3346,
@@ -2660,7 +2799,8 @@
       "baselineRollupMae": 2.201273236799943,
       "planMae": 5.836533333333337,
       "planRidgeMae": 3.9118518349246716,
-      "blendMae": 3.6248653895676783
+      "blendMae": 3.6248653895676783,
+      "blendByAgeMae": 3.6298216219193598
     },
     {
       "seed": 3363,
@@ -2679,7 +2819,8 @@
       "baselineRollupMae": 1.8645436207284292,
       "planMae": 5.97536666666667,
       "planRidgeMae": 3.549599451788169,
-      "blendMae": 3.535239479418365
+      "blendMae": 3.535239479418365,
+      "blendByAgeMae": 3.534309034778017
     },
     {
       "seed": 3380,
@@ -2698,7 +2839,8 @@
       "baselineRollupMae": 2.3281133379130456,
       "planMae": 5.267433333333335,
       "planRidgeMae": 3.7919654487764607,
-      "blendMae": 3.8962340424308826
+      "blendMae": 3.8962340424308826,
+      "blendByAgeMae": 3.8861832369543365
     },
     {
       "seed": 3397,
@@ -2717,7 +2859,8 @@
       "baselineRollupMae": 2.537158099479834,
       "planMae": 4.511233333333336,
       "planRidgeMae": 4.30202975908006,
-      "blendMae": 4.076817669239481
+      "blendMae": 4.076817669239481,
+      "blendByAgeMae": 4.062817604080563
     },
     {
       "seed": 3414,
@@ -2736,7 +2879,8 @@
       "baselineRollupMae": 1.967244068525767,
       "planMae": 5.002633333333335,
       "planRidgeMae": 3.690482690558793,
-      "blendMae": 3.453581137754726
+      "blendMae": 3.453581137754726,
+      "blendByAgeMae": 3.471575967605055
     },
     {
       "seed": 3431,
@@ -2755,7 +2899,8 @@
       "baselineRollupMae": 2.55064637724766,
       "planMae": 6.850633333333327,
       "planRidgeMae": 4.371272930097761,
-      "blendMae": 4.649655288449882
+      "blendMae": 4.649655288449882,
+      "blendByAgeMae": 4.655093061471497
     },
     {
       "seed": 3448,
@@ -2774,7 +2919,8 @@
       "baselineRollupMae": 3.068870565928712,
       "planMae": 6.156066666666663,
       "planRidgeMae": 4.238512982888812,
-      "blendMae": 4.552865265521172
+      "blendMae": 4.552865265521172,
+      "blendByAgeMae": 4.500146469271402
     },
     {
       "seed": 3465,
@@ -2793,7 +2939,8 @@
       "baselineRollupMae": 2.3767652776905472,
       "planMae": 5.446633333333334,
       "planRidgeMae": 3.9545089624188594,
-      "blendMae": 4.041795169880392
+      "blendMae": 4.041795169880392,
+      "blendByAgeMae": 3.938630165668383
     },
     {
       "seed": 3482,
@@ -2812,7 +2959,8 @@
       "baselineRollupMae": 3.0903265727263105,
       "planMae": 6.046666666666667,
       "planRidgeMae": 4.662401752485592,
-      "blendMae": 5.340035064793827
+      "blendMae": 5.340035064793827,
+      "blendByAgeMae": 5.292032955873553
     },
     {
       "seed": 3499,
@@ -2831,7 +2979,8 @@
       "baselineRollupMae": 2.222244744521097,
       "planMae": 4.797533333333329,
       "planRidgeMae": 3.601960485672107,
-      "blendMae": 3.6396490748775068
+      "blendMae": 3.6396490748775068,
+      "blendByAgeMae": 3.6611489113236377
     },
     {
       "seed": 3516,
@@ -2850,7 +2999,8 @@
       "baselineRollupMae": 2.478050496105423,
       "planMae": 4.9625,
       "planRidgeMae": 4.146303647415326,
-      "blendMae": 4.078581688284585
+      "blendMae": 4.078581688284585,
+      "blendByAgeMae": 4.066994874928431
     },
     {
       "seed": 3533,
@@ -2869,7 +3019,8 @@
       "baselineRollupMae": 1.8933496222363349,
       "planMae": 5.593999999999996,
       "planRidgeMae": 3.808961176549879,
-      "blendMae": 3.6083245895564526
+      "blendMae": 3.6083245895564526,
+      "blendByAgeMae": 3.5752442174144834
     },
     {
       "seed": 3550,
@@ -2888,7 +3039,8 @@
       "baselineRollupMae": 2.7489804945626974,
       "planMae": 5.940700000000003,
       "planRidgeMae": 4.043387806029239,
-      "blendMae": 4.304556349414285
+      "blendMae": 4.304556349414285,
+      "blendByAgeMae": 4.227652092215832
     },
     {
       "seed": 3567,
@@ -2907,7 +3059,8 @@
       "baselineRollupMae": 2.186473624149321,
       "planMae": 5.0177,
       "planRidgeMae": 3.7377273779972073,
-      "blendMae": 3.8694934934521257
+      "blendMae": 3.8694934934521257,
+      "blendByAgeMae": 3.838269772863068
     },
     {
       "seed": 3584,
@@ -2926,7 +3079,8 @@
       "baselineRollupMae": 3.289591767153865,
       "planMae": 5.2410999999999985,
       "planRidgeMae": 4.451910670023426,
-      "blendMae": 4.361607875801923
+      "blendMae": 4.361607875801923,
+      "blendByAgeMae": 4.379814957148572
     },
     {
       "seed": 3601,
@@ -2945,7 +3099,8 @@
       "baselineRollupMae": 2.491400009478436,
       "planMae": 5.732933333333338,
       "planRidgeMae": 4.19715152436946,
-      "blendMae": 4.235260008140321
+      "blendMae": 4.235260008140321,
+      "blendByAgeMae": 4.235252530312369
     },
     {
       "seed": 3618,
@@ -2964,7 +3119,8 @@
       "baselineRollupMae": 2.2745934826706136,
       "planMae": 5.332600000000006,
       "planRidgeMae": 3.641950998732657,
-      "blendMae": 3.6020737308162447
+      "blendMae": 3.6020737308162447,
+      "blendByAgeMae": 3.625431253402519
     },
     {
       "seed": 3635,
@@ -2983,7 +3139,8 @@
       "baselineRollupMae": 1.6515068522472736,
       "planMae": 5.001333333333331,
       "planRidgeMae": 4.114044659421203,
-      "blendMae": 3.6399449906062955
+      "blendMae": 3.6399449906062955,
+      "blendByAgeMae": 3.655911512885766
     },
     {
       "seed": 3652,
@@ -3002,7 +3159,8 @@
       "baselineRollupMae": 3.30493725720195,
       "planMae": 5.433366666666666,
       "planRidgeMae": 4.200712478827119,
-      "blendMae": 4.560702045651254
+      "blendMae": 4.560702045651254,
+      "blendByAgeMae": 4.5928140587212205
     },
     {
       "seed": 3669,
@@ -3021,7 +3179,8 @@
       "baselineRollupMae": 2.408108892848637,
       "planMae": 5.741166666666672,
       "planRidgeMae": 3.9822087964766766,
-      "blendMae": 3.96130955719984
+      "blendMae": 3.96130955719984,
+      "blendByAgeMae": 3.92393555137456
     },
     {
       "seed": 3686,
@@ -3040,7 +3199,8 @@
       "baselineRollupMae": 1.8132059825264988,
       "planMae": 5.128799999999999,
       "planRidgeMae": 3.903986592367181,
-      "blendMae": 3.8043848238440243
+      "blendMae": 3.8043848238440243,
+      "blendByAgeMae": 3.6960119804450526
     },
     {
       "seed": 3703,
@@ -3059,7 +3219,8 @@
       "baselineRollupMae": 2.388794915108123,
       "planMae": 5.356199999999996,
       "planRidgeMae": 4.005658188875663,
-      "blendMae": 4.194575293790771
+      "blendMae": 4.194575293790771,
+      "blendByAgeMae": 4.285021219281318
     },
     {
       "seed": 3720,
@@ -3078,7 +3239,8 @@
       "baselineRollupMae": 2.925432903408508,
       "planMae": 5.992933333333334,
       "planRidgeMae": 4.275268053867837,
-      "blendMae": 4.392884935896407
+      "blendMae": 4.392884935896407,
+      "blendByAgeMae": 4.25552952418328
     },
     {
       "seed": 3737,
@@ -3097,7 +3259,8 @@
       "baselineRollupMae": 2.2171378103623236,
       "planMae": 5.006333333333337,
       "planRidgeMae": 3.4279034384118927,
-      "blendMae": 3.5413565955077204
+      "blendMae": 3.5413565955077204,
+      "blendByAgeMae": 3.556061916371898
     },
     {
       "seed": 3754,
@@ -3116,7 +3279,8 @@
       "baselineRollupMae": 2.2673040046304993,
       "planMae": 6.188033333333334,
       "planRidgeMae": 5.450712778177138,
-      "blendMae": 4.211929642477418
+      "blendMae": 4.211929642477418,
+      "blendByAgeMae": 4.168879601024746
     },
     {
       "seed": 3771,
@@ -3135,7 +3299,8 @@
       "baselineRollupMae": 2.4560614097823454,
       "planMae": 5.70676666666667,
       "planRidgeMae": 4.210777745653412,
-      "blendMae": 3.9329096325954036
+      "blendMae": 3.9329096325954036,
+      "blendByAgeMae": 3.955527300440252
     },
     {
       "seed": 3788,
@@ -3154,7 +3319,8 @@
       "baselineRollupMae": 2.6127563087593857,
       "planMae": 6.1813666666666665,
       "planRidgeMae": 4.314228067479826,
-      "blendMae": 4.176583314627409
+      "blendMae": 4.176583314627409,
+      "blendByAgeMae": 4.262552360636715
     },
     {
       "seed": 3805,
@@ -3173,7 +3339,8 @@
       "baselineRollupMae": 2.9926158077737104,
       "planMae": 5.880066666666667,
       "planRidgeMae": 4.390030050775411,
-      "blendMae": 4.108784087852233
+      "blendMae": 4.108784087852233,
+      "blendByAgeMae": 4.102117782142672
     },
     {
       "seed": 3822,
@@ -3192,7 +3359,8 @@
       "baselineRollupMae": 2.3714700009096132,
       "planMae": 6.373166666666668,
       "planRidgeMae": 4.168699360018711,
-      "blendMae": 4.387497133663031
+      "blendMae": 4.387497133663031,
+      "blendByAgeMae": 4.301494456947376
     },
     {
       "seed": 3839,
@@ -3211,7 +3379,8 @@
       "baselineRollupMae": 2.616185971697006,
       "planMae": 5.681633333333332,
       "planRidgeMae": 4.354357922601223,
-      "blendMae": 4.0448708981641035
+      "blendMae": 4.0448708981641035,
+      "blendByAgeMae": 4.033518695933168
     },
     {
       "seed": 3856,
@@ -3230,7 +3399,8 @@
       "baselineRollupMae": 1.8849881736322298,
       "planMae": 5.6953999999999985,
       "planRidgeMae": 4.301213491417144,
-      "blendMae": 4.20130852181601
+      "blendMae": 4.20130852181601,
+      "blendByAgeMae": 4.218448660392427
     },
     {
       "seed": 3873,
@@ -3249,7 +3419,8 @@
       "baselineRollupMae": 2.063914499782809,
       "planMae": 4.6226333333333365,
       "planRidgeMae": 3.800927263314395,
-      "blendMae": 3.831039252961415
+      "blendMae": 3.831039252961415,
+      "blendByAgeMae": 3.8984191968769966
     },
     {
       "seed": 3890,
@@ -3268,7 +3439,8 @@
       "baselineRollupMae": 1.9386985627606514,
       "planMae": 4.818633333333337,
       "planRidgeMae": 3.5323138483209875,
-      "blendMae": 3.3296970429322754
+      "blendMae": 3.3296970429322754,
+      "blendByAgeMae": 3.3075478021955993
     },
     {
       "seed": 3907,
@@ -3287,7 +3459,8 @@
       "baselineRollupMae": 2.763604809408149,
       "planMae": 5.012766666666672,
       "planRidgeMae": 3.6857608870610905,
-      "blendMae": 4.12403029185433
+      "blendMae": 4.12403029185433,
+      "blendByAgeMae": 4.133966654114958
     },
     {
       "seed": 3924,
@@ -3306,7 +3479,8 @@
       "baselineRollupMae": 1.8770202314602022,
       "planMae": 5.732666666666668,
       "planRidgeMae": 3.7513342669617114,
-      "blendMae": 3.6919414250742544
+      "blendMae": 3.6919414250742544,
+      "blendByAgeMae": 3.7094907454308856
     },
     {
       "seed": 3941,
@@ -3325,7 +3499,8 @@
       "baselineRollupMae": 1.5770151297201251,
       "planMae": 5.040199999999997,
       "planRidgeMae": 3.4802615181018055,
-      "blendMae": 3.714755737304562
+      "blendMae": 3.714755737304562,
+      "blendByAgeMae": 3.8178767012677053
     },
     {
       "seed": 3958,
@@ -3344,7 +3519,8 @@
       "baselineRollupMae": 2.3387849342335025,
       "planMae": 4.986533333333331,
       "planRidgeMae": 3.648196869778953,
-      "blendMae": 3.751731767224772
+      "blendMae": 3.751731767224772,
+      "blendByAgeMae": 3.7035233541853403
     },
     {
       "seed": 3975,
@@ -3363,7 +3539,8 @@
       "baselineRollupMae": 2.8823116790396353,
       "planMae": 5.525666666666664,
       "planRidgeMae": 3.9411182912461142,
-      "blendMae": 4.053552647591351
+      "blendMae": 4.053552647591351,
+      "blendByAgeMae": 4.064589226158807
     },
     {
       "seed": 3992,
@@ -3382,7 +3559,8 @@
       "baselineRollupMae": 2.398256265116784,
       "planMae": 6.561666666666665,
       "planRidgeMae": 4.442690508511421,
-      "blendMae": 4.464879932540978
+      "blendMae": 4.464879932540978,
+      "blendByAgeMae": 4.436442612566636
     },
     {
       "seed": 4009,
@@ -3401,7 +3579,8 @@
       "baselineRollupMae": 1.6762815638232975,
       "planMae": 5.304066666666666,
       "planRidgeMae": 3.6300952322585243,
-      "blendMae": 3.24157642052205
+      "blendMae": 3.24157642052205,
+      "blendByAgeMae": 3.2928910360261443
     },
     {
       "seed": 4026,
@@ -3420,7 +3599,8 @@
       "baselineRollupMae": 2.6709057487088694,
       "planMae": 5.863433333333335,
       "planRidgeMae": 4.920179021729412,
-      "blendMae": 4.312711073299432
+      "blendMae": 4.312711073299432,
+      "blendByAgeMae": 4.393239428635117
     },
     {
       "seed": 4043,
@@ -3439,7 +3619,8 @@
       "baselineRollupMae": 2.0784809055809124,
       "planMae": 6.456999999999998,
       "planRidgeMae": 3.862060500420504,
-      "blendMae": 3.831079958002882
+      "blendMae": 3.831079958002882,
+      "blendByAgeMae": 3.8178504754418947
     },
     {
       "seed": 4060,
@@ -3458,7 +3639,8 @@
       "baselineRollupMae": 2.2946789266788126,
       "planMae": 5.8869333333333325,
       "planRidgeMae": 4.037329954526647,
-      "blendMae": 4.197634362377181
+      "blendMae": 4.197634362377181,
+      "blendByAgeMae": 4.223406091336148
     },
     {
       "seed": 4077,
@@ -3477,7 +3659,8 @@
       "baselineRollupMae": 2.3816511472261057,
       "planMae": 5.148566666666666,
       "planRidgeMae": 3.7307869940673277,
-      "blendMae": 3.7255714578689854
+      "blendMae": 3.7255714578689854,
+      "blendByAgeMae": 3.7653691616983282
     },
     {
       "seed": 4094,
@@ -3496,7 +3679,8 @@
       "baselineRollupMae": 2.3825394149137633,
       "planMae": 5.4316,
       "planRidgeMae": 4.441568731181156,
-      "blendMae": 4.245360059736527
+      "blendMae": 4.245360059736527,
+      "blendByAgeMae": 4.261991321265452
     },
     {
       "seed": 4111,
@@ -3515,7 +3699,8 @@
       "baselineRollupMae": 2.2458332761281876,
       "planMae": 5.925499999999997,
       "planRidgeMae": 3.8087254610970147,
-      "blendMae": 3.7141193435713276
+      "blendMae": 3.7141193435713276,
+      "blendByAgeMae": 3.7168474119419126
     },
     {
       "seed": 4128,
@@ -3534,7 +3719,8 @@
       "baselineRollupMae": 2.530753726657727,
       "planMae": 6.014299999999997,
       "planRidgeMae": 4.654339692819605,
-      "blendMae": 4.409824626758408
+      "blendMae": 4.409824626758408,
+      "blendByAgeMae": 4.403559628283184
     },
     {
       "seed": 4145,
@@ -3553,7 +3739,8 @@
       "baselineRollupMae": 2.4453565951007965,
       "planMae": 6.096833333333334,
       "planRidgeMae": 4.242371917422686,
-      "blendMae": 3.9467171775272347
+      "blendMae": 3.9467171775272347,
+      "blendByAgeMae": 4.024581767193098
     },
     {
       "seed": 4162,
@@ -3572,7 +3759,8 @@
       "baselineRollupMae": 1.7925196661339495,
       "planMae": 5.534066666666665,
       "planRidgeMae": 3.389763239241348,
-      "blendMae": 3.5533463540098547
+      "blendMae": 3.5533463540098547,
+      "blendByAgeMae": 3.5454749574964564
     },
     {
       "seed": 4179,
@@ -3591,7 +3779,8 @@
       "baselineRollupMae": 2.1217237945465106,
       "planMae": 5.538233333333327,
       "planRidgeMae": 4.553728533915195,
-      "blendMae": 3.704284291168388
+      "blendMae": 3.704284291168388,
+      "blendByAgeMae": 3.7028502276273625
     },
     {
       "seed": 4196,
@@ -3610,7 +3799,8 @@
       "baselineRollupMae": 3.6404761753846886,
       "planMae": 7.22133333333333,
       "planRidgeMae": 4.680765660538814,
-      "blendMae": 5.029236353994807
+      "blendMae": 5.029236353994807,
+      "blendByAgeMae": 4.91260383732423
     },
     {
       "seed": 4213,
@@ -3629,7 +3819,8 @@
       "baselineRollupMae": 2.007585001581904,
       "planMae": 5.926100000000002,
       "planRidgeMae": 4.184358755693296,
-      "blendMae": 4.241947718478529
+      "blendMae": 4.241947718478529,
+      "blendByAgeMae": 4.310340391513197
     },
     {
       "seed": 4230,
@@ -3648,7 +3839,8 @@
       "baselineRollupMae": 1.7672028797228545,
       "planMae": 5.294766666666666,
       "planRidgeMae": 3.9600920955250096,
-      "blendMae": 3.6382454183421578
+      "blendMae": 3.6382454183421578,
+      "blendByAgeMae": 3.644303105672234
     },
     {
       "seed": 4247,
@@ -3667,7 +3859,8 @@
       "baselineRollupMae": 1.6487719432714498,
       "planMae": 5.277866666666666,
       "planRidgeMae": 3.397873458284654,
-      "blendMae": 3.429949770413898
+      "blendMae": 3.429949770413898,
+      "blendByAgeMae": 3.4638089487318946
     },
     {
       "seed": 4264,
@@ -3686,7 +3879,8 @@
       "baselineRollupMae": 1.5931932193164946,
       "planMae": 5.239466666666666,
       "planRidgeMae": 3.878260311580234,
-      "blendMae": 3.7173188785258873
+      "blendMae": 3.7173188785258873,
+      "blendByAgeMae": 3.7300301401352294
     },
     {
       "seed": 4281,
@@ -3705,7 +3899,8 @@
       "baselineRollupMae": 2.707333684906091,
       "planMae": 5.821700000000002,
       "planRidgeMae": 4.152665502329665,
-      "blendMae": 4.113182441011323
+      "blendMae": 4.113182441011323,
+      "blendByAgeMae": 4.232958217387122
     },
     {
       "seed": 4298,
@@ -3724,7 +3919,8 @@
       "baselineRollupMae": 1.7277816434393258,
       "planMae": 5.942766666666664,
       "planRidgeMae": 5.640041714777732,
-      "blendMae": 3.896190935755743
+      "blendMae": 3.896190935755743,
+      "blendByAgeMae": 3.9227063170508676
     },
     {
       "seed": 4315,
@@ -3743,7 +3939,8 @@
       "baselineRollupMae": 2.684382454982574,
       "planMae": 5.650366666666671,
       "planRidgeMae": 4.06620643658437,
-      "blendMae": 4.195704366487175
+      "blendMae": 4.195704366487175,
+      "blendByAgeMae": 4.169933926666309
     },
     {
       "seed": 4332,
@@ -3762,7 +3959,8 @@
       "baselineRollupMae": 2.3363127878367758,
       "planMae": 6.069933333333332,
       "planRidgeMae": 4.209975832498316,
-      "blendMae": 4.094391488911199
+      "blendMae": 4.094391488911199,
+      "blendByAgeMae": 4.11703039119315
     },
     {
       "seed": 4349,
@@ -3781,7 +3979,8 @@
       "baselineRollupMae": 2.732970675996303,
       "planMae": 6.925633333333332,
       "planRidgeMae": 4.3437372021391525,
-      "blendMae": 4.356868903646647
+      "blendMae": 4.356868903646647,
+      "blendByAgeMae": 4.281052417540668
     },
     {
       "seed": 4366,
@@ -3800,7 +3999,8 @@
       "baselineRollupMae": 2.3154127947204937,
       "planMae": 5.52083333333334,
       "planRidgeMae": 3.645271915316147,
-      "blendMae": 3.7475005310460414
+      "blendMae": 3.7475005310460414,
+      "blendByAgeMae": 3.7714551215017194
     }
   ],
   "summary": {
