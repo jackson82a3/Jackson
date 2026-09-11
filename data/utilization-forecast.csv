@@ -1,61 +1,61 @@
-Cost Center,Cost Center Name,Person Name,Target Type,Job Level,Forecast Period,Forecast Month,Last Util %,Forecast Util %,Forecast Low 80,Forecast High 80,Util % Target,Forecast Variance,Expected Avail Hours
-CC-1010,Structural Engineering,Amara Ashby,Billable Staff,L3 Senior Engineer,13,2026-10,96.89,95.97,88.19,100.00,85.00,10.97,141.3
-CC-1010,Structural Engineering,Bennett Salazar,Billable Staff,L3 Senior Engineer,13,2026-10,98.42,97.66,89.89,100.00,85.00,12.66,149.3
-CC-1010,Structural Engineering,Camille Thorne,Billable Staff,L3 Senior Engineer,13,2026-10,94.44,93.69,85.91,100.00,85.00,8.69,141.3
-CC-1010,Structural Engineering,Devon Sandoval,Billable Staff,L1 Analyst,13,2026-10,88.69,87.58,79.81,95.36,80.00,7.58,144.0
-CC-1010,Structural Engineering,Elena Lindqvist,Billable Staff,L1 Analyst,13,2026-10,50.59,52.03,44.25,59.80,80.00,-27.97,132.0
-CC-1010,Structural Engineering,Farid Beaumont,Billable Staff,L3 Senior Engineer,13,2026-10,95.91,95.25,87.47,100.00,85.00,10.25,142.0
-CC-1010,Structural Engineering,Grace Mbeki,Billable Staff,L1 Analyst,13,2026-10,68.64,68.86,61.09,76.63,80.00,-11.14,128.0
-CC-1010,Structural Engineering,Hassan Adeyemi,Billable Staff,L2 Engineer,13,2026-10,51.12,52.10,44.33,59.87,85.00,-32.90,150.7
-CC-1010,Structural Engineering,Imani Mensah,Billable Staff,L3 Senior Engineer,13,2026-10,84.55,84.32,76.55,92.10,85.00,-0.68,142.7
-CC-1010,Structural Engineering,Jonas Whitfield,Billable Staff,L1 Analyst,13,2026-10,63.79,64.71,56.93,72.48,80.00,-15.29,138.7
-CC-1010,Structural Engineering,Katya Rathore,Billable Staff,L1 Analyst,13,2026-10,86.81,86.00,78.23,93.77,80.00,6.00,148.7
-CC-1020,Mechanical Engineering,Liam Carrasco,Project Leadership,L4 Manager,13,2026-10,60.31,60.68,52.90,68.45,60.00,0.68,156.0
-CC-1020,Mechanical Engineering,Maren Yilmaz,Billable Staff,L3 Senior Engineer,13,2026-10,91.67,91.45,83.67,99.22,85.00,6.45,146.7
-CC-1020,Mechanical Engineering,Nikhil Petrova,Billable Staff,L2 Engineer,13,2026-10,71.00,70.70,62.93,78.47,85.00,-14.30,137.3
-CC-1020,Mechanical Engineering,Odessa Duarte,Billable Staff,L2 Engineer,13,2026-10,88.25,87.91,80.14,95.68,85.00,2.91,160.0
-CC-1020,Mechanical Engineering,Priya Halvorsen,Billable Staff,L2 Engineer,13,2026-10,74.09,74.57,66.80,82.35,85.00,-10.43,137.3
-CC-1020,Mechanical Engineering,Quentin Ferreira,Project Leadership,L5 Principal,13,2026-10,53.04,53.68,45.91,61.46,55.00,-1.32,143.3
-CC-1020,Mechanical Engineering,Rosalind Moreau,Billable Staff,L1 Analyst,13,2026-10,84.49,84.05,76.28,91.83,80.00,4.05,129.3
-CC-1020,Mechanical Engineering,Soren Iverson,Billable Staff,L3 Senior Engineer,13,2026-10,84.89,84.69,76.91,92.46,85.00,-0.31,158.7
-CC-1020,Mechanical Engineering,Tamsin Vasquez,Billable Staff,L1 Analyst,13,2026-10,69.62,69.39,61.61,77.16,80.00,-10.61,143.3
-CC-1020,Mechanical Engineering,Ulises Larkin,Project Leadership,L4 Manager,13,2026-10,73.50,72.66,64.88,80.43,60.00,12.66,162.7
-CC-1030,Electrical Engineering,Adaeze Haddad,Billable Staff,L3 Senior Engineer,13,2026-10,92.05,91.52,83.75,99.29,85.00,6.52,168.0
-CC-1030,Electrical Engineering,Bruno Kowalski,Project Leadership,L4 Manager,13,2026-10,64.70,64.50,56.73,72.28,60.00,4.50,162.0
-CC-1030,Electrical Engineering,Clara Bergstrom,Project Leadership,L5 Principal,13,2026-10,51.99,52.26,44.49,60.04,55.00,-2.74,156.7
-CC-1030,Electrical Engineering,Dmitri Delacroix,Billable Staff,L1 Analyst,13,2026-10,70.30,70.53,62.76,78.31,80.00,-9.47,152.0
-CC-1030,Electrical Engineering,Vera Okafor,Billable Staff,L3 Senior Engineer,13,2026-10,98.54,97.64,89.87,100.00,85.00,12.64,141.3
-CC-1030,Electrical Engineering,Wren Nakamura,Overhead,L2 Engineer,13,2026-10,27.62,27.44,19.67,35.22,25.00,2.44,148.0
-CC-1030,Electrical Engineering,Xiomara Fontaine,Overhead,L4 Manager,13,2026-10,27.23,26.82,19.05,34.60,25.00,1.82,154.7
-CC-1030,Electrical Engineering,Yusuf Novak,Billable Staff,L2 Engineer,13,2026-10,83.33,82.82,75.05,90.60,85.00,-2.18,138.7
-CC-1030,Electrical Engineering,Zara Ashworth,Project Leadership,L5 Principal,13,2026-10,62.88,62.05,54.28,69.83,55.00,7.05,145.3
-CC-2010,Project Management,Amara Petrova,Billable Staff,L2 Engineer,13,2026-10,79.63,79.75,71.98,87.53,85.00,-5.25,158.0
-CC-2010,Project Management,Bennett Duarte,Billable Staff,L3 Senior Engineer,13,2026-10,96.01,95.10,87.32,100.00,85.00,10.10,156.0
-CC-2010,Project Management,Camille Halvorsen,Project Leadership,L5 Principal,13,2026-10,31.49,31.93,24.16,39.70,55.00,-23.07,133.3
-CC-2010,Project Management,Devon Ferreira,Billable Staff,L3 Senior Engineer,13,2026-10,68.38,68.97,61.20,76.74,85.00,-16.03,126.0
-CC-2010,Project Management,Elena Moreau,Project Leadership,L4 Manager,13,2026-10,68.23,67.33,59.55,75.10,60.00,7.33,143.3
-CC-2010,Project Management,Farid Iverson,Billable Staff,L2 Engineer,13,2026-10,98.52,96.90,89.13,100.00,85.00,11.90,146.0
-CC-2010,Project Management,Grace Vasquez,Billable Staff,L2 Engineer,13,2026-10,95.58,94.69,86.92,100.00,85.00,9.69,141.3
-CC-2010,Project Management,Hassan Larkin,Billable Staff,L2 Engineer,13,2026-10,76.22,75.65,67.88,83.43,85.00,-9.35,140.0
-CC-2010,Project Management,Imani Okafor,Billable Staff,L1 Analyst,13,2026-10,89.02,87.64,79.87,95.41,80.00,7.64,156.0
-CC-2010,Project Management,Jonas Nakamura,Project Leadership,L4 Manager,13,2026-10,62.38,61.99,54.21,69.76,60.00,1.99,140.0
-CC-3010,Field Services,Katya Fontaine,Billable Staff,L2 Engineer,13,2026-10,69.17,69.77,61.99,77.54,85.00,-15.23,149.3
-CC-3010,Field Services,Liam Novak,Billable Staff,L3 Senior Engineer,13,2026-10,87.69,87.29,79.51,95.06,85.00,2.29,138.7
-CC-3010,Field Services,Maren Ashworth,Billable Staff,L3 Senior Engineer,13,2026-10,96.60,95.76,87.98,100.00,85.00,10.76,150.0
-CC-3010,Field Services,Nikhil Haddad,Billable Staff,L3 Senior Engineer,13,2026-10,74.84,74.43,66.66,82.21,85.00,-10.57,160.7
-CC-3010,Field Services,Odessa Kowalski,Project Leadership,L4 Manager,13,2026-10,66.51,66.66,58.89,74.43,60.00,6.66,140.7
-CC-3010,Field Services,Priya Bergstrom,Billable Staff,L2 Engineer,13,2026-10,85.33,85.71,77.94,93.49,85.00,0.71,131.3
-CC-3010,Field Services,Quentin Delacroix,Billable Staff,L3 Senior Engineer,13,2026-10,97.62,96.14,88.36,100.00,85.00,11.14,162.7
-CC-3010,Field Services,Rosalind Ashby,Project Leadership,L4 Manager,13,2026-10,61.15,61.09,53.32,68.86,60.00,1.09,162.7
-CC-3010,Field Services,Soren Salazar,Project Leadership,L4 Manager,13,2026-10,69.48,68.86,61.08,76.63,60.00,8.86,142.0
-CC-3010,Field Services,Tamsin Thorne,Project Leadership,L4 Manager,13,2026-10,60.85,60.22,52.45,68.00,60.00,0.22,148.0
-CC-4010,Digital Solutions,Adaeze Whitfield,Billable Staff,L3 Senior Engineer,13,2026-10,97.90,96.63,88.86,100.00,85.00,11.63,139.3
-CC-4010,Digital Solutions,Bruno Rathore,Project Leadership,L4 Manager,13,2026-10,64.15,64.58,56.81,72.35,60.00,4.58,152.0
-CC-4010,Digital Solutions,Clara Carrasco,Project Leadership,L4 Manager,13,2026-10,50.96,51.30,43.53,59.07,60.00,-8.70,157.3
-CC-4010,Digital Solutions,Dmitri Yilmaz,Billable Staff,L3 Senior Engineer,13,2026-10,75.45,76.09,68.31,83.86,85.00,-8.91,141.3
-CC-4010,Digital Solutions,Ulises Sandoval,Project Leadership,L4 Manager,13,2026-10,49.00,49.66,41.88,57.43,60.00,-10.34,141.3
-CC-4010,Digital Solutions,Vera Lindqvist,Billable Staff,L2 Engineer,13,2026-10,90.13,89.74,81.97,97.51,85.00,4.74,170.7
-CC-4010,Digital Solutions,Wren Beaumont,Billable Staff,L3 Senior Engineer,13,2026-10,24.36,27.56,19.78,35.33,85.00,-57.44,152.0
-CC-4010,Digital Solutions,Xiomara Mbeki,Project Leadership,L4 Manager,13,2026-10,42.87,44.59,36.82,52.37,60.00,-15.41,141.3
-CC-4010,Digital Solutions,Yusuf Adeyemi,Billable Staff,L2 Engineer,13,2026-10,88.85,88.86,81.09,96.63,85.00,3.86,150.7
-CC-4010,Digital Solutions,Zara Mensah,Project Leadership,L4 Manager,13,2026-10,32.04,33.14,25.37,40.92,60.00,-26.86,147.3
+Cost Center,Cost Center Name,Person Name,Target Type,Job Level,Forecast Period,Forecast Month,Last Util %,Forecast Util %,Forecast Low 80,Forecast High 80,Util % Target,Forecast Variance,Expected Avail Hours,Method,Periods Of History,Basis
+CC-1010,Structural Engineering,Amara Ashby,Billable Staff,L3 Senior Engineer,13,2026-10,96.89,95.97,88.16,100.00,85.00,10.97,141.3,model,12,
+CC-1010,Structural Engineering,Bennett Salazar,Billable Staff,L3 Senior Engineer,13,2026-10,98.42,97.66,89.85,100.00,85.00,12.66,149.3,model,12,
+CC-1010,Structural Engineering,Camille Thorne,Billable Staff,L3 Senior Engineer,13,2026-10,94.44,93.69,85.88,100.00,85.00,8.69,141.3,model,12,
+CC-1010,Structural Engineering,Devon Sandoval,Billable Staff,L1 Analyst,13,2026-10,88.69,87.58,79.77,95.39,80.00,7.58,144.0,model,12,
+CC-1010,Structural Engineering,Elena Lindqvist,Billable Staff,L1 Analyst,13,2026-10,50.59,52.03,44.22,59.84,80.00,-27.97,132.0,model,12,
+CC-1010,Structural Engineering,Farid Beaumont,Billable Staff,L3 Senior Engineer,13,2026-10,95.91,95.25,87.44,100.00,85.00,10.25,142.0,model,12,
+CC-1010,Structural Engineering,Grace Mbeki,Billable Staff,L1 Analyst,13,2026-10,68.64,68.86,61.05,76.67,80.00,-11.14,128.0,model,12,
+CC-1010,Structural Engineering,Hassan Adeyemi,Billable Staff,L2 Engineer,13,2026-10,51.12,52.10,44.29,59.91,85.00,-32.90,150.7,model,12,
+CC-1010,Structural Engineering,Imani Mensah,Billable Staff,L3 Senior Engineer,13,2026-10,84.55,84.32,76.51,92.13,85.00,-0.68,142.7,model,12,
+CC-1010,Structural Engineering,Jonas Whitfield,Billable Staff,L1 Analyst,13,2026-10,63.79,64.71,56.90,72.51,80.00,-15.29,138.7,model,12,
+CC-1010,Structural Engineering,Katya Rathore,Billable Staff,L1 Analyst,13,2026-10,86.81,86.00,78.19,93.81,80.00,6.00,148.7,model,12,
+CC-1020,Mechanical Engineering,Liam Carrasco,Project Leadership,L4 Manager,13,2026-10,60.31,60.68,52.87,68.49,60.00,0.68,156.0,model,12,
+CC-1020,Mechanical Engineering,Maren Yilmaz,Billable Staff,L3 Senior Engineer,13,2026-10,91.67,91.45,83.64,99.26,85.00,6.45,146.7,model,12,
+CC-1020,Mechanical Engineering,Nikhil Petrova,Billable Staff,L2 Engineer,13,2026-10,71.00,70.70,62.89,78.51,85.00,-14.30,137.3,model,12,
+CC-1020,Mechanical Engineering,Odessa Duarte,Billable Staff,L2 Engineer,13,2026-10,88.25,87.91,80.10,95.72,85.00,2.91,160.0,model,12,
+CC-1020,Mechanical Engineering,Priya Halvorsen,Billable Staff,L2 Engineer,13,2026-10,74.09,74.57,66.77,82.38,85.00,-10.43,137.3,model,12,
+CC-1020,Mechanical Engineering,Quentin Ferreira,Project Leadership,L5 Principal,13,2026-10,53.04,53.68,45.87,61.49,55.00,-1.32,143.3,model,12,
+CC-1020,Mechanical Engineering,Rosalind Moreau,Billable Staff,L1 Analyst,13,2026-10,84.49,84.05,76.24,91.86,80.00,4.05,129.3,model,12,
+CC-1020,Mechanical Engineering,Soren Iverson,Billable Staff,L3 Senior Engineer,13,2026-10,84.89,84.69,76.88,92.50,85.00,-0.31,158.7,model,12,
+CC-1020,Mechanical Engineering,Tamsin Vasquez,Billable Staff,L1 Analyst,13,2026-10,69.62,69.39,61.58,77.20,80.00,-10.61,143.3,model,12,
+CC-1020,Mechanical Engineering,Ulises Larkin,Project Leadership,L4 Manager,13,2026-10,73.50,72.66,64.85,80.47,60.00,12.66,162.7,model,12,
+CC-1030,Electrical Engineering,Adaeze Haddad,Billable Staff,L3 Senior Engineer,13,2026-10,92.05,91.52,83.71,99.33,85.00,6.52,168.0,model,12,
+CC-1030,Electrical Engineering,Bruno Kowalski,Project Leadership,L4 Manager,13,2026-10,64.70,64.50,56.70,72.31,60.00,4.50,162.0,model,12,
+CC-1030,Electrical Engineering,Clara Bergstrom,Project Leadership,L5 Principal,13,2026-10,51.99,52.26,44.45,60.07,55.00,-2.74,156.7,model,12,
+CC-1030,Electrical Engineering,Dmitri Delacroix,Billable Staff,L1 Analyst,13,2026-10,70.30,70.53,62.73,78.34,80.00,-9.47,152.0,model,12,
+CC-1030,Electrical Engineering,Vera Okafor,Billable Staff,L3 Senior Engineer,13,2026-10,98.54,97.64,89.84,100.00,85.00,12.64,141.3,model,12,
+CC-1030,Electrical Engineering,Wren Nakamura,Overhead,L2 Engineer,13,2026-10,27.62,27.44,19.63,35.25,25.00,2.44,148.0,model,12,
+CC-1030,Electrical Engineering,Xiomara Fontaine,Overhead,L4 Manager,13,2026-10,27.23,26.82,19.01,34.63,25.00,1.82,154.7,model,12,
+CC-1030,Electrical Engineering,Yusuf Novak,Billable Staff,L2 Engineer,13,2026-10,83.33,82.82,75.01,90.63,85.00,-2.18,138.7,model,12,
+CC-1030,Electrical Engineering,Zara Ashworth,Project Leadership,L5 Principal,13,2026-10,62.88,62.05,54.25,69.86,55.00,7.05,145.3,model,12,
+CC-2010,Project Management,Amara Petrova,Billable Staff,L2 Engineer,13,2026-10,79.63,79.75,71.95,87.56,85.00,-5.25,158.0,model,12,
+CC-2010,Project Management,Bennett Duarte,Billable Staff,L3 Senior Engineer,13,2026-10,96.01,95.10,87.29,100.00,85.00,10.10,156.0,model,12,
+CC-2010,Project Management,Camille Halvorsen,Project Leadership,L5 Principal,13,2026-10,31.49,31.93,24.12,39.74,55.00,-23.07,133.3,model,12,
+CC-2010,Project Management,Devon Ferreira,Billable Staff,L3 Senior Engineer,13,2026-10,68.38,68.97,61.16,76.78,85.00,-16.03,126.0,model,12,
+CC-2010,Project Management,Elena Moreau,Project Leadership,L4 Manager,13,2026-10,68.23,67.33,59.52,75.14,60.00,7.33,143.3,model,12,
+CC-2010,Project Management,Farid Iverson,Billable Staff,L2 Engineer,13,2026-10,98.52,96.90,89.09,100.00,85.00,11.90,146.0,model,12,
+CC-2010,Project Management,Grace Vasquez,Billable Staff,L2 Engineer,13,2026-10,95.58,94.69,86.88,100.00,85.00,9.69,141.3,model,12,
+CC-2010,Project Management,Hassan Larkin,Billable Staff,L2 Engineer,13,2026-10,76.22,75.65,67.85,83.46,85.00,-9.35,140.0,model,12,
+CC-2010,Project Management,Imani Okafor,Billable Staff,L1 Analyst,13,2026-10,89.02,87.64,79.83,95.45,80.00,7.64,156.0,model,12,
+CC-2010,Project Management,Jonas Nakamura,Project Leadership,L4 Manager,13,2026-10,62.38,61.99,54.18,69.79,60.00,1.99,140.0,model,12,
+CC-3010,Field Services,Katya Fontaine,Billable Staff,L2 Engineer,13,2026-10,69.17,69.77,61.96,77.57,85.00,-15.23,149.3,model,12,
+CC-3010,Field Services,Liam Novak,Billable Staff,L3 Senior Engineer,13,2026-10,87.69,87.29,79.48,95.10,85.00,2.29,138.7,model,12,
+CC-3010,Field Services,Maren Ashworth,Billable Staff,L3 Senior Engineer,13,2026-10,96.60,95.76,87.95,100.00,85.00,10.76,150.0,model,12,
+CC-3010,Field Services,Nikhil Haddad,Billable Staff,L3 Senior Engineer,13,2026-10,74.84,74.43,66.63,82.24,85.00,-10.57,160.7,model,12,
+CC-3010,Field Services,Odessa Kowalski,Project Leadership,L4 Manager,13,2026-10,66.51,66.66,58.85,74.47,60.00,6.66,140.7,model,12,
+CC-3010,Field Services,Priya Bergstrom,Billable Staff,L2 Engineer,13,2026-10,85.33,85.71,77.91,93.52,85.00,0.71,131.3,model,12,
+CC-3010,Field Services,Quentin Delacroix,Billable Staff,L3 Senior Engineer,13,2026-10,97.62,96.14,88.33,100.00,85.00,11.14,162.7,model,12,
+CC-3010,Field Services,Rosalind Ashby,Project Leadership,L4 Manager,13,2026-10,61.15,61.09,53.28,68.90,60.00,1.09,162.7,model,12,
+CC-3010,Field Services,Soren Salazar,Project Leadership,L4 Manager,13,2026-10,69.48,68.86,61.05,76.67,60.00,8.86,142.0,model,12,
+CC-3010,Field Services,Tamsin Thorne,Project Leadership,L4 Manager,13,2026-10,60.85,60.22,52.42,68.03,60.00,0.22,148.0,model,12,
+CC-4010,Digital Solutions,Adaeze Whitfield,Billable Staff,L3 Senior Engineer,13,2026-10,97.90,96.63,88.82,100.00,85.00,11.63,139.3,model,12,
+CC-4010,Digital Solutions,Bruno Rathore,Project Leadership,L4 Manager,13,2026-10,64.15,64.58,56.77,72.39,60.00,4.58,152.0,model,12,
+CC-4010,Digital Solutions,Clara Carrasco,Project Leadership,L4 Manager,13,2026-10,50.96,51.30,43.49,59.11,60.00,-8.70,157.3,model,12,
+CC-4010,Digital Solutions,Dmitri Yilmaz,Billable Staff,L3 Senior Engineer,13,2026-10,75.45,76.09,68.28,83.89,85.00,-8.91,141.3,model,12,
+CC-4010,Digital Solutions,Ulises Sandoval,Project Leadership,L4 Manager,13,2026-10,49.00,49.66,41.85,57.46,60.00,-10.34,141.3,model,12,
+CC-4010,Digital Solutions,Vera Lindqvist,Billable Staff,L2 Engineer,13,2026-10,90.13,89.74,81.93,97.55,85.00,4.74,170.7,model,12,
+CC-4010,Digital Solutions,Wren Beaumont,Billable Staff,L3 Senior Engineer,13,2026-10,24.36,27.56,19.75,35.36,85.00,-57.44,152.0,model,12,
+CC-4010,Digital Solutions,Xiomara Mbeki,Project Leadership,L4 Manager,13,2026-10,42.87,44.59,36.78,52.40,60.00,-15.41,141.3,model,12,
+CC-4010,Digital Solutions,Yusuf Adeyemi,Billable Staff,L2 Engineer,13,2026-10,88.85,88.86,81.05,96.67,85.00,3.86,150.7,model,12,
+CC-4010,Digital Solutions,Zara Mensah,Project Leadership,L4 Manager,13,2026-10,32.04,33.14,25.33,40.95,60.00,-26.86,147.3,model,12,

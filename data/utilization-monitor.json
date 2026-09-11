@@ -1,0 +1,119 @@
+{
+  "checkedAt": "2026-09-07T00:11:49.848Z",
+  "since": 13,
+  "drift": [
+    {
+      "feature": "firm_util_momentum",
+      "trained": -0.25248586903598946,
+      "now": 3.149833237541723,
+      "drift": 0.9961469270111734
+    },
+    {
+      "feature": "util_momentum",
+      "trained": -0.23325925925925936,
+      "now": 3.008666666666667,
+      "drift": 0.5226963981249944
+    },
+    {
+      "feature": "opportunity_share",
+      "trained": 1.0845765766025395,
+      "now": 1.8941688455526824,
+      "drift": 0.49976209118782855
+    },
+    {
+      "feature": "fringe_share",
+      "trained": 14.085066243755657,
+      "now": 16.10646712676843,
+      "drift": 0.2199567832780165
+    },
+    {
+      "feature": "avail_ratio",
+      "trained": 85.91493375624421,
+      "now": 83.89353287323156,
+      "drift": -0.2199567832780029
+    },
+    {
+      "feature": "ot_share",
+      "trained": 1.4169459662857633,
+      "now": 2.125658976417816,
+      "drift": 0.2003598575989099
+    },
+    {
+      "feature": "util_person_sd",
+      "trained": 5.629456374098176,
+      "now": 6.161308795401571,
+      "drift": 0.17908304781147166
+    },
+    {
+      "feature": "ma3_vs_person_mean",
+      "trained": 0.3518633898508892,
+      "now": -0.025207070707070105,
+      "drift": -0.0856927199322748
+    },
+    {
+      "feature": "training_share",
+      "trained": 3.1381736759675696,
+      "now": 2.9676704717768567,
+      "drift": -0.05989946371244489
+    },
+    {
+      "feature": "bench_share_ma3",
+      "trained": 12.388732686279953,
+      "now": 13.118196872728767,
+      "drift": 0.05433454580916294
+    },
+    {
+      "feature": "cost_center_momentum_rel",
+      "trained": 0.02844434128513478,
+      "now": 0.08368942145657789,
+      "drift": 0.046778481872670565
+    },
+    {
+      "feature": "bench_share",
+      "trained": 13.01441002408677,
+      "now": 12.421924516419487,
+      "drift": -0.040990734280382746
+    },
+    {
+      "feature": "ytd_vs_util",
+      "trained": 0.0070740740740743244,
+      "now": 0.22066666666666634,
+      "drift": 0.031198390914378957
+    },
+    {
+      "feature": "util_vs_person_mean",
+      "trained": 0.047258451579284176,
+      "now": -0.1624848484848472,
+      "drift": -0.031183830694274675
+    },
+    {
+      "feature": "cost_center_vs_firm",
+      "trained": 0.059488389364609505,
+      "now": 0.20747379253942858,
+      "drift": 0.02227112350915446
+    },
+    {
+      "feature": "gap_to_target",
+      "trained": 4.602000000000001,
+      "now": 4.4543333333333335,
+      "drift": -0.012541976467280792
+    },
+    {
+      "feature": "util_vs_cost_center",
+      "trained": -0.03299769597986659,
+      "now": -0.18454852259457924,
+      "drift": -0.008880117772007633
+    },
+    {
+      "feature": "leadership_share",
+      "trained": 8.836490761374499,
+      "now": 8.757814249923863,
+      "drift": -0.008292046462162651
+    }
+  ],
+  "verdict": {
+    "accuracyBreached": false,
+    "driftedFeatures": [],
+    "breached": false
+  }
+}

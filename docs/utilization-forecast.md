@@ -121,24 +121,44 @@ the origin must reproduce it bit for bit.
 
 ## 3. Results
 
+> **Read section 2.1 of `OPERATING-GUIDE.md` first.** Everything below is
+> correctly measured on one simulated panel, and does not survive re-generating
+> that panel from a different seed: across 200 seeds the model beats the naive
+> baseline on 101, an exact coin flip, and is clearly worse on bias and on the
+> cost-center rollup. The numbers here describe this dataset; they are not
+> evidence about the model in general.
+
+
 Out-of-sample, 300 person-periods, Util % in percentage points:
 
 | model | MAE | RMSE | bias | R2 | within 5pp |
 | --- | --- | --- | --- | --- | --- |
-| **ridge (this model)** | **4.56** | **6.07** | -0.13 | 0.899 | 65.3% |
+| **ridge (this model)** | **4.58** | **6.09** | -0.08 | 0.898 | 65.0% |
 | baseline: last period | 4.63 | 6.10 | -0.33 | 0.898 | 62.0% |
 | baseline: 3-period moving average | 4.97 | 6.28 | -0.05 | 0.892 | 57.7% |
 | baseline: person mean | 6.19 | 7.92 | -1.18 | 0.828 | 48.3% |
 | baseline: target | 9.62 | 13.42 | 3.12 | 0.506 | 36.0% |
 | baseline: cost-center mean | 14.61 | 18.29 | -0.28 | 0.082 | 21.7% |
 
+These come from **nested** penalty selection: each fold's penalty is chosen by an
+inner rolling origin over the periods that closed before it, so nothing about a
+fold touches the period it is scored on. Choosing the penalty on the folds being
+reported - the usual shortcut, and what this model originally did - says 4.56pp
+instead. That 0.02pp is the size of the optimism, and both are printed each run.
+
 The honest summary: on a twelve-period panel the gain over "same as last period"
-is real but small (1.5% MAE, and a larger gain on RMSE-per-fold stability and on
-hit rate within 5pp), while bias drops to roughly zero and the hours-weighted
-**cost-center rollup lands within 3.2pp MAE**, which is the number a resourcing
-conversation actually runs on. The 80% interval is +/-7.8pp and covered 83.0% of
-validation rows. The weakest fold is P10 (July, MAE 6.7): the vacation trough is
-a month effect that one year of history cannot teach.
+is real but small (1.0% MAE, and a larger gain on hit rate within 5pp), while
+bias drops to roughly zero and the hours-weighted **cost-center rollup lands
+within 3.3pp MAE**, which is the number a resourcing conversation actually runs
+on. The weakest fold is P10 (July, MAE 6.8): the vacation trough is a month
+effect that one year of history cannot teach.
+
+The 80% interval is +/-7.8pp. Measured on the residuals that defined it, it
+covers 83.7%; measured **walk-forward**, with each fold's interval calibrated
+only on folds before it, it covers **74.6%** - and nearly all of the shortfall is
+P10 at 56.7%. Treat it as roughly a 75% interval. Conformal and Student-t widths
+were tried as replacements and are worse or uselessly wide; every run reports all
+four. See `OPERATING-GUIDE.md` section 2.2.
 
 Top standardized drivers: `training_share` (+0.28 - a training-heavy period is
 followed by recovery), `gap_to_target` (+0.17), `util_vs_person_mean` (-0.16 -
@@ -146,8 +166,11 @@ mean reversion), `ytd_vs_util` (+0.16).
 
 ## 4. Outputs
 
-- `data/utilization-model.json` - coefficients, standardization stats, chosen
-  penalty and the full grid, fold-by-fold and baseline metrics, residual sigma.
+- `data/utilization-model.json` - a versioned artifact: coefficients,
+  standardization stats, the penalty each fold chose and the full grid,
+  fold-by-fold and baseline metrics, interval calibration for every method
+  tried, and the training period range. Loading refuses an artifact whose
+  feature list does not match the code's.
 - `data/utilization-forecast.csv` - per person: last Util %, forecast, 80%
   interval, target, forecast variance, expected available hours.
 - The training report also prints the cost-center rollup for the next period and

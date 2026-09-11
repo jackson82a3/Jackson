@@ -212,17 +212,30 @@ export function buildSample(
   };
 }
 
-/** Every (person, origin -> origin+1) pair that has both history and an outcome. */
-export function buildTrainingSamples(records: PeriodedRecord[]): Sample[] {
+/**
+ * Every (person, origin -> origin+horizon) pair that has both history and an outcome.
+ *
+ * `horizon` is how many periods ahead the sample predicts. It defaults to 1,
+ * which is what the shipped model uses; larger values exist so the decay beyond
+ * one period can be *measured* rather than asserted. The features are unchanged
+ * either way - they are all computed at the origin - so a horizon-3 sample is
+ * the same information being asked a harder question.
+ */
+export function buildTrainingSamples(records: PeriodedRecord[], horizon = 1): Sample[] {
+  if (!Number.isInteger(horizon) || horizon < 1) {
+    throw new Error(`Horizon must be a positive integer, got ${horizon}`);
+  }
   const panel = groupByPerson(records);
   const aggregates = periodAggregates(records);
   const samples: Sample[] = [];
 
   for (const rows of panel.values()) {
-    for (let i = MIN_HISTORY - 1; i < rows.length - 1; i++) {
+    for (let i = MIN_HISTORY - 1; i < rows.length - horizon; i++) {
       const history = rows.slice(0, i + 1);
-      const next = rows[i + 1];
-      if (next.periodIndex !== rows[i].periodIndex + 1) continue; // no gap-spanning samples
+      const next = rows[i + horizon];
+      // No gap-spanning samples: the target must be exactly `horizon` periods
+      // after the origin, not merely the next row that happens to exist.
+      if (next.periodIndex !== rows[i].periodIndex + horizon) continue;
       samples.push(buildSample(history, aggregates, next.periodIndex, next.utilPct));
     }
   }

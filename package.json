@@ -5,11 +5,20 @@
   "type": "module",
   "description": "Seeded twelve-period workforce utilization dataset and a next-period Util % forecaster.",
   "engines": {
-    "node": ">=22.6"
+    "node": ">=22.18"
   },
   "scripts": {
     "util:generate": "node scripts/generate-utilization-data.ts",
     "util:train": "node scripts/train-utilization-forecast.ts",
+    "util:predict": "node scripts/predict-utilization.ts",
+    "util:monitor": "node scripts/monitor-utilization.ts",
+    "util:experiment": "node scripts/experiment-utilization.ts",
+    "util:horizon": "node scripts/horizon-utilization.ts",
+    "util:secondyear": "node scripts/second-year-utilization.ts",
+    "util:seedstudy": "node scripts/seed-study-utilization.ts",
+    "util:plans": "node scripts/generate-utilization-plans.ts",
+    "util:compare": "node scripts/compare-utilization-forecasts.ts",
+    "util:sweep": "node scripts/sweep-utilization-plans.ts",
     "util:test": "node scripts/test-utilization.ts",
     "typecheck": "tsc --noEmit"
   },

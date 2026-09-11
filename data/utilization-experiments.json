@@ -1,0 +1,269 @@
+{
+  "generatedAt": "2026-09-07T00:11:57.224Z",
+  "results": [
+    {
+      "name": "ridge",
+      "metrics": {
+        "n": 300,
+        "mae": 4.57802920763941,
+        "rmse": 6.093373314220661,
+        "bias": -0.08239980935476701,
+        "r2": 0.8980128521048084,
+        "within5": 0.65
+      },
+      "byFold": [
+        {
+          "targetPeriod": 8,
+          "n": 60,
+          "mae": 3.7910781827923956,
+          "rmse": 5.058905663532705
+        },
+        {
+          "targetPeriod": 9,
+          "n": 60,
+          "mae": 3.056705343306818,
+          "rmse": 3.977840762450693
+        },
+        {
+          "targetPeriod": 10,
+          "n": 60,
+          "mae": 6.794201697426731,
+          "rmse": 8.681136600688905
+        },
+        {
+          "targetPeriod": 11,
+          "n": 60,
+          "mae": 4.208347175634872,
+          "rmse": 5.241763428432055
+        },
+        {
+          "targetPeriod": 12,
+          "n": 60,
+          "mae": 5.039813639036243,
+          "rmse": 6.4336639303647525
+        }
+      ],
+      "lambdaByFold": [
+        {
+          "targetPeriod": 8,
+          "lambda": 3
+        },
+        {
+          "targetPeriod": 9,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 10,
+          "lambda": 2
+        },
+        {
+          "targetPeriod": 11,
+          "lambda": 2
+        },
+        {
+          "targetPeriod": 12,
+          "lambda": 3
+        }
+      ],
+      "coverage": 0.7458333333333333
+    },
+    {
+      "name": "huber",
+      "metrics": {
+        "n": 300,
+        "mae": 4.6083868687388,
+        "rmse": 6.1363592267558476,
+        "bias": -0.012719635567014482,
+        "r2": 0.8965688328499745,
+        "within5": 0.6466666666666666
+      },
+      "byFold": [
+        {
+          "targetPeriod": 8,
+          "n": 60,
+          "mae": 3.8049570153485592,
+          "rmse": 5.0690291180623115
+        },
+        {
+          "targetPeriod": 9,
+          "n": 60,
+          "mae": 3.048489042450263,
+          "rmse": 3.9756193477920814
+        },
+        {
+          "targetPeriod": 10,
+          "n": 60,
+          "mae": 6.99452986861989,
+          "rmse": 8.876818089164434
+        },
+        {
+          "targetPeriod": 11,
+          "n": 60,
+          "mae": 4.228757377826809,
+          "rmse": 5.263274141623113
+        },
+        {
+          "targetPeriod": 12,
+          "n": 60,
+          "mae": 4.965201039448459,
+          "rmse": 6.3461770636076755
+        }
+      ],
+      "lambdaByFold": [
+        {
+          "targetPeriod": 8,
+          "lambda": 3
+        },
+        {
+          "targetPeriod": 9,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 10,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 11,
+          "lambda": 2
+        },
+        {
+          "targetPeriod": 12,
+          "lambda": 2
+        }
+      ],
+      "coverage": 0.7416666666666667
+    },
+    {
+      "name": "recency",
+      "metrics": {
+        "n": 300,
+        "mae": 4.67154153596402,
+        "rmse": 6.186129154592934,
+        "bias": -0.17425502940243826,
+        "r2": 0.8948842386439916,
+        "within5": 0.6366666666666667
+      },
+      "byFold": [
+        {
+          "targetPeriod": 8,
+          "n": 60,
+          "mae": 3.8484869947727787,
+          "rmse": 5.103933651566359
+        },
+        {
+          "targetPeriod": 9,
+          "n": 60,
+          "mae": 3.0704294289111878,
+          "rmse": 3.9719569735009226
+        },
+        {
+          "targetPeriod": 10,
+          "n": 60,
+          "mae": 6.921649920159983,
+          "rmse": 8.786201873773651
+        },
+        {
+          "targetPeriod": 11,
+          "n": 60,
+          "mae": 4.329229421193,
+          "rmse": 5.396004586731999
+        },
+        {
+          "targetPeriod": 12,
+          "n": 60,
+          "mae": 5.187911914783135,
+          "rmse": 6.572684367962072
+        }
+      ],
+      "lambdaByFold": [
+        {
+          "targetPeriod": 8,
+          "lambda": 3
+        },
+        {
+          "targetPeriod": 9,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 10,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 11,
+          "lambda": 2
+        },
+        {
+          "targetPeriod": 12,
+          "lambda": 3
+        }
+      ],
+      "coverage": 0.7333333333333333
+    },
+    {
+      "name": "huber_recency",
+      "metrics": {
+        "n": 300,
+        "mae": 4.659776689624493,
+        "rmse": 6.178412609061274,
+        "bias": -0.1127762141533593,
+        "r2": 0.895146316799267,
+        "within5": 0.6433333333333333
+      },
+      "byFold": [
+        {
+          "targetPeriod": 8,
+          "n": 60,
+          "mae": 3.8612241791693327,
+          "rmse": 5.111765925527255
+        },
+        {
+          "targetPeriod": 9,
+          "n": 60,
+          "mae": 3.055956941228517,
+          "rmse": 3.966954632604765
+        },
+        {
+          "targetPeriod": 10,
+          "n": 60,
+          "mae": 6.9981546301012685,
+          "rmse": 8.86414058672457
+        },
+        {
+          "targetPeriod": 11,
+          "n": 60,
+          "mae": 4.307228451210798,
+          "rmse": 5.361844148111297
+        },
+        {
+          "targetPeriod": 12,
+          "n": 60,
+          "mae": 5.076319246412549,
+          "rmse": 6.455592218740093
+        }
+      ],
+      "lambdaByFold": [
+        {
+          "targetPeriod": 8,
+          "lambda": 3
+        },
+        {
+          "targetPeriod": 9,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 10,
+          "lambda": 1
+        },
+        {
+          "targetPeriod": 11,
+          "lambda": 2
+        },
+        {
+          "targetPeriod": 12,
+          "lambda": 3
+        }
+      ],
+      "coverage": 0.7416666666666667
+    }
+  ]
+}

@@ -7,6 +7,14 @@
 > `"type": "module"` and the npm scripts do **not** pass
 > `--disable-warning=MODULE_TYPELESS_PACKAGE_JSON`. Everything else below stands as
 > written — see `README.md` for the current entry point.
+>
+> **§6 is now built.** The open question below — does this beat forecasting from
+> PM hour allocations? — has been answered on simulated allocations, along with a
+> sensitivity sweep over how good planners would have to be for the answer to
+> flip. See `docs/utilization-plan-headtohead.md`. The §6 caveats were carried
+> into it: plans are snapshotted at forecast time and a self-check enforces it,
+> and the absence of any self-fulfilment effect is stated as a limitation rather
+> than quietly simulated away. §7's other limitations still stand.
 
 Everything needed to continue this work in a fresh session. The code is on
 GitHub; this file carries the reasoning, the dead ends, and the open question.

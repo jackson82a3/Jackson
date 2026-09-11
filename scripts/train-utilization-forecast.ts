@@ -8,10 +8,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseCsv } from '../src/lib/utilization/csv.ts';
-import { verifyRecord } from '../src/lib/utilization/types.ts';
+import { serializeModel } from '../src/lib/utilization/model-io.ts';
+import { parsePlanCsv } from '../src/lib/utilization/plan.ts';
+import { runHeadToHead } from '../src/lib/utilization/headtohead.ts';
+import { formatValidationReport, validateDataset } from '../src/lib/utilization/validate.ts';
 import {
   featureImportance,
-  forecastNextPeriod,
+  forecastAll,
   rollupByCostCenter,
   trainForecaster,
 } from '../src/lib/utilization/forecast.ts';
@@ -31,15 +34,44 @@ if (!fs.existsSync(dataPath)) {
 }
 
 const records = parseCsv(fs.readFileSync(dataPath, 'utf8'));
-const badRows = records.filter(r => verifyRecord(r).length > 0);
-if (badRows.length > 0) {
-  console.error(`${badRows.length} rows fail the accounting identities; refusing to train.`);
-  console.error(`  e.g. ${badRows[0].personName} in ${badRows[0].sourceName}: ${verifyRecord(badRows[0])[0]}`);
+
+const validation = validateDataset(records);
+if (!validation.ok || validation.warnings.length > 0) {
+  console.log(formatValidationReport(validation));
+  console.log('');
+}
+if (!validation.ok) {
+  console.error('Refusing to train on data with errors. Fix the extract, not the tolerance.');
   process.exit(1);
 }
 
 const trained = trainForecaster(records);
-const forecasts = forecastNextPeriod(trained, records);
+
+// Given allocations, also fit the deployment blend weight. The seed study is
+// unambiguous that the blend is the only forecaster here that beats the naive
+// baseline across simulated panels, so an artifact trained where allocations
+// exist should be able to use them.
+const plansPath = arg('plans', '');
+if (plansPath) {
+  const resolved = path.resolve(process.cwd(), plansPath);
+  if (!fs.existsSync(resolved)) {
+    console.error(`No plan file at ${path.relative(process.cwd(), resolved)}.`);
+    process.exit(1);
+  }
+  const head = runHeadToHead(records, parsePlanCsv(fs.readFileSync(resolved, 'utf8')));
+  trained.blendWeight = head.deployedBlendWeight;
+  console.log(
+    `Blend     weight ${head.deployedBlendWeight.toFixed(3)} on the PM plan, fitted on ` +
+      `${head.validationRows} out-of-sample rows`,
+  );
+  console.log(
+    `          blend ${head.metrics.blend.mae.toFixed(2)}pp vs model ` +
+      `${head.metrics.history_ridge.mae.toFixed(2)}pp on this panel`,
+  );
+  console.log('');
+}
+const result = forecastAll(trained, records);
+const forecasts = result.forecasts;
 const rollup = rollupByCostCenter(forecasts);
 
 const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
@@ -64,7 +96,10 @@ console.log(
   `Samples   ${t.samples} person-period pairs | ${t.features} features | ${t.validationSamples} scored out-of-sample`,
 );
 console.log(
-  `Model     ridge, lambda=${trained.model.lambda} chosen by rolling-origin CV over ${trained.byFold.length} folds`,
+  `Model     ridge, lambda=${trained.model.lambda}, chosen inside each fold's own past (nested selection)`,
+);
+console.log(
+  `          per-fold penalties: ${trained.lambdaByFold.map(l => `P${l.targetPeriod}:${l.lambda}`).join(' ')}`,
 );
 console.log('');
 
@@ -76,17 +111,63 @@ console.log(metricLine('ridge (this model)', trained.metrics, widths));
 for (const baseline of trained.baselines) {
   console.log(metricLine(`baseline: ${baseline.name}`, baseline.metrics, widths));
 }
+console.log(
+  metricLine('  (penalty tuned on these folds)', trained.optimisticMetrics, widths),
+);
 const bestBaseline = trained.baselines.reduce((a, b) => (b.metrics.mae < a.metrics.mae ? b : a));
 const lift = (1 - trained.metrics.mae / bestBaseline.metrics.mae) * 100;
 console.log('');
-console.log(
-  `MAE is ${lift.toFixed(1)}% below the best baseline (${bestBaseline.name}); ` +
-    `80% interval is +/-${(1.2816 * trained.sigma).toFixed(1)}pp with ${pct(trained.coverage80)} realised coverage.`,
-);
+console.log(`MAE is ${lift.toFixed(1)}% below the best baseline (${bestBaseline.name}).`);
 console.log(
   `Cost-center rollup (hours-weighted): MAE ${trained.costCenterMetrics.mae.toFixed(2)}pp, ` +
     `RMSE ${trained.costCenterMetrics.rmse.toFixed(2)}pp over ${trained.costCenterMetrics.n} cost-center periods.`,
 );
+console.log('');
+
+const iv = trained.interval;
+console.log('80% prediction interval - every method tried, coverage measured walk-forward');
+console.log(row(['method', 'interval', 'coverage'], [28, 20, 12]));
+console.log('-'.repeat(78));
+for (const m of [...iv.methods].sort((a, b) => b.coverageWalkForward - a.coverageWalkForward)) {
+  const label = m.name === iv.shipped ? `${m.name}  <- shipped` : m.name;
+  console.log(
+    row(
+      [label, `${m.low.toFixed(1)} / +${m.high.toFixed(1)}pp`, pct(m.coverageWalkForward)],
+      [28, 20, 12],
+    ),
+  );
+}
+console.log(
+  `Nominal coverage is 80%; each fold's interval is calibrated only on folds before it ` +
+    `(${iv.nWalkForward} rows).`,
+);
+console.log('');
+
+console.log('Forecast coverage of the roster');
+console.log(row(['method', 'people'], [28, 9]));
+console.log('-'.repeat(78));
+for (const c of result.coverage) console.log(row([c.method, c.people], [28, 9]));
+if (result.excluded.length > 0) {
+  console.log(
+    `Excluded (absent from the last period): ${result.excluded
+      .slice(0, 5)
+      .map(e => `${e.personName} (last seen P${e.lastSeenPeriod})`)
+      .join(', ')}${result.excluded.length > 5 ? ', ...' : ''}`,
+  );
+}
+console.log('');
+
+console.log('Coverage of the shipped interval, by fold');
+console.log(row(['period', 'n', 'half width', 'coverage'], [28, 7, 12, 10]));
+console.log('-'.repeat(78));
+for (const f of iv.byFold) {
+  console.log(
+    row(
+      [`P${String(f.targetPeriod).padStart(2, '0')}`, f.n, `${f.halfWidth.toFixed(1)}pp`, pct(f.coverage)],
+      [28, 7, 12, 10],
+    ),
+  );
+}
 console.log('');
 
 console.log('Accuracy by validation fold');
@@ -159,30 +240,7 @@ fs.mkdirSync(outDir, { recursive: true });
 const modelPath = path.join(outDir, 'utilization-model.json');
 fs.writeFileSync(
   modelPath,
-  JSON.stringify(
-    {
-      kind: 'utilization-next-period-ridge',
-      trainedAt: trained.trainedAt,
-      dataset: { file: path.relative(process.cwd(), dataPath), ...trained.training },
-      lambda: trained.model.lambda,
-      lambdaGrid: trained.byLambda,
-      metrics: trained.metrics,
-      byFold: trained.byFold,
-      baselines: trained.baselines,
-      costCenterMetrics: trained.costCenterMetrics,
-      sigma: trained.sigma,
-      coverage80: trained.coverage80,
-      model: {
-        featureNames: trained.model.featureNames,
-        coefficients: trained.model.coefficients,
-        means: trained.model.means,
-        sds: trained.model.sds,
-        intercept: trained.model.intercept,
-      },
-    },
-    null,
-    2,
-  ) + '\n',
+  JSON.stringify(serializeModel(trained, path.relative(process.cwd(), dataPath)), null, 2) + '\n',
 );
 
 const forecastPath = path.join(outDir, 'utilization-forecast.csv');

@@ -1,0 +1,307 @@
+{
+  "generatedAt": "2026-09-05T14:28:32.868Z",
+  "staleness": 0.28,
+  "seed": 20260902,
+  "cells": [
+    {
+      "foresight": 0.2,
+      "optimismUp": 0,
+      "planMae": 4.965833333333338,
+      "planBias": 0.5445666666666664,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.711683627918447,
+      "blendMae": 4.404846372903559,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.2,
+      "optimismUp": 0.1,
+      "planMae": 5.179100000000001,
+      "planBias": 0.9417666666666662,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.725294649640739,
+      "blendMae": 4.4357494724118105,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.2,
+      "optimismUp": 0.2,
+      "planMae": 5.461533333333331,
+      "planBias": 1.338333333333334,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.814516879403776,
+      "blendMae": 4.477723933174788,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.2,
+      "optimismUp": 0.35,
+      "planMae": 6.0056666666666665,
+      "planBias": 1.9335999999999978,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.823816228767752,
+      "blendMae": 4.547171412902287,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.2,
+      "optimismUp": 0.5,
+      "planMae": 6.606466666666666,
+      "planBias": 2.528666666666667,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.920200079256525,
+      "blendMae": 4.61107406231138,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.35,
+      "optimismUp": 0,
+      "planMae": 4.689133333333333,
+      "planBias": 0.48693333333333366,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.576950540182596,
+      "blendMae": 4.283896773049907,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.35,
+      "optimismUp": 0.1,
+      "planMae": 4.902866666666668,
+      "planBias": 0.8981999999999999,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.61557903388712,
+      "blendMae": 4.332591786471185,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.35,
+      "optimismUp": 0.2,
+      "planMae": 5.191166666666669,
+      "planBias": 1.308833333333335,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.729636708097206,
+      "blendMae": 4.385299337692721,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.35,
+      "optimismUp": 0.35,
+      "planMae": 5.752499999999998,
+      "planBias": 1.9230999999999994,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.737097612591521,
+      "blendMae": 4.474133164695378,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.35,
+      "optimismUp": 0.5,
+      "planMae": 6.388399999999997,
+      "planBias": 2.5382666666666647,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.857532235969474,
+      "blendMae": 4.557615389922617,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.5,
+      "optimismUp": 0,
+      "planMae": 4.209133333333333,
+      "planBias": 0.3481333333333335,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.192545404320113,
+      "blendMae": 4.0373705238458415,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.5,
+      "optimismUp": 0.1,
+      "planMae": 4.434799999999999,
+      "planBias": 0.7860000000000011,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.351689588932275,
+      "blendMae": 4.119871281396118,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.5,
+      "optimismUp": 0.2,
+      "planMae": 4.736000000000002,
+      "planBias": 1.2237999999999989,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.491468720085753,
+      "blendMae": 4.210479616026743,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.5,
+      "optimismUp": 0.35,
+      "planMae": 5.338166666666663,
+      "planBias": 1.8802333333333312,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.56730885675778,
+      "blendMae": 4.33825958077199,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.5,
+      "optimismUp": 0.5,
+      "planMae": 6.0313,
+      "planBias": 2.5344999999999978,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.715729950138154,
+      "blendMae": 4.455886252887385,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.55,
+      "optimismUp": 0,
+      "planMae": 4.062499999999994,
+      "planBias": 0.29670000000000024,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.052507231097978,
+      "blendMae": 3.941555078445319,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.55,
+      "optimismUp": 0.1,
+      "planMae": 4.285800000000003,
+      "planBias": 0.7439999999999998,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.257480363437523,
+      "blendMae": 4.041664390203338,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.55,
+      "optimismUp": 0.2,
+      "planMae": 4.587799999999998,
+      "planBias": 1.1912000000000005,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.348416975385784,
+      "blendMae": 4.143897767281103,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.55,
+      "optimismUp": 0.35,
+      "planMae": 5.194699999999994,
+      "planBias": 1.8621666666666663,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.493746005672013,
+      "blendMae": 4.287775160849101,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.55,
+      "optimismUp": 0.5,
+      "planMae": 5.909100000000004,
+      "planBias": 2.5326333333333344,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.659196895526362,
+      "blendMae": 4.419418695429174,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.65,
+      "optimismUp": 0,
+      "planMae": 3.807433333333335,
+      "planBias": 0.19049999999999995,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 3.8211151919933006,
+      "blendMae": 3.7434436905512727,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.65,
+      "optimismUp": 0.1,
+      "planMae": 4.004866666666668,
+      "planBias": 0.6580666666666669,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 3.9872456206545994,
+      "blendMae": 3.8699431966436615,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.65,
+      "optimismUp": 0.2,
+      "planMae": 4.309633333333334,
+      "planBias": 1.125233333333334,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.1386497301692025,
+      "blendMae": 4.000091663443066,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.65,
+      "optimismUp": 0.35,
+      "planMae": 4.917300000000002,
+      "planBias": 1.826900000000002,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.376907241359156,
+      "blendMae": 4.18611706655423,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.65,
+      "optimismUp": 0.5,
+      "planMae": 5.666899999999998,
+      "planBias": 2.5287000000000006,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.533873640955311,
+      "blendMae": 4.3430509153742864,
+      "planBeatsModel": false
+    },
+    {
+      "foresight": 0.8,
+      "optimismUp": 0,
+      "planMae": 3.520066666666666,
+      "planBias": 0.05939999999999992,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 3.5440436064472625,
+      "blendMae": 3.46684030186162,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.8,
+      "optimismUp": 0.1,
+      "planMae": 3.686599999999997,
+      "planBias": 0.5539999999999998,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 3.697716084189726,
+      "blendMae": 3.6046957022320893,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.8,
+      "optimismUp": 0.2,
+      "planMae": 3.956699999999999,
+      "planBias": 1.0485000000000009,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 3.878150212915332,
+      "blendMae": 3.7794764206928138,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.8,
+      "optimismUp": 0.35,
+      "planMae": 4.5692666666666675,
+      "planBias": 1.7903333333333349,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.1425147732917,
+      "blendMae": 4.024452208547826,
+      "planBeatsModel": true
+    },
+    {
+      "foresight": 0.8,
+      "optimismUp": 0.5,
+      "planMae": 5.352333333333333,
+      "planBias": 2.532400000000001,
+      "historyMae": 4.57802920763941,
+      "planRidgeMae": 4.294556695240294,
+      "blendMae": 4.226766448151953,
+      "planBeatsModel": false
+    }
+  ]
+}
